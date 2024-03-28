@@ -1,0 +1,10 @@
+# General
+node_modules
+
+# dotenv environment variable files
+.env
+
+# other
+.DS_Store
+debug.log
+dist

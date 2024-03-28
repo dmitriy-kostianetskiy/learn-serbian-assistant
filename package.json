@@ -1,0 +1,43 @@
+{
+  "name": "learn-serbian-assistant",
+  "version": "1.0.0",
+  "description": "Assistant for those who are learning Serbian",
+  "main": "index.ts",
+  "scripts": {
+    "start": "npm run ts-node index.ts",
+    "ts-node": "node --env-file=.env -r ts-node/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmitriy-kostianetskiy/learn-serbian-assistant.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dmitriy-kostianetskiy/learn-serbian-assistant/issues"
+  },
+  "homepage": "https://github.com/dmitriy-kostianetskiy/learn-serbian-assistant#readme",
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "eslint": "^8.57.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "latest",
+    "prettier": "3.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,scss,less,md,ts,html,component.html}": [
+      "prettier --write"
+    ]
+  }
+}
