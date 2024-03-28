@@ -39,5 +39,8 @@
     "*.{js,json,css,scss,less,md,ts,html,component.html}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "openai": "^4.29.2"
   }
 }
