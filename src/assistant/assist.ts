@@ -1,24 +1,10 @@
 import { openai } from '../openai';
 import OpenAI from 'openai';
-import { ConjugationOutput } from './model';
+import { AssistantOutput } from './model';
+import { STRINGIFIED_EXAMPLE } from './example';
 
-const EXAMPLE: ConjugationOutput = {
-  singular: {
-    first: 'dajem',
-    second: 'daješ',
-    third: 'daje',
-  },
-  plural: {
-    first: 'dajemo',
-    second: 'dajete',
-    third: 'daju',
-  },
-};
-
-const STRINGIFIED_EXAMPLE = JSON.stringify(EXAMPLE);
-
-export async function conjugate(verb: string): Promise<ConjugationOutput> {
-  const prompt = generatePrompt(verb);
+export async function assist(word: string): Promise<AssistantOutput> {
+  const prompt = generatePrompt(word);
 
   const chatCompletion = await openai.chat.completions.create({
     messages: [
@@ -54,6 +40,12 @@ function processChatCompletionAsJson<T extends object>(
   return JSON.parse(content) as T;
 }
 
-function generatePrompt(verb: string): string {
-  return `Conjugate Serbian verb "${verb}". Print results in JSON with the following structure: ${STRINGIFIED_EXAMPLE}`;
+function generatePrompt(word: string): string {
+  return [
+    `Figure out what part of speech Serbian word "${word}" is.`,
+    'If it is a verb then generate conjugations.',
+    'If it is a noun then generate cases.',
+    'Provide translation to english and russian.',
+    `Print results in JSON with the following structure:\n${STRINGIFIED_EXAMPLE}`,
+  ].join('\n');
 }

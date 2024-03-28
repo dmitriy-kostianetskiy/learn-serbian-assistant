@@ -1,7 +1,7 @@
-import { conjugate } from './conjugation/conjugator';
+import { assist } from './assistant/assist';
 
 async function main(): Promise<void> {
-  const response = await conjugate('putovati');
+  const response = await assist('dete');
 
   console.log(response);
 }
