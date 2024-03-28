@@ -1,23 +1,11 @@
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPEN_AI_TOKEN,
-});
+import { conjugate } from './conjugation/conjugator';
 
 async function main(): Promise<void> {
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [
-      {
-        role: 'user',
-        content: 'Conjugate Serbian verb "dati"',
-      },
-    ],
-    model: 'gpt-3.5-turbo',
-  });
+  const response = await conjugate('putovati');
 
-  const [firstChoice] = chatCompletion.choices;
-
-  console.log(firstChoice.message.content);
+  console.log(response);
 }
 
-main();
+main()
+  .then(() => process.exit(0))
+  .catch(console.error);
