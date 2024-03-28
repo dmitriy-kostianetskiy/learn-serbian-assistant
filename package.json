@@ -2,9 +2,9 @@
   "name": "learn-serbian-assistant",
   "version": "1.0.0",
   "description": "Assistant for those who are learning Serbian",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "npm run ts-node index.ts",
+    "start": "npm run ts-node src/index.ts",
     "ts-node": "node --env-file=.env -r ts-node/register"
   },
   "repository": {
