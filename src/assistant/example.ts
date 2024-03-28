@@ -8,6 +8,12 @@ export const EXAMPLE: AssistantOutput[] = [
       english: 'to give',
       russian: 'давать',
     },
+    definition: {
+      english:
+        'To move, shift, provide something abstract or concrete to someone or something or somewhere.',
+      russian: 'перемещать что-либо в распоряжение другого субъекта',
+      serbian: 'pružiti nešto',
+    },
     conjugations: {
       singular: {
         first: 'dajem',
@@ -27,6 +33,12 @@ export const EXAMPLE: AssistantOutput[] = [
     translation: {
       english: 'child',
       russian: 'ребенок',
+    },
+    definition: {
+      english:
+        'A person who has not yet reached adulthood, whether natural (puberty), cultural (initiation), or legal (majority).',
+      russian: 'мальчик или девочка в раннем возрасте (до отрочества)',
+      serbian: 'људско биће у односу на своје родитеље',
     },
     cases: {
       singular: {
@@ -48,11 +60,17 @@ export const EXAMPLE: AssistantOutput[] = [
     },
   },
   {
-    word: 'sa',
+    word: 'bre',
     partOfSpeech: 'other',
     translation: {
-      english: 'with',
-      russian: 'с',
+      english: 'hey',
+      russian: 'эй!',
+    },
+    definition: {
+      english: 'an exclamation used to call out to someone, to address someone',
+      russian:
+        'возглас, которым окликают, подзывают кого-либо, обращаются к кому-либо',
+      serbian: 'Za pojačavanje pri obraćanju.',
     },
   },
 ];

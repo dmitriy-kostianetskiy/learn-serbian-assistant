@@ -1,7 +1,7 @@
 import { assist } from './assistant/assist';
 
 async function main(): Promise<void> {
-  const response = await assist('dete');
+  const response = await assist('Kurac');
 
   console.log(response);
 }

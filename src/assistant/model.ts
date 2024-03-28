@@ -2,11 +2,18 @@ interface AssistantOutputBase {
   word: string;
   partOfSpeech: PartOfSpeech;
   translation: Translation;
+  definition: Definition;
 }
 
 export interface Translation {
   english: string;
   russian: string;
+}
+
+export interface Definition {
+  english: string;
+  russian: string;
+  serbian: string;
 }
 
 export type PartOfSpeech = 'verb' | 'noun' | 'other';
