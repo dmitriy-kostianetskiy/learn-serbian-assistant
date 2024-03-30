@@ -4,6 +4,7 @@
   "description": "Assistant for those who are learning Serbian",
   "main": "src/index.ts",
   "scripts": {
+    "lint": "eslint --ext .js,.ts .",
     "start": "npm run ts-node src/index.ts",
     "ts-node": "node --env-file=.env -r ts-node/register"
   },

@@ -1,10 +1,16 @@
-import { openai } from '../openai';
 import OpenAI from 'openai';
 import { AssistantOutput } from './model';
 import { STRINGIFIED_EXAMPLE } from './example';
 
-export async function assist(word: string): Promise<AssistantOutput> {
+export async function assist(
+  apiKey: string,
+  word: string,
+): Promise<AssistantOutput> {
   const prompt = generatePrompt(word);
+
+  const openai = new OpenAI({
+    apiKey,
+  });
 
   const chatCompletion = await openai.chat.completions.create({
     messages: [
