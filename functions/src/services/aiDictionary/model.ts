@@ -1,4 +1,4 @@
-interface AssistantOutputBase {
+interface WordDataBase {
   word: string;
   partOfSpeech: PartOfSpeech;
   translation: Translation;
@@ -18,7 +18,7 @@ export interface Definition {
 
 export type PartOfSpeech = 'verb' | 'noun' | 'other';
 
-export interface AssistantVerbOutput extends AssistantOutputBase {
+export interface VerbData extends WordDataBase {
   word: string;
   partOfSpeech: 'verb';
   conjugations: ConjugationsOutput;
@@ -35,7 +35,7 @@ export interface Conjugations {
   third: string;
 }
 
-export interface AssistantNounOutput extends AssistantOutputBase {
+export interface NounData extends WordDataBase {
   partOfSpeech: 'noun';
   cases: CasesOutput;
 }
@@ -54,11 +54,8 @@ export interface CasesOutput {
   plural: Cases;
 }
 
-export interface AssistantOtherOutput extends AssistantOutputBase {
+export interface OtherData extends WordDataBase {
   partOfSpeech: 'other';
 }
 
-export type AssistantOutput =
-  | AssistantVerbOutput
-  | AssistantNounOutput
-  | AssistantOtherOutput;
+export type WordData = VerbData | NounData | OtherData;

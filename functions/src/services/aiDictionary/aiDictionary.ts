@@ -1,31 +1,33 @@
 import OpenAI from 'openai';
-import { AssistantOutput } from './model';
+import { WordData } from './model';
 import { STRINGIFIED_EXAMPLE } from './example';
 
-export async function assist(
-  apiKey: string,
-  word: string,
-): Promise<AssistantOutput> {
-  const prompt = generatePrompt(word);
+export interface AiDictionary {
+  getWordData(word: string): Promise<WordData>;
+}
 
-  const openai = new OpenAI({
-    apiKey,
-  });
+export function getAiDictionary(openai: OpenAI, openAiSeed = 42): AiDictionary {
+  return {
+    getWordData: async (word: string) => {
+      const prompt = generatePrompt(word);
 
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [
-      {
-        role: 'user',
-        content: prompt,
-      },
-    ],
-    model: 'gpt-3.5-turbo',
-    response_format: {
-      type: 'json_object',
+      const chatCompletion = await openai.chat.completions.create({
+        messages: [
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+        model: 'gpt-3.5-turbo',
+        response_format: {
+          type: 'json_object',
+        },
+        seed: openAiSeed,
+      });
+
+      return processChatCompletionAsJson(chatCompletion);
     },
-  });
-
-  return processChatCompletionAsJson(chatCompletion);
+  };
 }
 
 function processChatCompletionAsJson<T extends object>(

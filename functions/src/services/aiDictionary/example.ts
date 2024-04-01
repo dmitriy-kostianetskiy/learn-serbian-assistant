@@ -1,6 +1,6 @@
-import { AssistantOutput } from './model';
+import { WordData } from './model';
 
-export const EXAMPLE: AssistantOutput[] = [
+export const EXAMPLE: WordData[] = [
   {
     word: 'dati',
     partOfSpeech: 'verb',
