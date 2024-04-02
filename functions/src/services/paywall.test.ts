@@ -1,7 +1,7 @@
 import { CollectionReference, DocumentData } from 'firebase-admin/firestore';
 import { Firestore, getFirestore } from '../apis/firestore';
 import { v4 as uuid } from 'uuid';
-import { Paywall, UserQuota, getPaywall } from './paywall';
+import { Paywall, User, getPaywall } from './paywall';
 
 describe('paywall', () => {
   let firestore: Firestore;
@@ -29,11 +29,12 @@ describe('paywall', () => {
     }
   });
 
-  test('should let if quote is positive', async () => {
+  test('should let if limit is not exceeded', async () => {
     // Arrange
     const id = '123';
-    const userQuota: UserQuota = {
-      quota: 1,
+    const userQuota: User = {
+      used: 9,
+      hasPremium: false,
     };
 
     const documentRef = collection.doc(id);
@@ -47,16 +48,17 @@ describe('paywall', () => {
     // Assert
     expect(result).toBeTruthy();
 
-    const { quota } = (await documentRef.get()).data() as UserQuota;
+    const { used } = (await documentRef.get()).data() as User;
 
-    expect(quota).toBe(0);
+    expect(used).toBe(10);
   });
 
-  test('should not let if quote is zero', async () => {
+  test('should not let if limit is exceeded', async () => {
     // Arrange
     const id = '123';
-    const userQuota: UserQuota = {
-      quota: 0,
+    const userQuota: User = {
+      used: 10,
+      hasPremium: false,
     };
 
     // add document to the collection
@@ -67,5 +69,28 @@ describe('paywall', () => {
 
     // Assert
     expect(result).toBeFalsy();
+  });
+
+  test('should let if limit is exceeded and has premium', async () => {
+    // Arrange
+    const id = '123';
+    const userQuota: User = {
+      used: 10,
+      hasPremium: true,
+    };
+    const documentRef = collection.doc(id);
+
+    // add document to the collection
+    await documentRef.set(userQuota);
+
+    // Act
+    const result = await paywall.try(id);
+
+    // Assert
+    expect(result).toBeTruthy();
+
+    const { used } = (await documentRef.get()).data() as User;
+
+    expect(used).toBe(11);
   });
 });

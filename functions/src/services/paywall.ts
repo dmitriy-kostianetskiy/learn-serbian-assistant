@@ -1,7 +1,8 @@
 import admin from 'firebase-admin';
 
-export interface UserQuota {
-  quota: number;
+export interface User {
+  used: number;
+  hasPremium: boolean;
 }
 
 export interface Paywall {
@@ -16,21 +17,26 @@ export function getPaywall(
 ): Paywall {
   const collection = firebase.collection(collectionName);
 
+  const defaultUserDocument: User = {
+    used: 0,
+    hasPremium: false,
+  };
+
   return {
     try: async (userId) => {
       const documentRef = collection.doc(userId);
       const documentSnapshot = await documentRef.get();
 
-      const document = (documentSnapshot.data() as UserQuota) ?? {
-        quota: defaultQuota,
-      };
+      const { used, hasPremium } =
+        (documentSnapshot.data() as User) ?? defaultUserDocument;
 
-      if (document.quota <= 0) {
+      if (used >= defaultQuota && !hasPremium) {
         return false;
       }
 
-      document.quota = document.quota - 1;
-      await documentRef.set(document);
+      await documentRef.update({
+        used: used + 1,
+      });
 
       return true;
     },
@@ -38,7 +44,11 @@ export function getPaywall(
       const documents = await collection.get();
 
       for (const { id } of documents.docs) {
-        await collection.doc(id).delete();
+        const document: Partial<User> = {
+          used: 0,
+        };
+
+        await collection.doc(id).update(document);
       }
     },
   };
