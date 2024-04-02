@@ -3,6 +3,7 @@ interface WordDataBase {
   partOfSpeech: PartOfSpeech;
   translation: Translation;
   definition: Definition;
+  example: string;
   synonyms: string[];
 }
 

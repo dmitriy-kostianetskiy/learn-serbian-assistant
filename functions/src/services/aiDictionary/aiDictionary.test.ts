@@ -22,6 +22,7 @@ describe('AiDictionary', () => {
       // Assert
       expect(wordData).toBeTruthy();
       expect(wordData.partOfSpeech).toBe('verb');
+      expect(wordData.example).toBeTruthy();
 
       if (wordData.partOfSpeech === 'verb') {
         const expectedConjugations: ConjugationsOutput = {
@@ -54,6 +55,7 @@ describe('AiDictionary', () => {
       // Assert
       expect(wordData).toBeTruthy();
       expect(wordData.partOfSpeech).toBe('noun');
+      expect(wordData.example).toBeTruthy();
 
       if (wordData.partOfSpeech === 'noun') {
         const expectedCases: CasesOutput = {

@@ -16,6 +16,7 @@ export const EXAMPLE: WordData[] = [
       serbian: 'pružiti nešto',
     },
     synonyms: ['prineti', 'pružiti', 'darovati', 'pokloniti'],
+    example: 'Molim dajte kafu!',
     conjugations: {
       singular: {
         first: 'dajem',
@@ -43,6 +44,7 @@ export const EXAMPLE: WordData[] = [
       serbian: 'људско биће у односу на своје родитеље',
     },
     synonyms: ['beba', 'klinac', 'balavko'],
+    example: 'Deca ide u školu',
     cases: {
       singular: {
         nominative: 'dete',
@@ -78,6 +80,7 @@ export const EXAMPLE: WordData[] = [
       serbian: 'Za pojačavanje pri obraćanju.',
     },
     synonyms: [],
+    example: 'Da kakav vinjak bre!',
   },
 ];
 

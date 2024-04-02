@@ -57,6 +57,7 @@ function generatePrompt(word: string): string {
     'Provide definition of the word in serbian, english and russian.',
     'Provide translation to english and russian.',
     'Provide a few synonyms in Serbian',
+    'Provide an example of usage of the word in Serbian',
     `Print results in JSON with the following structure:\n${STRINGIFIED_EXAMPLE}`,
   ].join('\n');
 }

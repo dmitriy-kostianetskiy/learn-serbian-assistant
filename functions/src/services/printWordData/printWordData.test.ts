@@ -18,6 +18,7 @@ describe('print word data', () => {
         russian: 'давать',
       },
       synonyms: ['prineti', 'pružiti', 'darovati', 'pokloniti'],
+      example: 'Molim dajte kafu!',
       conjugations: {
         singular: {
           first: 'dajem',
@@ -36,8 +37,10 @@ describe('print word data', () => {
     const message = printWordData(wordData);
 
     // Assert
-
     expect(message).toContain('<strong>dati</strong>');
+
+    // Assert Example
+    expect(message).toContain('Molim dajte kafu!');
 
     // Assert translations
     expect(message).toContain('🇬🇧 to give');
@@ -72,6 +75,7 @@ describe('print word data', () => {
         russian: 'стол',
       },
       synonyms: ['astal', 'trpeza'],
+      example: 'Ostavite to na stolu.',
       cases: {
         singular: {
           nominative: 'sto',
@@ -100,6 +104,9 @@ describe('print word data', () => {
     // Assert
 
     expect(message).toContain('<strong>sto</strong>');
+
+    // Assert Example
+    expect(message).toContain('Ostavite to na stolu.');
 
     // Assert translations
     expect(message).toContain('🇬🇧 table');

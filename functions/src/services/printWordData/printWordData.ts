@@ -65,8 +65,11 @@ const printBasicWordData = ({
   definition,
   translation,
   synonyms,
+  example,
 }: WordData) => {
   return [
+    `💡 Example: ${example}`,
+    '',
     ...[
       '❗️ <strong>Definition</strong>',
       '',
