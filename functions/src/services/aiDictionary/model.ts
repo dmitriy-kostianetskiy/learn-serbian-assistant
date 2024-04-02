@@ -1,9 +1,9 @@
 interface WordDataBase {
   word: string;
-
   partOfSpeech: PartOfSpeech;
   translation: Translation;
   definition: Definition;
+  synonyms: string[];
 }
 
 export interface Translation {

@@ -17,10 +17,10 @@ export const printWordData = (wordData: WordData): string => {
   }
 };
 const printVerb = (wordData: VerbData) => {
-  const { conjugations, infinitive, partOfSpeech } = wordData;
+  const { conjugations, infinitive } = wordData;
 
   return [
-    `<strong>${infinitive}</strong> (${partOfSpeech})`,
+    `<strong>${infinitive}</strong>`,
     '',
     printBasicWordData(wordData),
     '',
@@ -36,10 +36,10 @@ const printVerb = (wordData: VerbData) => {
   ].join('\n');
 };
 const printNoun = (wordData: NounData) => {
-  const { cases, partOfSpeech } = wordData;
+  const { cases } = wordData;
 
   return [
-    `<strong>${cases.singular.nominative}</strong> (${partOfSpeech})`,
+    `<strong>${cases.singular.nominative}</strong>`,
     '',
     printBasicWordData(wordData),
     '',
@@ -55,28 +55,36 @@ const printNoun = (wordData: NounData) => {
   ].join('\n');
 };
 const printOther = (wordData: OtherData) => {
-  const { word, partOfSpeech } = wordData;
+  const { word } = wordData;
 
+  return [`<strong>${word}</strong>`, '', printBasicWordData(wordData)].join(
+    '\n',
+  );
+};
+const printBasicWordData = ({
+  definition,
+  translation,
+  synonyms,
+}: WordData) => {
   return [
-    `<strong>${word}</strong> (${partOfSpeech})`,
-    '',
-    printBasicWordData(wordData),
+    ...[
+      '❗️ <strong>Definition</strong>',
+      '',
+      `  🇷🇸 ${definition.serbian}`,
+      `  🇬🇧 ${definition.english}`,
+      `  🇷🇺 ${definition.russian}`,
+      '',
+      '💬 <strong>Translation</strong>',
+      '',
+      `  🇬🇧 ${translation.english}`,
+      `  🇷🇺 ${translation.russian}`,
+    ],
+    ...(synonyms.length > 0
+      ? ['', '📚 <strong>Synonyms</strong>', '', synonyms.join(', ')]
+      : []),
   ].join('\n');
 };
-const printBasicWordData = ({ definition, translation }: WordData) => {
-  return [
-    '❗️ <strong>Definition</strong>',
-    '',
-    `  🇷🇸 ${definition.serbian}`,
-    `  🇬🇧 ${definition.english}`,
-    `  🇷🇺 ${definition.russian}`,
-    '',
-    '💬 <strong>Translation</strong>',
-    '',
-    `  🇬🇧 ${translation.english}`,
-    `  🇷🇺 ${translation.russian}`,
-  ].join('\n');
-};
+
 const printCases = (cases: Cases) => {
   return [
     `  Nominative: <strong>${cases.nominative}</strong>`,

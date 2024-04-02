@@ -39,6 +39,7 @@ describe('AiDictionary', () => {
 
         expect(wordData.conjugations).toMatchObject(expectedConjugations);
         expect(wordData.infinitive).toBe('dati');
+        expect(wordData.synonyms).not.toHaveLength(0);
       }
     },
     TIMEOUT,
@@ -77,6 +78,7 @@ describe('AiDictionary', () => {
         };
 
         expect(wordData.cases).toMatchObject(expectedCases);
+        expect(wordData.synonyms).not.toHaveLength(0);
       }
     },
     TIMEOUT,

@@ -17,6 +17,7 @@ describe('print word data', () => {
         english: 'to give',
         russian: 'давать',
       },
+      synonyms: ['prineti', 'pružiti', 'darovati', 'pokloniti'],
       conjugations: {
         singular: {
           first: 'dajem',
@@ -36,7 +37,7 @@ describe('print word data', () => {
 
     // Assert
 
-    expect(message).toContain('<strong>dati</strong> (verb)');
+    expect(message).toContain('<strong>dati</strong>');
 
     // Assert translations
     expect(message).toContain('🇬🇧 to give');
@@ -70,6 +71,7 @@ describe('print word data', () => {
         english: 'table',
         russian: 'стол',
       },
+      synonyms: ['astal', 'trpeza'],
       cases: {
         singular: {
           nominative: 'sto',
@@ -97,7 +99,7 @@ describe('print word data', () => {
 
     // Assert
 
-    expect(message).toContain('<strong>sto</strong> (noun)');
+    expect(message).toContain('<strong>sto</strong>');
 
     // Assert translations
     expect(message).toContain('🇬🇧 table');
@@ -108,8 +110,10 @@ describe('print word data', () => {
     expect(message).toContain('🇬🇧 a piece of furniture');
     expect(message).toContain('🇷🇺 предмет мебели');
 
-    // Assert singular conjugations
+    // Assert synonyms
+    expect(message).toContain('astal, trpeza');
 
+    // Assert singular conjugations
     expect(message).toContain('Nominative: <strong>sto</strong>');
     expect(message).toContain('Genitive: <strong>stola</strong>');
     expect(message).toContain('Dative: <strong>stolu</strong>');
@@ -119,7 +123,6 @@ describe('print word data', () => {
     expect(message).toContain('Vocative: <strong>sto</strong>');
 
     // Assert plural conjugations
-
     expect(message).toContain('Nominative: <strong>stolovi</strong>');
     expect(message).toContain('Genitive: <strong>stolova</strong>');
     expect(message).toContain('Dative: <strong>stolovima</strong>');

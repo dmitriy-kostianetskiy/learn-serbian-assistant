@@ -15,6 +15,7 @@ export const EXAMPLE: WordData[] = [
       russian: 'перемещать что-либо в распоряжение другого субъекта',
       serbian: 'pružiti nešto',
     },
+    synonyms: ['prineti', 'pružiti', 'darovati', 'pokloniti'],
     conjugations: {
       singular: {
         first: 'dajem',
@@ -41,6 +42,7 @@ export const EXAMPLE: WordData[] = [
       russian: 'мальчик или девочка в раннем возрасте (до отрочества)',
       serbian: 'људско биће у односу на своје родитеље',
     },
+    synonyms: ['beba', 'klinac', 'balavko'],
     cases: {
       singular: {
         nominative: 'dete',
@@ -75,6 +77,7 @@ export const EXAMPLE: WordData[] = [
         'возглас, которым окликают, подзывают кого-либо, обращаются к кому-либо',
       serbian: 'Za pojačavanje pri obraćanju.',
     },
+    synonyms: [],
   },
 ];
 

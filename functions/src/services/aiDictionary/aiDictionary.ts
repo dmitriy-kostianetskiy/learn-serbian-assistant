@@ -56,6 +56,7 @@ function generatePrompt(word: string): string {
     'If it is a noun then generate cases, DO NOT add any prepositions.',
     'Provide definition of the word in serbian, english and russian.',
     'Provide translation to english and russian.',
+    'Provide a few synonyms in Serbian',
     `Print results in JSON with the following structure:\n${STRINGIFIED_EXAMPLE}`,
   ].join('\n');
 }
