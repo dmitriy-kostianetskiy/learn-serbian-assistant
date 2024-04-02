@@ -1,7 +1,9 @@
 import admin from 'firebase-admin';
 
-export function getFirestore(): admin.firestore.Firestore {
-  admin.initializeApp();
+export type Firestore = admin.firestore.Firestore;
 
+admin.initializeApp();
+
+export function getFirestore(): Firestore {
   return admin.firestore();
 }

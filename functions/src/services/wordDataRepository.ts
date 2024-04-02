@@ -8,13 +8,13 @@ export interface WordDataRepository {
 
 export function getWordDataRepository(
   firebase: admin.firestore.Firestore,
+  collectionName = 'dictionary',
 ): WordDataRepository {
+  const collection = firebase.collection(collectionName);
+
   return {
     get: async (word) => {
-      const document = await firebase
-        .collection('dictionary')
-        .doc(word.toLocaleLowerCase())
-        .get();
+      const document = await collection.doc(word.toLowerCase()).get();
 
       if (!document.exists) {
         return undefined;
@@ -23,9 +23,8 @@ export function getWordDataRepository(
       return document.data() as WordData;
     },
     add: async (wordData) => {
-      await firebase.collection('dictionary').add({
-        id: wordData.word,
-        ...wordData,
+      await collection.doc(wordData.word).set({
+        wordData,
       });
     },
   };
