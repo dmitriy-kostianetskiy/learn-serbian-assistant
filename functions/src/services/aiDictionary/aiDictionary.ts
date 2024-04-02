@@ -58,6 +58,8 @@ function generatePrompt(word: string): string {
     'Provide translation to english and russian.',
     'Provide a few synonyms in Serbian',
     'Provide an example of usage of the word in Serbian',
+    'Provide grammatical number of a given word as a string "množina" or "jednina"',
+    'Provide grammatical gender of a given word as a string "muški", "ženski" or "srednji"',
     `Print results in JSON with the following structure:\n${STRINGIFIED_EXAMPLE}`,
   ].join('\n');
 }

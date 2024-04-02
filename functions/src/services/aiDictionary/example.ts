@@ -33,6 +33,8 @@ export const EXAMPLE: WordData[] = [
   {
     word: 'dete',
     partOfSpeech: 'noun',
+    grammaticalGender: 'srednji',
+    grammaticalNumber: 'jednina',
     translation: {
       english: 'child',
       russian: 'ребенок',

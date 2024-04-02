@@ -16,6 +16,7 @@ export const printWordData = (wordData: WordData): string => {
       return printOther(wordData);
   }
 };
+
 const printVerb = (wordData: VerbData) => {
   const { conjugations, infinitive } = wordData;
 
@@ -35,11 +36,12 @@ const printVerb = (wordData: VerbData) => {
     `  Oni\\One\\Ona <strong>${conjugations.plural.third}</strong>`,
   ].join('\n');
 };
+
 const printNoun = (wordData: NounData) => {
-  const { cases } = wordData;
+  const { cases, word, grammaticalGender, grammaticalNumber } = wordData;
 
   return [
-    `<strong>${cases.singular.nominative}</strong>`,
+    `📝 <strong>${word}</strong> (${grammaticalNumber}, ${grammaticalGender})`,
     '',
     printBasicWordData(wordData),
     '',
@@ -54,6 +56,7 @@ const printNoun = (wordData: NounData) => {
     printCases(cases.plural),
   ].join('\n');
 };
+
 const printOther = (wordData: OtherData) => {
   const { word } = wordData;
 
@@ -61,6 +64,7 @@ const printOther = (wordData: OtherData) => {
     '\n',
   );
 };
+
 const printBasicWordData = ({
   definition,
   translation,

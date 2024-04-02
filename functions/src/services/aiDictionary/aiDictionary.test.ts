@@ -41,6 +41,8 @@ describe('AiDictionary', () => {
         expect(wordData.conjugations).toMatchObject(expectedConjugations);
         expect(wordData.infinitive).toBe('dati');
         expect(wordData.synonyms).not.toHaveLength(0);
+
+        console.log(wordData);
       }
     },
     TIMEOUT,
@@ -56,6 +58,8 @@ describe('AiDictionary', () => {
       expect(wordData).toBeTruthy();
       expect(wordData.partOfSpeech).toBe('noun');
       expect(wordData.example).toBeTruthy();
+      expect(wordData.grammaticalGender).toBeTruthy();
+      expect(wordData.grammaticalNumber).toBeTruthy();
 
       if (wordData.partOfSpeech === 'noun') {
         const expectedCases: CasesOutput = {
@@ -81,6 +85,8 @@ describe('AiDictionary', () => {
 
         expect(wordData.cases).toMatchObject(expectedCases);
         expect(wordData.synonyms).not.toHaveLength(0);
+
+        console.log(wordData);
       }
     },
     TIMEOUT,

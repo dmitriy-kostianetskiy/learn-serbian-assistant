@@ -1,5 +1,7 @@
 interface WordDataBase {
   word: string;
+  grammaticalGender?: string;
+  grammaticalNumber?: string;
   partOfSpeech: PartOfSpeech;
   translation: Translation;
   definition: Definition;
