@@ -12,6 +12,7 @@ import {
   getWordDataRepository,
 } from './services/wordDataRepository';
 import { Dictionary, getDictionary } from './services/dictionary';
+import { Paywall, getPaywall } from './services/paywall';
 
 export interface Dependencies {
   firestore: admin.firestore.Firestore;
@@ -20,6 +21,7 @@ export interface Dependencies {
   aiDictionary: AiDictionary;
   wordDataRepository: WordDataRepository;
   dictionary: Dictionary;
+  paywall: Paywall;
 }
 
 let dependencies: Dependencies | undefined;
@@ -36,7 +38,8 @@ export function getDependencies(): Dependencies {
 
   const aiDictionary = getAiDictionary(openai);
   const wordDataRepository = getWordDataRepository(firestore);
-  const dictionary = getDictionary(aiDictionary, wordDataRepository);
+  const paywall = getPaywall(firestore);
+  const dictionary = getDictionary(aiDictionary, wordDataRepository, paywall);
 
   dependencies = {
     firestore,
@@ -45,6 +48,7 @@ export function getDependencies(): Dependencies {
     aiDictionary,
     wordDataRepository,
     dictionary,
+    paywall,
   };
 
   return dependencies;

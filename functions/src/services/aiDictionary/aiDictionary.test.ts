@@ -17,7 +17,9 @@ describe('AiDictionary', () => {
     'should recognize verb and provide conjugations',
     async () => {
       // Arrange & Act
-      const wordData = await aiDictionary.getWordData('dajem');
+      const wordData = await aiDictionary.getWordData('dati');
+
+      console.log(wordData);
 
       // Assert
       expect(wordData).toBeTruthy();
@@ -41,8 +43,6 @@ describe('AiDictionary', () => {
         expect(wordData.conjugations).toMatchObject(expectedConjugations);
         expect(wordData.infinitive).toBe('dati');
         expect(wordData.synonyms).not.toHaveLength(0);
-
-        console.log(wordData);
       }
     },
     TIMEOUT,
@@ -53,6 +53,8 @@ describe('AiDictionary', () => {
     async () => {
       // Arrange & Act
       const wordData = await aiDictionary.getWordData('sto');
+
+      console.log(wordData);
 
       // Assert
       expect(wordData).toBeTruthy();
@@ -85,8 +87,6 @@ describe('AiDictionary', () => {
 
         expect(wordData.cases).toMatchObject(expectedCases);
         expect(wordData.synonyms).not.toHaveLength(0);
-
-        console.log(wordData);
       }
     },
     TIMEOUT,

@@ -1,6 +1,7 @@
 import { message } from 'telegraf/filters';
 import { Dependencies } from '../dependencies';
 import { printWordData } from '../services/printWordData/printWordData';
+import { UserQuotaExceededError } from '../services/dictionary';
 
 export const configureBot = (dependencies: Dependencies) => () => {
   const { telegraf, dictionary } = dependencies;
@@ -19,12 +20,26 @@ export const configureBot = (dependencies: Dependencies) => () => {
   });
 
   telegraf.on(message('text'), async (context) => {
-    const wordData = await dictionary.getWordData(context.text);
-    const message = printWordData(wordData);
+    try {
+      const wordData = await dictionary.getWordData(
+        context.text,
+        context.message.from.id.toFixed(0),
+      );
 
-    await context.reply(message, {
-      parse_mode: 'HTML',
-      reply_parameters: { message_id: context.message.message_id },
-    });
+      const message = printWordData(wordData);
+
+      await context.reply(message, {
+        parse_mode: 'HTML',
+        reply_parameters: { message_id: context.message.message_id },
+      });
+    } catch (e) {
+      if (e instanceof UserQuotaExceededError) {
+        await context.reply(e.message, {
+          reply_parameters: { message_id: context.message.message_id },
+        });
+      } else {
+        throw e;
+      }
+    }
   });
 };
