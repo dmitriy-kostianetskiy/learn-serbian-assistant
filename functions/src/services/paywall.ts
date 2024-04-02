@@ -6,7 +6,7 @@ export interface UserQuota {
 
 export interface Paywall {
   try(userId: string): Promise<boolean>;
-  reset(userId: string): Promise<void>;
+  reset(): Promise<void>;
 }
 
 export function getPaywall(
@@ -34,10 +34,12 @@ export function getPaywall(
 
       return true;
     },
-    reset: async (userId) => {
-      const documentRef = collection.doc(userId);
+    reset: async () => {
+      const documents = await collection.get();
 
-      await documentRef.delete();
+      for (const { id } of documents.docs) {
+        await collection.doc(id).delete();
+      }
     },
   };
 }
