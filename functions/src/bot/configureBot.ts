@@ -1,7 +1,7 @@
 import { message } from 'telegraf/filters';
 import { Dependencies } from '../dependencies';
 
-export const bootstrapBot = (dependencies: Dependencies) => () => {
+export const configureBot = (dependencies: Dependencies) => () => {
   const { telegraf, dictionary } = dependencies;
 
   telegraf.start((context) => {
