@@ -52,7 +52,8 @@ function generatePrompt(word: string): string {
   return [
     `Figure out what part of speech Serbian word "${word}" is.`,
     'If it is a verb then generate conjugations.',
-    'If it is a noun then generate cases.',
+    'If it is a verb then also provide infinitive.',
+    'If it is a noun then generate cases, DO NOT add any prepositions.',
     'Provide definition of the word in serbian, english and russian.',
     'Provide translation to english and russian.',
     `Print results in JSON with the following structure:\n${STRINGIFIED_EXAMPLE}`,

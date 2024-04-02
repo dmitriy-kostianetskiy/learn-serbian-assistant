@@ -1,4 +1,4 @@
-import { AiDictionary } from './aiDictionary';
+import { AiDictionary } from './aiDictionary/aiDictionary';
 import { WordData } from './aiDictionary/model';
 import { Dictionary, getDictionary } from './dictionary';
 import { WordDataRepository } from './wordDataRepository';

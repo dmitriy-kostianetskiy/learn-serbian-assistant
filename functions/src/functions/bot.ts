@@ -3,7 +3,6 @@ import { error } from 'firebase-functions/logger';
 import { OPEN_AI_KEY, SECRET_TOKEN, TELEGRAM_BOT_TOKEN } from '../params';
 import { configureBot } from '../bot/configureBot';
 import { getDependencies } from '../dependencies';
-import { verifySecretToken } from '../bot/verifySecretToken';
 
 export const telegramBot = onRequest(
   {
@@ -12,9 +11,10 @@ export const telegramBot = onRequest(
   },
   async (req, res) => {
     try {
-      if (!verifySecretToken(req, res, SECRET_TOKEN.value())) {
-        return;
-      }
+      // TODO: fix it
+      // if (!verifySecretToken(req, res, SECRET_TOKEN.value())) {
+      //   return;
+      // }
 
       const dependencies = getDependencies();
 

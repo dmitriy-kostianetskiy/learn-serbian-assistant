@@ -3,7 +3,10 @@ import { OPEN_AI_KEY, TELEGRAM_BOT_TOKEN } from './params';
 import { getFirestore } from './apis/firestore';
 import admin from 'firebase-admin';
 import { Telegraf } from 'telegraf';
-import { AiDictionary, getAiDictionary } from './services/aiDictionary';
+import {
+  AiDictionary,
+  getAiDictionary,
+} from './services/aiDictionary/aiDictionary';
 import {
   WordDataRepository,
   getWordDataRepository,

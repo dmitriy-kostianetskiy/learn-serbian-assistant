@@ -23,9 +23,7 @@ export function getWordDataRepository(
       return document.data() as WordData;
     },
     add: async (wordData) => {
-      await collection.doc(wordData.word).set({
-        wordData,
-      });
+      await collection.doc(wordData.word).set(wordData);
     },
   };
 }

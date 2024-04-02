@@ -4,6 +4,7 @@ export const EXAMPLE: WordData[] = [
   {
     word: 'dati',
     partOfSpeech: 'verb',
+    infinitive: 'dati',
     translation: {
       english: 'to give',
       russian: 'давать',
