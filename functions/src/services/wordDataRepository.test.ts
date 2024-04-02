@@ -18,7 +18,7 @@ describe('word data repository', () => {
 
   beforeEach(async () => {
     // create collection with random name for testing
-    const testCollection = `test-${uuid()}`;
+    const testCollection = `dictionary-test-${uuid()}`;
     collection = firestore.collection(testCollection);
 
     // create repository

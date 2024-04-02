@@ -1,6 +1,6 @@
 import admin from 'firebase-admin';
 
-interface UserQuota {
+export interface UserQuota {
   quota: number;
 }
 
@@ -30,7 +30,7 @@ export function getPaywall(
       }
 
       document.quota = document.quota - 1;
-      documentRef.set(document);
+      await documentRef.set(document);
 
       return true;
     },
