@@ -3,7 +3,7 @@ import { WordData } from './aiDictionary/model';
 import { Dictionary, getDictionary } from './dictionary';
 import { WordDataRepository } from './wordDataRepository';
 
-describe('dictionary', () => {
+describe('Dictionary', () => {
   let aiDictionary: AiDictionary;
   let wordDataRepository: WordDataRepository;
   let dictionary: Dictionary;

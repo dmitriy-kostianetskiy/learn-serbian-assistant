@@ -47,6 +47,7 @@ export interface Cases {
   accusative: string;
   instrumental: string;
   locative: string;
+  vocative: string;
 }
 
 export interface CasesOutput {

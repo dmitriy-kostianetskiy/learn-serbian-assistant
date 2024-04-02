@@ -48,6 +48,7 @@ export const EXAMPLE: WordData[] = [
         accusative: 'dete',
         instrumental: 'detetom',
         locative: 'detetu',
+        vocative: 'dete',
       },
       plural: {
         nominative: 'deca',
@@ -56,6 +57,7 @@ export const EXAMPLE: WordData[] = [
         accusative: 'decu',
         instrumental: 'decoma',
         locative: 'deci',
+        vocative: 'deco',
       },
     },
   },
