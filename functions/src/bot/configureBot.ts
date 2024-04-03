@@ -11,25 +11,22 @@ export const configureBot = (dependencies: Dependencies) => () => {
 
     const userId = id.toFixed(0);
 
-    await Promise.all([
-      // add user to DB
-      userRepository.add(userId, {
-        userName: username,
-        firstName: first_name,
-        lastName: last_name,
-      }),
-      // send a message
-      context.reply(
-        [
-          'Hello!',
-          '',
-          'I am an assistant for those who are learning Serbian 🇷🇸.',
-          'Just type in any word in Serbian or English and will come up with useful insights.',
-          '',
-          'Go try it now! Good luck in learning! 🎓📚',
-        ].join('\n'),
-      ),
-    ]);
+    await userRepository.add(userId, {
+      userName: username,
+      firstName: first_name,
+      lastName: last_name,
+    });
+
+    await context.reply(
+      [
+        'Hello!',
+        '',
+        'I am an assistant for those who are learning Serbian 🇷🇸.',
+        'Just type in any word in Serbian or English and will come up with useful insights.',
+        '',
+        'Go try it now! Good luck in learning! 🎓📚',
+      ].join('\n'),
+    );
   });
 
   telegraf.on(message('text'), async (context) => {
