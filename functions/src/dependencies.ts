@@ -13,6 +13,7 @@ import {
 } from './services/wordDataRepository';
 import { Dictionary, getDictionary } from './services/dictionary';
 import { Paywall, getPaywall } from './services/paywall';
+import { UserRepository, getUserRepository } from './services/userRepository';
 
 export interface Dependencies {
   firestore: admin.firestore.Firestore;
@@ -20,6 +21,7 @@ export interface Dependencies {
   telegraf: Telegraf;
   aiDictionary: AiDictionary;
   wordDataRepository: WordDataRepository;
+  userRepository: UserRepository;
   dictionary: Dictionary;
   paywall: Paywall;
 }
@@ -37,8 +39,11 @@ export function getDependencies(): Dependencies {
   const telegraf = new Telegraf(TELEGRAM_BOT_TOKEN.value());
 
   const aiDictionary = getAiDictionary(openai);
+
   const wordDataRepository = getWordDataRepository(firestore);
-  const paywall = getPaywall(firestore);
+  const userRepository = getUserRepository(firestore);
+
+  const paywall = getPaywall(userRepository);
   const dictionary = getDictionary(aiDictionary, wordDataRepository, paywall);
 
   dependencies = {
@@ -47,6 +52,7 @@ export function getDependencies(): Dependencies {
     telegraf,
     aiDictionary,
     wordDataRepository,
+    userRepository,
     dictionary,
     paywall,
   };
