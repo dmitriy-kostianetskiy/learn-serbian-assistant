@@ -1,0 +1,33 @@
+name: Tests
+
+on: [pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: ./functions
+
+      - name: Setup firestore-credentials.json
+        run: |
+          echo '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}' >> ${{ github.workspace }}/firestore-credentials.json
+
+      - name: Setup .env.test file
+        run: |
+          echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/firestore-credentials.json" >> ./functions/.env.test
+          echo "OPEN_AI_KEY=${{ secrets.OPEN_AI_KEY }}" >> ./functions/.env.test
+
+      - name: Unit Tests
+        run: npm run test
+        working-directory: ./functions

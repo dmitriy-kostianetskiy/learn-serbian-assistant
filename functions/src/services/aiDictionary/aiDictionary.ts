@@ -51,16 +51,16 @@ function processChatCompletionAsJson<T extends object>(
 function generatePrompt(word: string): string {
   return [
     `Generate a JSON containing the following information about the word "${word}" in Serbian.`,
-    'Save a part of speech in a field "partOfSpeech". KEEP IN MIND "partOfSpeech" only can be "verb", "noun" or "other"',
-    'If it is a verb then generate conjugations for all grammatical genders and grammatical numbers.',
-    'If it is a verb then also provide infinitive.',
-    'If it is a noun then generate cases for singular and plural, DO NOT add any prepositions.',
-    'Provide definition of the word in serbian, english and russian.',
-    'Provide translation to english and russian.',
-    'Provide a few synonyms in Serbian',
-    'Provide an example of usage of the word in Serbian',
-    'Provide grammatical number of a given word as a string "množina" or "jednina"',
-    'Provide grammatical gender of a given word as a string "muški", "ženski" or "srednji"',
+    'Field "partOfSpeech" should contain part of speech. "partOfSpeech" only can be "verb", "noun" or "other".',
+    'If it is a verb then field "conjugations" should contain two subfields "singluar" for conjugations for singular and "plural" for conjugations for plural.',
+    'If it is a verb then "infinitive" should contain infinitive.',
+    'If it is a noun then field "cases" should contain two subfields: "singluar" for cases in singular and "plural" for cases in plural. DO NOT add any prepositions.',
+    'Field "definition" should contain definition of the word in serbian, english and russian.',
+    'Field "translation" should contain translation fo the input word in english and russian.',
+    'Field "synonyms" should contain a few synonyms in Serbian',
+    'Field "example" should contain an example of usage of the word in Serbian',
+    'Field "grammaticalNumber" should contain grammatical number of an input word as a string "množina" or "jednina"',
+    'Field "grammaticalGender" should contain grammatical gender of a given word as a string "muški", "ženski" or "srednji"',
     `Print results in JSON with the following structure:\n${STRINGIFIED_EXAMPLE}`,
   ].join('\n');
 }
