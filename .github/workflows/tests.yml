@@ -21,11 +21,11 @@ jobs:
 
       - name: Setup firestore-credentials.json
         run: |
-          printf '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}' >> /firestore-credentials.json
+          printf '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}' >> ${{ github.workspace }}/firestore-credentials.json
 
       - name: Setup .env.test file
         run: |
-          printf "GOOGLE_APPLICATION_CREDENTIALS=/firestore-credentials.json" >> .env.test
+          printf "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/firestore-credentials.json" >> .env.test
           printf "OPEN_AI_KEY=${{ secrets.OPEN_AI_KEY }}" >> .env.test
 
       - name: Unit Tests
