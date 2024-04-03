@@ -1,6 +1,7 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { getPaywall } from '../services/paywall';
 import { getFirestore } from '../apis/firestore';
+import { getUserRepository } from '../services/userRepository';
 
 export const resetQuotes = onSchedule(
   {
@@ -9,7 +10,8 @@ export const resetQuotes = onSchedule(
   },
   async () => {
     const firestore = getFirestore();
-    const paywall = getPaywall(firestore);
+    const userRepository = getUserRepository(firestore);
+    const paywall = getPaywall(userRepository);
 
     await paywall.reset();
   },
