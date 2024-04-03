@@ -9,7 +9,8 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "test": "dotenvx run --env-file=.env.test -- jest"
+    "test": "dotenvx run --env-file=.env.test -- jest",
+    "test:ci": "jest"
   },
   "engines": {
     "node": "20"
