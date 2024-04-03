@@ -4,27 +4,39 @@ import { printWordData } from '../services/printWordData/printWordData';
 import { UserQuotaExceededError } from '../services/dictionary';
 
 export const configureBot = (dependencies: Dependencies) => () => {
-  const { telegraf, dictionary } = dependencies;
+  const { telegraf, dictionary, userRepository } = dependencies;
 
-  telegraf.start((context) => {
-    context.reply(
-      [
-        'Hello!',
-        '',
-        'I am an assistant for those who are learning Serbian 🇷🇸.',
-        'Just type in any word in Serbian or English and will come up with useful insights.',
-        '',
-        'Go try it now! Good luck in learning! 🎓📚',
-      ].join('\n'),
-    );
+  telegraf.start(async (context) => {
+    const { id, first_name, last_name, username } = context.message.from;
+
+    const userId = id.toFixed(0);
+
+    await Promise.all([
+      // add user to DB
+      userRepository.add(userId, {
+        userName: username,
+        firstName: first_name,
+        lastName: last_name,
+      }),
+      // send a message
+      context.reply(
+        [
+          'Hello!',
+          '',
+          'I am an assistant for those who are learning Serbian 🇷🇸.',
+          'Just type in any word in Serbian or English and will come up with useful insights.',
+          '',
+          'Go try it now! Good luck in learning! 🎓📚',
+        ].join('\n'),
+      ),
+    ]);
   });
 
   telegraf.on(message('text'), async (context) => {
     try {
-      const wordData = await dictionary.getWordData(
-        context.text,
-        context.message.from.id.toFixed(0),
-      );
+      const userId = context.message.from.id.toFixed(0);
+
+      const wordData = await dictionary.getWordData(context.text, userId);
 
       const message = printWordData(wordData);
 

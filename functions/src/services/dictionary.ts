@@ -28,7 +28,7 @@ export function getDictionary(
 
       if (!(await paywall.try(userId))) {
         throw new UserQuotaExceededError(
-          'You have exceeded daily usage limit.',
+          'You have exceeded daily usage limit. Please try again tomorrow.',
         );
       }
 

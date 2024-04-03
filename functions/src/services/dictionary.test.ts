@@ -71,7 +71,9 @@ describe('Dictionary', () => {
     await expect(async () => {
       await dictionary.getWordData('not-cached', 'bad');
     }).rejects.toThrow(
-      new UserQuotaExceededError('You have exceeded daily usage limit.'),
+      new UserQuotaExceededError(
+        'You have exceeded daily usage limit. Please try again tomorrow.',
+      ),
     );
   });
 });

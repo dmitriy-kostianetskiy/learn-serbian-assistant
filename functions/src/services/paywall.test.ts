@@ -1,71 +1,53 @@
-import { CollectionReference, DocumentData } from 'firebase-admin/firestore';
-import { Firestore, getFirestore } from '../apis/firestore';
-import { v4 as uuid } from 'uuid';
-import { Paywall, User, getPaywall } from './paywall';
+import { getPaywall } from './paywall';
+import { UpdateUserInput, User, UserRepository } from './userRepository';
 
 describe('paywall', () => {
-  let firestore: Firestore;
-  let paywall: Paywall;
-  let collection: CollectionReference<DocumentData>;
-
-  beforeAll(async () => {
-    firestore = getFirestore();
-  });
-
-  beforeEach(async () => {
-    // create collection with random name for testing
-    const testCollection = `paywall-test-${uuid()}`;
-    collection = firestore.collection(testCollection);
-
-    // create repository
-    paywall = getPaywall(firestore, testCollection);
-  });
-
-  afterEach(async () => {
-    const documents = await collection.get();
-
-    for (const { id } of documents.docs) {
-      await collection.doc(id).delete();
-    }
-  });
-
   test('should let if limit is not exceeded', async () => {
     // Arrange
-    const id = '123';
-    const userQuota: User = {
-      used: 9,
+    const userId = '123';
+    const user: User = {
+      dailyQuotaUsed: 0,
       hasPremium: false,
     };
 
-    const documentRef = collection.doc(id);
+    const userRepository: UserRepository = {
+      add: jest.fn(),
+      get: jest.fn(async () => user),
+      update: jest.fn(),
+      updateAll: jest.fn(),
+    };
 
-    // add document to the collection
-    await documentRef.set(userQuota);
+    const paywall = getPaywall(userRepository);
 
     // Act
-    const result = await paywall.try(id);
+    const result = await paywall.try(userId);
 
     // Assert
     expect(result).toBeTruthy();
 
-    const { used } = (await documentRef.get()).data() as User;
-
-    expect(used).toBe(10);
+    const expectedUpdate: UpdateUserInput = { dailyQuotaUsed: 1 };
+    expect(userRepository.update).toHaveBeenCalledWith(userId, expectedUpdate);
   });
 
   test('should not let if limit is exceeded', async () => {
     // Arrange
-    const id = '123';
-    const userQuota: User = {
-      used: 10,
+    const userId = '123';
+    const user: User = {
+      dailyQuotaUsed: 100,
       hasPremium: false,
     };
 
-    // add document to the collection
-    await collection.doc(id).set(userQuota);
+    const userRepository: UserRepository = {
+      add: jest.fn(),
+      get: jest.fn(async () => user),
+      update: jest.fn(),
+      updateAll: jest.fn(),
+    };
+
+    const paywall = getPaywall(userRepository);
 
     // Act
-    const result = await paywall.try(id);
+    const result = await paywall.try(userId);
 
     // Assert
     expect(result).toBeFalsy();
@@ -73,24 +55,28 @@ describe('paywall', () => {
 
   test('should let if limit is exceeded and has premium', async () => {
     // Arrange
-    const id = '123';
-    const userQuota: User = {
-      used: 10,
+    const userId = '123';
+    const user: User = {
+      dailyQuotaUsed: 100,
       hasPremium: true,
     };
-    const documentRef = collection.doc(id);
 
-    // add document to the collection
-    await documentRef.set(userQuota);
+    const userRepository: UserRepository = {
+      add: jest.fn(),
+      get: jest.fn(async () => user),
+      update: jest.fn(),
+      updateAll: jest.fn(),
+    };
+
+    const paywall = getPaywall(userRepository);
 
     // Act
-    const result = await paywall.try(id);
+    const result = await paywall.try(userId);
 
     // Assert
     expect(result).toBeTruthy();
 
-    const { used } = (await documentRef.get()).data() as User;
-
-    expect(used).toBe(11);
+    const expectedUpdate: UpdateUserInput = { dailyQuotaUsed: 101 };
+    expect(userRepository.update).toHaveBeenCalledWith(userId, expectedUpdate);
   });
 });

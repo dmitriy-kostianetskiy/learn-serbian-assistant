@@ -6,6 +6,7 @@ import {
 } from './wordDataRepository';
 import { v4 as uuid } from 'uuid';
 import { WordData } from './aiDictionary/model';
+import { deleteCollection } from './deleteCollection';
 
 describe('word data repository', () => {
   let firestore: Firestore;
@@ -26,11 +27,7 @@ describe('word data repository', () => {
   });
 
   afterEach(async () => {
-    const documents = await collection.get();
-
-    for (const { id } of documents.docs) {
-      await collection.doc(id).delete();
-    }
+    await deleteCollection(collection);
   });
 
   test('should return word data if it exists in db', async () => {

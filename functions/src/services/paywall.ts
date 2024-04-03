@@ -1,9 +1,4 @@
-import admin from 'firebase-admin';
-
-export interface User {
-  used: number;
-  hasPremium: boolean;
-}
+import { UserRepository } from './userRepository';
 
 export interface Paywall {
   try(userId: string): Promise<boolean>;
@@ -11,45 +6,29 @@ export interface Paywall {
 }
 
 export function getPaywall(
-  firebase: admin.firestore.Firestore,
-  collectionName = 'paywall',
-  defaultQuota = 10,
+  userRepository: UserRepository,
+  defaultQuota = 100,
 ): Paywall {
-  const collection = firebase.collection(collectionName);
-
-  const defaultUserDocument: User = {
-    used: 0,
-    hasPremium: false,
-  };
-
   return {
     try: async (userId) => {
-      const documentRef = collection.doc(userId);
-      const documentSnapshot = await documentRef.get();
+      const user = await userRepository.get(userId);
 
-      const { used, hasPremium } =
-        (documentSnapshot.data() as User) ?? defaultUserDocument;
-
-      if (used >= defaultQuota && !hasPremium) {
+      if (!user) {
         return false;
       }
 
-      await documentRef.update({
-        used: used + 1,
+      if (user.dailyQuotaUsed >= defaultQuota && !user.hasPremium) {
+        return false;
+      }
+
+      await userRepository.update(userId, {
+        dailyQuotaUsed: (user.dailyQuotaUsed || 0) + 1,
       });
 
       return true;
     },
     reset: async () => {
-      const documents = await collection.get();
-
-      for (const { id } of documents.docs) {
-        const document: Partial<User> = {
-          used: 0,
-        };
-
-        await collection.doc(id).update(document);
-      }
+      await userRepository.updateAll({ dailyQuotaUsed: 0 });
     },
   };
 }
