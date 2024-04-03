@@ -25,8 +25,8 @@ jobs:
 
       - name: Setup .env.test file
         run: |
-          printf "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/firestore-credentials.json" >> .env.test
-          printf "OPEN_AI_KEY=${{ secrets.OPEN_AI_KEY }}" >> .env.test
+          printf "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/firestore-credentials.json" >> ./functions/.env.test
+          printf "OPEN_AI_KEY=${{ secrets.OPEN_AI_KEY }}" >> ./functions/.env.test
 
       - name: Unit Tests
         run: npm run test
