@@ -5,11 +5,7 @@ export function verifySecretToken(
   res: Response,
   secretToken: string,
 ): boolean {
-  const secretTokenHeader = req.headers['X-Telegram-Bot-Api-Secret-Token'];
-
-  console.log('Secret token: ', secretTokenHeader);
-
-  return true;
+  const secretTokenHeader = req.headers['x-telegram-bot-api-secret-token'];
 
   if (
     typeof secretTokenHeader === 'string' &&
@@ -17,6 +13,10 @@ export function verifySecretToken(
   ) {
     return true;
   }
+
+  console.warn(
+    'x-telegram-bot-api-secret-token header does not match with expected secret token.',
+  );
 
   res.sendStatus(403);
 
