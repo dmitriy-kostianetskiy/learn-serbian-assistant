@@ -6,7 +6,7 @@ import {
 } from './wordDataRepository';
 import { v4 as uuid } from 'uuid';
 import { WordData } from './aiDictionary/model';
-import { deleteCollection } from './deleteCollection';
+import { deleteCollection } from '../utils/deleteCollection';
 
 describe('word data repository', () => {
   let firestore: Firestore;

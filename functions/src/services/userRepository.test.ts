@@ -7,7 +7,7 @@ import {
   UserRepository,
   getUserRepository,
 } from './userRepository';
-import { deleteCollection } from './deleteCollection';
+import { deleteCollection } from '../utils/deleteCollection';
 
 describe('user repository', () => {
   let firestore: Firestore;

@@ -1,34 +1,57 @@
 import { UserRepository } from './userRepository';
 
+export class UnableToPassPaywallError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
 export interface Paywall {
-  try(userId: string): Promise<boolean>;
+  pass(userId: string): Promise<void>;
   reset(): Promise<void>;
 }
 
 export function getPaywall(
   userRepository: UserRepository,
-  defaultQuota = 100,
+  defaultQuota = 10,
 ): Paywall {
   return {
-    try: async (userId) => {
+    pass: async (userId) => {
       const user = await userRepository.get(userId);
 
       if (!user) {
-        return false;
+        console.log(
+          `User ${userId} failed to pass paywall: unable to find the user.`,
+        );
+
+        throw new UnableToPassPaywallError('Please run /start command.');
       }
 
       if (user.dailyQuotaUsed >= defaultQuota && !user.hasPremium) {
-        return false;
+        console.log(
+          `User ${userId} failed to pass paywall: daily quota exceeded.`,
+        );
+
+        throw new UnableToPassPaywallError(
+          'You have exceeded daily usage limit. Please try again tomorrow.',
+        );
       }
 
+      const oldDailyQuota = user.dailyQuotaUsed || 0;
+      const newDailyQuota = oldDailyQuota + 1;
+
       await userRepository.update(userId, {
-        dailyQuotaUsed: (user.dailyQuotaUsed || 0) + 1,
+        dailyQuotaUsed: newDailyQuota,
       });
 
-      return true;
+      console.log(
+        `User ${userId} passed paywall: daily quota usage updated from ${oldDailyQuota} to ${newDailyQuota}`,
+      );
     },
     reset: async () => {
       await userRepository.updateAll({ dailyQuotaUsed: 0 });
+
+      console.log('Daily quota reset for all users');
     },
   };
 }

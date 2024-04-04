@@ -1,7 +1,9 @@
 import { message } from 'telegraf/filters';
 import { Dependencies } from '../dependencies';
 import { printWordData } from '../services/printWordData/printWordData';
-import { UserQuotaExceededError } from '../services/dictionary';
+import { UnableToPassPaywallError } from '../services/paywall';
+import { Context } from 'telegraf';
+import { Update } from 'telegraf/typings/core/types/typegram';
 
 export const configureBot = (dependencies: Dependencies) => () => {
   const { telegraf, dictionary, userRepository } = dependencies;
@@ -37,18 +39,22 @@ export const configureBot = (dependencies: Dependencies) => () => {
 
       const message = printWordData(wordData);
 
-      await context.reply(message, {
-        parse_mode: 'HTML',
-        reply_parameters: { message_id: context.message.message_id },
-      });
+      await replyToMessage(context, message);
     } catch (e) {
-      if (e instanceof UserQuotaExceededError) {
-        await context.reply(e.message, {
-          reply_parameters: { message_id: context.message.message_id },
-        });
+      if (e instanceof UnableToPassPaywallError) {
+        await replyToMessage(context, e.message);
       } else {
         throw e;
       }
     }
   });
 };
+
+async function replyToMessage(
+  context: Context<Update.MessageUpdate>,
+  message: string,
+) {
+  await context.reply(message, {
+    reply_parameters: { message_id: context.message.message_id },
+  });
+}
