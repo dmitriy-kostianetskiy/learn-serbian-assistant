@@ -2,7 +2,7 @@ import { getPaywall } from './paywall';
 import { UpdateUserInput, User, UserRepository } from './userRepository';
 
 describe('paywall', () => {
-  test('should let if limit is not exceeded', async () => {
+  test('should not throw if daily quota is exceeded and should increase daily quota usage', async () => {
     // Arrange
     const userId = '123';
     const user: User = {
@@ -20,20 +20,18 @@ describe('paywall', () => {
     const paywall = getPaywall(userRepository);
 
     // Act
-    const result = await paywall.try(userId);
+    await paywall.pass(userId);
 
     // Assert
-    expect(result).toBeTruthy();
-
     const expectedUpdate: UpdateUserInput = { dailyQuotaUsed: 1 };
     expect(userRepository.update).toHaveBeenCalledWith(userId, expectedUpdate);
   });
 
-  test('should not let if limit is exceeded', async () => {
+  test('should throw if daily quota is exceeded', async () => {
     // Arrange
     const userId = '123';
     const user: User = {
-      dailyQuotaUsed: 100,
+      dailyQuotaUsed: 10,
       hasPremium: false,
     };
 
@@ -44,20 +42,19 @@ describe('paywall', () => {
       updateAll: jest.fn(),
     };
 
-    const paywall = getPaywall(userRepository);
+    const paywall = getPaywall(userRepository, 10);
 
-    // Act
-    const result = await paywall.try(userId);
-
-    // Assert
-    expect(result).toBeFalsy();
+    // Act & Assert
+    expect(async () => await paywall.pass(userId)).rejects.toThrow(
+      'You have exceeded daily usage limit. Please try again tomorrow.',
+    );
   });
 
-  test('should let if limit is exceeded and has premium', async () => {
+  test('should not throw if daily quota is exceeded but the user has premium and should increase daily quota usage', async () => {
     // Arrange
     const userId = '123';
     const user: User = {
-      dailyQuotaUsed: 100,
+      dailyQuotaUsed: 10,
       hasPremium: true,
     };
 
@@ -68,15 +65,14 @@ describe('paywall', () => {
       updateAll: jest.fn(),
     };
 
-    const paywall = getPaywall(userRepository);
+    const paywall = getPaywall(userRepository, 10);
 
     // Act
-    const result = await paywall.try(userId);
+    await paywall.pass(userId);
 
     // Assert
-    expect(result).toBeTruthy();
+    const expectedUpdate: UpdateUserInput = { dailyQuotaUsed: 11 };
 
-    const expectedUpdate: UpdateUserInput = { dailyQuotaUsed: 101 };
     expect(userRepository.update).toHaveBeenCalledWith(userId, expectedUpdate);
   });
 });

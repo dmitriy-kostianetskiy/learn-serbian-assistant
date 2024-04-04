@@ -8,7 +8,7 @@ describe('verifySecretToken', () => {
   beforeEach(() => {
     req = {
       headers: {
-        ['X-Telegram-Bot-Api-Secret-Token']: 'SECRET!!!',
+        ['x-telegram-bot-api-secret-token']: 'SECRET!!!',
       },
     } as unknown as Request;
 

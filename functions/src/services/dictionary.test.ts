@@ -1,14 +1,10 @@
 import { AiDictionary } from './aiDictionary/aiDictionary';
 import { WordData } from './aiDictionary/model';
-import {
-  Dictionary,
-  UserQuotaExceededError,
-  getDictionary,
-} from './dictionary';
+import { Dictionary, getDictionary } from './dictionary';
 import { Paywall } from './paywall';
 import { WordDataRepository } from './wordDataRepository';
 
-describe('Dictionary', () => {
+describe('dictionary', () => {
   let aiDictionary: AiDictionary;
   let wordDataRepository: WordDataRepository;
   let dictionary: Dictionary;
@@ -33,13 +29,7 @@ describe('Dictionary', () => {
     };
 
     paywall = {
-      try: jest.fn(async (userId) => {
-        if (userId === 'good') {
-          return true;
-        }
-
-        return false;
-      }),
+      pass: jest.fn(),
       reset: jest.fn(),
     };
 
@@ -64,16 +54,5 @@ describe('Dictionary', () => {
     expect(wordData).toBeTruthy();
     expect(aiDictionary.getWordData).toHaveBeenCalled();
     expect(wordDataRepository.add).toHaveBeenCalled();
-  });
-
-  test('should not do AI call when user exceeded daily limit', async () => {
-    // Assert
-    await expect(async () => {
-      await dictionary.getWordData('not-cached', 'bad');
-    }).rejects.toThrow(
-      new UserQuotaExceededError(
-        'You have exceeded daily usage limit. Please try again tomorrow.',
-      ),
-    );
   });
 });
