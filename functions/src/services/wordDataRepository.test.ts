@@ -1,5 +1,4 @@
-import { CollectionReference, DocumentData } from 'firebase-admin/firestore';
-import { Firestore, getFirestore } from '../apis/firestore';
+import { getFirestore } from '../apis/firestore';
 import {
   WordDataRepository,
   getWordDataRepository,
@@ -7,6 +6,11 @@ import {
 import { v4 as uuid } from 'uuid';
 import { WordData } from './aiDictionary/model';
 import { deleteCollection } from '../utils/deleteCollection';
+import {
+  CollectionReference,
+  DocumentData,
+  Firestore,
+} from 'firebase-admin/firestore';
 
 describe('word data repository', () => {
   let firestore: Firestore;
