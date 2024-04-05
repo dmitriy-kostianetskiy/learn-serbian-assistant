@@ -55,6 +55,7 @@ async function replyToMessage(
   message: string,
 ) {
   await context.reply(message, {
+    parse_mode: 'HTML',
     reply_parameters: { message_id: context.message.message_id },
   });
 }
