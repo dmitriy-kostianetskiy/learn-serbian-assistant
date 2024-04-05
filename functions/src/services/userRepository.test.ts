@@ -1,5 +1,9 @@
-import { CollectionReference, DocumentData } from 'firebase-admin/firestore';
-import { Firestore, getFirestore } from '../apis/firestore';
+import {
+  CollectionReference,
+  DocumentData,
+  Firestore,
+} from 'firebase-admin/firestore';
+import { getFirestore } from '../apis/firestore';
 import { v4 as uuid } from 'uuid';
 import {
   AddUserInput,

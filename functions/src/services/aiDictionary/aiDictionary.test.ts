@@ -1,6 +1,8 @@
 import OpenAI from 'openai';
 import { AiDictionary, getAiDictionary } from './aiDictionary';
 import { CasesOutput, ConjugationsOutput } from './model';
+import { getConfig } from '../config';
+import { getRemoteConfig } from '../../apis/remoteConfig';
 
 const TIMEOUT = 15_000;
 
@@ -10,6 +12,7 @@ describe('AiDictionary', () => {
   beforeAll(() => {
     aiDictionary = getAiDictionary(
       new OpenAI({ apiKey: process.env.OPEN_AI_KEY }),
+      getConfig(getRemoteConfig()),
     );
   });
 
