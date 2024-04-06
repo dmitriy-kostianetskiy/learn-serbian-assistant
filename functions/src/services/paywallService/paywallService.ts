@@ -1,9 +1,9 @@
 import { Dependencies } from '../../dependencies';
-import { PaywallService } from './model';
+import { PaywallService } from './paywallService.model';
 
-export function getPaywallService({
+export const getPaywallService = ({
   userRepository,
-}: Pick<Dependencies, 'userRepository'>): PaywallService {
+}: Pick<Dependencies, 'userRepository'>): PaywallService => {
   return {
     tryPass: async (userId) => {
       // TODO: move to config
@@ -43,4 +43,4 @@ export function getPaywallService({
       console.log('Daily quota reset for all users');
     },
   };
-}
+};

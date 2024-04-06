@@ -1,2 +1,2 @@
-export * from './model';
+export * from './paywallService.model';
 export * from './paywallService';

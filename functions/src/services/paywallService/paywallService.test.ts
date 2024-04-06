@@ -1,6 +1,6 @@
 import { getPaywallService } from './paywallService';
 import { UpdateUserInput, User, UserRepository } from '../userRepository';
-import { TryPassResult } from './model';
+import { TryPassResult } from './paywallService.model';
 
 describe('PaywallService', () => {
   test('should pass if daily quota is exceeded and should increase daily quota usage', async () => {

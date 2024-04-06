@@ -10,10 +10,7 @@ import {
 
 import { UserRepository, getUserRepository } from './services/userRepository';
 import { RemoteConfig, getRemoteConfig } from 'firebase-admin/remote-config';
-import {
-  ConfigService,
-  getConfigService,
-} from './services/configService/configService';
+import { ConfigService, getConfigService } from './services/configService';
 import { Firestore } from 'firebase-admin/firestore';
 import { PromptService, getPrompService } from './services/promptService';
 import { PaywallService, getPaywallService } from './services/paywallService';

@@ -1,5 +1,5 @@
 import { RemoteConfigTemplate } from 'firebase-admin/remote-config';
-import { WellKnownParameter } from './model';
+import { WellKnownParameter } from './configService.model';
 
 export const extractValue = (
   template: RemoteConfigTemplate,

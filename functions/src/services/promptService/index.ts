@@ -1,2 +1,2 @@
 export * from './promptService';
-export * from './model';
+export * from './promptService.model';

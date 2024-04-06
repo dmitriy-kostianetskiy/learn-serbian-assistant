@@ -1,7 +1,11 @@
 import { substitutePlaceholders } from '../../utils/substitutePlaceholders';
 
 import { Dependencies } from '../../dependencies';
-import { GetPromptInputs, GetPromptResult, PromptService } from './model';
+import {
+  GetPromptInputs,
+  GetPromptResult,
+  PromptService,
+} from './promptService.model';
 import { hash } from '../../utils/hash';
 
 export const getPrompService = ({
