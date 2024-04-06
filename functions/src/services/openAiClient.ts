@@ -1,26 +1,16 @@
 import OpenAI from 'openai';
-import { WordData } from './model';
-import { STRINGIFIED_EXAMPLE } from './example';
-import { Config } from '../config';
-import { substitutePlaceholders } from '../../utils/substitutePlaceholders';
+import { Dependencies } from '../dependencies';
 
-export interface AiDictionary {
-  getWordData(word: string): Promise<WordData>;
+export interface OpenAiClient {
+  promptAsJson<T extends object>(prompt: string): Promise<T>;
 }
 
-export function getAiDictionary(
-  openai: OpenAI,
-  config: Config,
+export const getOpenAiClient = (
+  { openai }: Pick<Dependencies, 'openai'>,
   openAiSeed = 42,
-): AiDictionary {
+): OpenAiClient => {
   return {
-    getWordData: async (word: string) => {
-      const promptTemplate = await config.getWordDataPrompt();
-      const prompt = substitutePlaceholders(promptTemplate, {
-        word,
-        example: STRINGIFIED_EXAMPLE,
-      });
-
+    promptAsJson: async <T extends object>(prompt: string) => {
       const chatCompletion = await openai.chat.completions.create({
         messages: [
           {
@@ -35,14 +25,14 @@ export function getAiDictionary(
         seed: openAiSeed,
       });
 
-      return processChatCompletionAsJson(chatCompletion);
+      return processChatCompletionAsJson<T>(chatCompletion);
     },
   };
-}
+};
 
-function processChatCompletionAsJson<T extends object>(
+const processChatCompletionAsJson = <T extends object>(
   chatCompletion: OpenAI.ChatCompletion,
-): T {
+): T => {
   if (!chatCompletion.choices.length) {
     throw new Error('Failed to get response from OpenAI: no choices returned.');
   }
@@ -56,4 +46,4 @@ function processChatCompletionAsJson<T extends object>(
   }
 
   return JSON.parse(content) as T;
-}
+};

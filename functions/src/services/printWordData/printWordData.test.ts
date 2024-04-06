@@ -1,4 +1,4 @@
-import { WordData } from '../aiDictionary/model';
+import { WordData } from '../../model/wordData';
 import { printWordData } from './printWordData';
 
 describe('print word data', () => {

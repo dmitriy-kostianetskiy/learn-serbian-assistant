@@ -1,30 +1,10 @@
-import {
-  RemoteConfig,
-  RemoteConfigTemplate,
-} from 'firebase-admin/remote-config';
+import { RemoteConfigTemplate } from 'firebase-admin/remote-config';
+import { WellKnownParameter } from './model';
 
-type WellKnownParameter = 'wordDataPrompt';
-
-export interface Config {
-  getWordDataPrompt(): Promise<string>;
-}
-
-export function getConfig(remoteConfig: RemoteConfig): Config {
-  let template: RemoteConfigTemplate | undefined;
-
-  return {
-    getWordDataPrompt: async () => {
-      template = template ?? (await remoteConfig.getTemplate());
-
-      return extractValue(template, 'wordDataPrompt');
-    },
-  };
-}
-
-function extractValue(
+export const extractValue = (
   template: RemoteConfigTemplate,
   parameterName: WellKnownParameter,
-): string {
+): string => {
   const parameter = template.parameters[parameterName];
 
   if (!parameter) {
@@ -47,4 +27,4 @@ function extractValue(
   }
 
   return parameterDefaultValue.value;
-}
+};

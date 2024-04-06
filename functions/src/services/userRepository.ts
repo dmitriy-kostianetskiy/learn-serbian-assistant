@@ -19,10 +19,10 @@ export interface UserRepository {
   updateAll(user: UpdateAllUsersInput): Promise<void>;
 }
 
-export function getUserRepository(
+export const getUserRepository = (
   firebase: admin.firestore.Firestore,
   collectionName = 'user',
-): UserRepository {
+): UserRepository => {
   const collection = firebase.collection(collectionName);
 
   return {
@@ -69,4 +69,4 @@ export function getUserRepository(
       }
     },
   };
-}
+};

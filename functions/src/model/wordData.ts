@@ -7,6 +7,7 @@ interface WordDataBase {
   definition: Definition;
   example: string;
   synonyms: string[];
+  promptHash?: string;
 }
 
 export interface Translation {

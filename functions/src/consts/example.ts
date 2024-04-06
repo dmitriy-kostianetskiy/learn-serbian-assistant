@@ -1,4 +1,4 @@
-import { WordData } from './model';
+import { WordData } from '../model/wordData';
 
 export const EXAMPLE: WordData[] = [
   {
@@ -86,4 +86,4 @@ export const EXAMPLE: WordData[] = [
   },
 ];
 
-export const STRINGIFIED_EXAMPLE = JSON.stringify(EXAMPLE);
+export const STRINGIFIED_EXAMPLE_WORD_DATA = JSON.stringify(EXAMPLE);

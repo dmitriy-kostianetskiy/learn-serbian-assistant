@@ -1,20 +1,20 @@
 import admin from 'firebase-admin';
-import { WordData } from './aiDictionary/model';
+import { WordData } from '../model/wordData';
 
 export interface WordDataRepository {
-  get(word: string): Promise<WordData | undefined>;
-  add(wordData: WordData): Promise<void>;
+  get(id: string): Promise<WordData | undefined>;
+  add(id: string, wordData: WordData): Promise<void>;
 }
 
-export function getWordDataRepository(
+export const getWordDataRepository = (
   firebase: admin.firestore.Firestore,
   collectionName = 'dictionary',
-): WordDataRepository {
+): WordDataRepository => {
   const collection = firebase.collection(collectionName);
 
   return {
-    get: async (word) => {
-      const document = await collection.doc(word.toLowerCase()).get();
+    get: async (id) => {
+      const document = await collection.doc(id).get();
 
       if (!document.exists) {
         return undefined;
@@ -22,8 +22,8 @@ export function getWordDataRepository(
 
       return document.data() as WordData;
     },
-    add: async (wordData) => {
-      await collection.doc(wordData.word.toLowerCase()).set(wordData);
+    add: async (id, wordData) => {
+      await collection.doc(id).set(wordData);
     },
   };
-}
+};
