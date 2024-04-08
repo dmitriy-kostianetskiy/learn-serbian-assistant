@@ -7,7 +7,8 @@ export interface OpenAiClient {
 
 export const getOpenAiClient = (
   { openai }: Pick<Dependencies, 'openai'>,
-  openAiSeed = 42,
+  seed = 42,
+  temperature = 0.2,
 ): OpenAiClient => {
   return {
     promptAsJson: async <T extends object>(prompt: string) => {
@@ -22,7 +23,8 @@ export const getOpenAiClient = (
         response_format: {
           type: 'json_object',
         },
-        seed: openAiSeed,
+        temperature,
+        seed,
       });
 
       return processChatCompletionAsJson<T>(chatCompletion);
