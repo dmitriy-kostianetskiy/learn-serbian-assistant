@@ -1,10 +1,10 @@
 import { Response, Request } from 'express';
 
-export function verifySecretToken(
+export const verifySecretToken = (
   req: Request,
   res: Response,
   secretToken: string,
-): boolean {
+): boolean => {
   const secretTokenHeader = req.headers['x-telegram-bot-api-secret-token'];
 
   if (
@@ -21,4 +21,4 @@ export function verifySecretToken(
   res.sendStatus(403);
 
   return false;
-}
+};

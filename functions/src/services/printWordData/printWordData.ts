@@ -4,7 +4,7 @@ import {
   OtherData,
   VerbData,
   WordData,
-} from '../aiDictionary/model';
+} from '../../model/wordData';
 
 export const printWordData = (wordData: WordData): string => {
   switch (wordData.partOfSpeech) {

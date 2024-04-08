@@ -1,6 +1,6 @@
 export const substitutePlaceholders = (
   text: string,
-  values: Record<string, string | number | Date>,
+  values: Record<string, string>,
 ) => {
   const keys = Object.keys(values);
 

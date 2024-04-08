@@ -5,7 +5,8 @@
       "type": "node-terminal",
       "request": "launch",
       "name": "Lanch",
-      "command": "npm run start"
+      "command": "npm run bot",
+      "cwd": "${workspaceFolder}/functions"
     }
   ]
 }

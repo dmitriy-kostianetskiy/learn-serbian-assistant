@@ -15,7 +15,10 @@ export const telegramBot = onRequest(
         return;
       }
 
-      const dependencies = getDependencies();
+      const dependencies = getDependencies({
+        telegramBotToken: TELEGRAM_BOT_TOKEN.value(),
+        openAiKey: OPEN_AI_KEY.value(),
+      });
 
       configureBot(dependencies)();
 
