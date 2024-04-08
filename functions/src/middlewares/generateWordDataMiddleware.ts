@@ -27,9 +27,13 @@ export const generateWordDataMiddleware =
       example: STRINGIFIED_EXAMPLE_WORD_DATA,
     });
 
-    const wordData =
-      (await wordDataRepository.get(promptHash)) ??
-      (await openAiClient.promptAsJson<WordData>(prompt));
+    let wordData = await wordDataRepository.get(promptHash);
+
+    if (!wordData) {
+      wordData = await openAiClient.promptAsJson<WordData>(prompt);
+
+      await wordDataRepository.add(promptHash, wordData);
+    }
 
     const message = printWordData(wordData);
 
