@@ -4,7 +4,7 @@ import { replyToMessage } from '../utils/replyToMessage';
 
 export const paywallMiddleware =
   ({ paywallService }: Pick<Dependencies, 'paywallService'>) =>
-  async (context: Context) => {
+  async (context: Context, next: () => Promise<void>) => {
     if (!context.message) {
       return;
     }
@@ -16,6 +16,8 @@ export const paywallMiddleware =
     if (!result.passed) {
       await replyToMessage(context)(result.message, context.message.message_id);
 
-      throw new Error(`Unable to pass the paywall: ${result.message}`);
+      return;
     }
+
+    await next();
   };

@@ -3,7 +3,7 @@ import { Dependencies } from '../dependencies';
 
 export const updateUserMiddleware =
   ({ userRepository }: Pick<Dependencies, 'userRepository'>) =>
-  async (context: Context) => {
+  async (context: Context, next: () => Promise<void>) => {
     if (!context.message) {
       return;
     }
@@ -17,4 +17,6 @@ export const updateUserMiddleware =
       firstName: first_name,
       lastName: last_name,
     });
+
+    await next();
   };

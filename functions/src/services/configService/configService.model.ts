@@ -1,5 +1,19 @@
-export type WellKnownParameter = 'wordDataPrompt' | 'welcomeMessage';
+export type WellKnownParameter =
+  | 'wordDataPrompt'
+  | 'welcomeMessage'
+  | 'dailyQuota';
+
+export type GetResult<T extends WellKnownParameter = WellKnownParameter> =
+  T extends 'wordDataPrompt'
+    ? string
+    : T extends 'welcomeMessage'
+      ? string
+      : T extends 'dailyQuota'
+        ? number
+        : never;
 
 export interface ConfigService {
-  get(parameter: WellKnownParameter): Promise<string>;
+  get<T extends WellKnownParameter = WellKnownParameter>(
+    parameter: T,
+  ): Promise<GetResult<T>>;
 }

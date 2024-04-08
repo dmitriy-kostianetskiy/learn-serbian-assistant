@@ -7,7 +7,7 @@ describe('AiDictionary', () => {
     const template = '<word> <example>';
     const configService: ConfigService = {
       get: jest.fn(async () => template),
-    };
+    } as ConfigService;
 
     const promptService = getPrompService({ configService });
 

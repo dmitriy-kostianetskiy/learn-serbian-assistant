@@ -1,30 +1,32 @@
-import { RemoteConfigTemplate } from 'firebase-admin/remote-config';
-import { WellKnownParameter } from './configService.model';
+import {
+  ParameterValueType,
+  RemoteConfigParameter,
+} from 'firebase-admin/remote-config';
 
 export const extractValue = (
-  template: RemoteConfigTemplate,
-  parameterName: WellKnownParameter,
-): string => {
-  const parameter = template.parameters[parameterName];
-
-  if (!parameter) {
-    throw new Error(
-      `Unable to get remote config: parameter '${parameterName}' is not found.`,
-    );
-  }
-
+  parameter: RemoteConfigParameter,
+): string | number | boolean | object | undefined => {
   const parameterDefaultValue = parameter.defaultValue;
-  if (!parameterDefaultValue) {
-    throw new Error(
-      `Unable to get remote config: parameter '${parameterName}' default value is not set.`,
-    );
+
+  if (!parameterDefaultValue || !('value' in parameterDefaultValue)) {
+    return undefined;
   }
 
-  if (!('value' in parameterDefaultValue)) {
-    throw new Error(
-      `Unable to get remote config: parameter '${parameterName}' value field is not set.`,
-    );
-  }
+  return parseValue(parameterDefaultValue.value, parameter.valueType);
+};
 
-  return parameterDefaultValue.value;
+const parseValue = (
+  rawValue: string,
+  valueType?: ParameterValueType,
+): string | number | boolean | object => {
+  switch (valueType) {
+    case 'BOOLEAN':
+      return rawValue === 'true';
+    case 'JSON':
+      return JSON.parse(rawValue);
+    case 'NUMBER':
+      return +rawValue;
+    default:
+      return rawValue;
+  }
 };

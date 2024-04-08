@@ -3,14 +3,15 @@ import { PaywallService } from './paywallService.model';
 
 export const getPaywallService = ({
   userRepository,
-}: Pick<Dependencies, 'userRepository'>): PaywallService => {
+  configService,
+}: Pick<Dependencies, 'userRepository' | 'configService'>): PaywallService => {
   return {
     tryPass: async (userId) => {
-      // TODO: move to config
-      const defaultQuota = 10;
+      const dailyQuota = await configService.get('dailyQuota');
+
       const user = await userRepository.get(userId);
 
-      if (!user || (user.dailyQuotaUsed >= defaultQuota && !user.hasPremium)) {
+      if (!user || (user.dailyQuotaUsed >= dailyQuota && !user.hasPremium)) {
         console.log(
           `User ${userId} failed to pass paywall: daily quota exceeded.`,
         );
