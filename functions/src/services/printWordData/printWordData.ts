@@ -18,10 +18,10 @@ export const printPhraseSummary = (phraseSummary: WordData): string => {
 };
 
 const printVerb = (verb: VerbData) => {
-  const { conjugations, infinitive } = verb;
+  const { conjugations, phrase } = verb;
 
   return [
-    `<strong>${infinitive}</strong>`,
+    `<strong>${phrase}</strong>`,
     '',
     printBasicSummary(verb),
     '',
@@ -38,10 +38,10 @@ const printVerb = (verb: VerbData) => {
 };
 
 const printNoun = (noun: NounData) => {
-  const { cases, word, grammaticalGender, grammaticalNumber } = noun;
+  const { cases, phrase, grammaticalGender, grammaticalNumber } = noun;
 
   return [
-    `📝 <strong>${word}</strong> (${grammaticalNumber}, ${grammaticalGender})`,
+    `📝 <strong>${phrase}</strong> (${grammaticalNumber}, ${grammaticalGender})`,
     '',
     printBasicSummary(noun),
     '',
@@ -58,9 +58,11 @@ const printNoun = (noun: NounData) => {
 };
 
 const printOther = (other: OtherData) => {
-  const { word } = other;
+  const { phrase } = other;
 
-  return [`<strong>${word}</strong>`, '', printBasicSummary(other)].join('\n');
+  return [`<strong>${phrase}</strong>`, '', printBasicSummary(other)].join(
+    '\n',
+  );
 };
 
 const printBasicSummary = ({

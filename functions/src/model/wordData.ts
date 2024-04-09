@@ -1,5 +1,5 @@
 interface WordDataBase {
-  word: string;
+  phrase: string;
   grammaticalGender?: string;
   grammaticalNumber?: string;
   partOfSpeech: PartOfSpeech;
@@ -24,7 +24,6 @@ export interface Definition {
 export type PartOfSpeech = 'verb' | 'noun' | 'other';
 
 export interface VerbData extends WordDataBase {
-  word: string;
   infinitive: string;
   partOfSpeech: 'verb';
   conjugations: ConjugationsOutput;

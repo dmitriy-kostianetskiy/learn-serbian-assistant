@@ -5,7 +5,7 @@ describe('print word data', () => {
   test('should print verb', () => {
     // Arrange
     const wordData: WordData = {
-      word: 'dati',
+      phrase: 'dati',
       infinitive: 'dati',
       partOfSpeech: 'verb',
       definition: {
@@ -63,7 +63,7 @@ describe('print word data', () => {
   test('should print noun', () => {
     // Arrange
     const wordData: WordData = {
-      word: 'sto',
+      phrase: 'sto',
       partOfSpeech: 'noun',
       definition: {
         english: 'a piece of furniture',

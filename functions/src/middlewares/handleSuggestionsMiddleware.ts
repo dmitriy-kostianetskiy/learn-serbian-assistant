@@ -8,6 +8,7 @@ import {
   Message,
   Update,
 } from 'telegraf/typings/core/types/typegram';
+import { printPhraseSummary } from '../services/printWordData/printWordData';
 
 type HandleSuggestionsMiddlewareDependencies = Pick<
   Dependencies,
@@ -36,8 +37,10 @@ export const handleSuggestionsMiddleware =
 
     const phraseSummary = await phraseSummaryService.generate(phrase);
 
+    const phraseSummaryString = printPhraseSummary(phraseSummary);
+
     await replyToMessage(context)(
-      phraseSummary,
+      phraseSummaryString,
       context.callbackQuery.message?.message_id,
     );
   };

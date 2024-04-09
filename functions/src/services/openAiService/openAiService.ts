@@ -24,11 +24,7 @@ export const getOpenAiService = (
         seed,
       });
 
-      const result = processChatCompletionAsJson<T>(chatCompletion);
-
-      console.log('Open AI request processed', { result, prompt });
-
-      return result;
+      return processChatCompletionAsJson<T>(chatCompletion);
     },
   };
 };

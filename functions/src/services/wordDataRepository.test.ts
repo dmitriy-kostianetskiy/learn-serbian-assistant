@@ -68,7 +68,7 @@ describe('WordDataRepository', () => {
     const word = 'kurac';
 
     const wordData: WordData = {
-      word,
+      phrase: word,
     } as WordData;
 
     // Act

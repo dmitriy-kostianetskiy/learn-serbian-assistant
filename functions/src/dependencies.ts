@@ -90,3 +90,9 @@ export const getDependencies = ({
 
   return dependencies;
 };
+
+export const getTestDependencies = () =>
+  getDependencies({
+    openAiKey: process.env.OPEN_AI_KEY!,
+    telegramBotToken: process.env.TELEGRAM_BOT_TOKEN!,
+  });

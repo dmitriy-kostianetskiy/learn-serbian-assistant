@@ -1,6 +1,5 @@
 import { WordData } from '../../model/wordData';
 import { substitutePlaceholders } from '../../utils/substitutePlaceholders';
-import { printPhraseSummary } from '../printWordData/printWordData';
 import {
   PhraseSummaryServiceDependencies,
   PhraseSummaryService,
@@ -18,11 +17,7 @@ export const getPhraseSummaryService = ({
       });
 
       // TODO: rename word data and repo
-      const phraseSummary = await openAiService.promptAsJson<WordData>(prompt);
-
-      const phraseSummaryString = printPhraseSummary(phraseSummary);
-
-      return phraseSummaryString;
+      return await openAiService.promptAsJson<WordData>(prompt);
     },
   };
 };

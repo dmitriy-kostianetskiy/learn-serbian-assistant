@@ -1,6 +1,7 @@
 import { Context } from 'telegraf';
 import { Dependencies } from '../dependencies';
 import { replyToMessage } from '../utils/replyToMessage';
+import { printPhraseSummary } from '../services/printWordData/printWordData';
 
 export type GeneratePhraseSummaryMiddlewareDependencies = Pick<
   Dependencies,
@@ -19,5 +20,7 @@ export const generatePhraseSummaryMiddleware =
 
     const phraseSummary = await phraseSummaryService.generate(phrase);
 
-    await replyToMessage(context)(phraseSummary, messageId);
+    const phraseSummaryString = printPhraseSummary(phraseSummary);
+
+    await replyToMessage(context)(phraseSummaryString, messageId);
   };
