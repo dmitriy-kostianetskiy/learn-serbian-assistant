@@ -16,11 +16,21 @@ export const getSuggestionService = ({
   return {
     async generate(phrase) {
       // get prompt
-      const suggestionsPromptTemplate =
-        await configService.get('suggestionsPrompt');
+      const [suggestionsSystemPromptTemplate, suggestionsUserPromptTemplate] =
+        await Promise.all([
+          configService.get('suggestionsSystemPrompt'),
+          configService.get('suggestionsUserPrompt'),
+        ]);
 
-      const suggestionsPrompt = substitutePlaceholders(
-        suggestionsPromptTemplate,
+      const suggestionsSystemPrompt = substitutePlaceholders(
+        suggestionsSystemPromptTemplate,
+        {
+          phrase,
+        },
+      );
+
+      const suggestionsUserPrompt = substitutePlaceholders(
+        suggestionsUserPromptTemplate,
         {
           phrase,
         },
@@ -29,7 +39,7 @@ export const getSuggestionService = ({
       // generate suggestions
       const result = await openAiService.promptAsJson<
         SuggestionPromptResponse | undefined
-      >(suggestionsPrompt);
+      >(suggestionsUserPrompt, suggestionsSystemPrompt);
 
       return {
         language: result?.language || 'unknown',

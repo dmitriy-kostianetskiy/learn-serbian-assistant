@@ -36,4 +36,13 @@ describe('SuggestionService', () => {
     expect(suggestions.language).toBe('serbian');
     expect(suggestions.suggestions).toHaveLength(0);
   });
+
+  test('should provide no suggestion for word "jj78 asd 12"', async () => {
+    // Act
+    const suggestions = await service.generate('jj78 asd 12');
+
+    // Assert
+    expect(suggestions.language).toBe('unknown');
+    expect(suggestions.suggestions).toHaveLength(0);
+  });
 });

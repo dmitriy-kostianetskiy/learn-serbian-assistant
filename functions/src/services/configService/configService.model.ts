@@ -1,5 +1,6 @@
 export type WellKnownParameter =
-  | 'suggestionsPrompt'
+  | 'suggestionsSystemPrompt'
+  | 'suggestionsUserPrompt'
   | 'phraseSummarySystemPrompt'
   | 'phraseSummaryUserPrompt'
   | 'welcomeMessage'
@@ -7,7 +8,8 @@ export type WellKnownParameter =
 
 export type GetResult<T extends WellKnownParameter = WellKnownParameter> =
   T extends
-    | 'suggestionsPrompt'
+    | 'suggestionsSystemPrompt'
+    | 'suggestionsUserPrompt'
     | 'welcomeMessage'
     | 'phraseSummaryUserPrompt'
     | 'phraseSummarySystemPrompt'
