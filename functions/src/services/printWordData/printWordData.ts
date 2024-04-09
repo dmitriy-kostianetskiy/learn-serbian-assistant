@@ -6,24 +6,24 @@ import {
   WordData,
 } from '../../model/wordData';
 
-export const printWordData = (wordData: WordData): string => {
-  switch (wordData.partOfSpeech) {
+export const printPhraseSummary = (phraseSummary: WordData): string => {
+  switch (phraseSummary.partOfSpeech) {
     case 'verb':
-      return printVerb(wordData);
+      return printVerb(phraseSummary);
     case 'noun':
-      return printNoun(wordData);
+      return printNoun(phraseSummary);
     default:
-      return printOther(wordData);
+      return printOther(phraseSummary);
   }
 };
 
-const printVerb = (wordData: VerbData) => {
-  const { conjugations, infinitive } = wordData;
+const printVerb = (verb: VerbData) => {
+  const { conjugations, infinitive } = verb;
 
   return [
     `<strong>${infinitive}</strong>`,
     '',
-    printBasicWordData(wordData),
+    printBasicSummary(verb),
     '',
     '🔄 <strong>Conjugations</strong>',
     '',
@@ -37,13 +37,13 @@ const printVerb = (wordData: VerbData) => {
   ].join('\n');
 };
 
-const printNoun = (wordData: NounData) => {
-  const { cases, word, grammaticalGender, grammaticalNumber } = wordData;
+const printNoun = (noun: NounData) => {
+  const { cases, word, grammaticalGender, grammaticalNumber } = noun;
 
   return [
     `📝 <strong>${word}</strong> (${grammaticalNumber}, ${grammaticalGender})`,
     '',
-    printBasicWordData(wordData),
+    printBasicSummary(noun),
     '',
     '🔄 <strong>Cases</strong>',
     '',
@@ -57,15 +57,13 @@ const printNoun = (wordData: NounData) => {
   ].join('\n');
 };
 
-const printOther = (wordData: OtherData) => {
-  const { word } = wordData;
+const printOther = (other: OtherData) => {
+  const { word } = other;
 
-  return [`<strong>${word}</strong>`, '', printBasicWordData(wordData)].join(
-    '\n',
-  );
+  return [`<strong>${word}</strong>`, '', printBasicSummary(other)].join('\n');
 };
 
-const printBasicWordData = ({
+const printBasicSummary = ({
   definition,
   translation,
   synonyms,

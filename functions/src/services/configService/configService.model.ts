@@ -1,16 +1,15 @@
 export type WellKnownParameter =
-  | 'wordDataPrompt'
+  | 'suggestionsPrompt'
+  | 'phraseSummaryPrompt'
   | 'welcomeMessage'
   | 'dailyQuota';
 
 export type GetResult<T extends WellKnownParameter = WellKnownParameter> =
-  T extends 'wordDataPrompt'
+  T extends 'suggestionsPrompt' | 'welcomeMessage' | 'phraseSummaryPrompt'
     ? string
-    : T extends 'welcomeMessage'
-      ? string
-      : T extends 'dailyQuota'
-        ? number
-        : never;
+    : T extends 'dailyQuota'
+      ? number
+      : never;
 
 export interface ConfigService {
   get<T extends WellKnownParameter = WellKnownParameter>(

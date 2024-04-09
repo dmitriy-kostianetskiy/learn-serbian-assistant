@@ -1,5 +1,5 @@
 import { WordData } from '../../model/wordData';
-import { printWordData } from './printWordData';
+import { printPhraseSummary } from './printWordData';
 
 describe('print word data', () => {
   test('should print verb', () => {
@@ -34,7 +34,7 @@ describe('print word data', () => {
     };
 
     // Act
-    const message = printWordData(wordData);
+    const message = printPhraseSummary(wordData);
 
     // Assert
     expect(message).toContain('<strong>dati</strong>');
@@ -99,7 +99,7 @@ describe('print word data', () => {
     };
 
     // Act
-    const message = printWordData(wordData);
+    const message = printPhraseSummary(wordData);
 
     // Assert
 

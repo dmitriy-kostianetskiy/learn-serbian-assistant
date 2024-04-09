@@ -3,7 +3,9 @@ import { Dependencies } from '../dependencies';
 import { updateUserMiddleware } from '../middlewares/updateUserMiddleware';
 import { sendWelcomeMessageMiddleware } from '../middlewares/sendWelcomeMessageMiddleware';
 import { paywallMiddleware } from '../middlewares/paywallMiddleware';
-import { generateWordDataMiddleware } from '../middlewares/generateWordDataMiddleware';
+import { generatePhraseSummaryMiddleware } from '../middlewares/generatePhraseSummaryMiddleware';
+import { generateSuggestionsMiddleware } from '../middlewares/generateSuggestionsMiddleware';
+import { handleSuggestionsMiddleware } from '../middlewares/handleSuggestionsMiddleware';
 
 export const configureBot = (dependencies: Dependencies) => () => {
   const { telegraf } = dependencies;
@@ -13,10 +15,16 @@ export const configureBot = (dependencies: Dependencies) => () => {
     sendWelcomeMessageMiddleware(dependencies),
   );
 
+  telegraf.action(
+    /^suggestion-\d+$/,
+    handleSuggestionsMiddleware(dependencies),
+  );
+
   telegraf.on(
     message('text'),
     updateUserMiddleware(dependencies),
     paywallMiddleware(dependencies),
-    generateWordDataMiddleware(dependencies),
+    generateSuggestionsMiddleware(dependencies),
+    generatePhraseSummaryMiddleware(dependencies),
   );
 };
