@@ -1,11 +1,11 @@
 import { WordData } from '../../model/wordData';
-import { printWordData } from './printWordData';
+import { printPhraseSummary } from './printWordData';
 
 describe('print word data', () => {
   test('should print verb', () => {
     // Arrange
     const wordData: WordData = {
-      word: 'dati',
+      phrase: 'dati',
       infinitive: 'dati',
       partOfSpeech: 'verb',
       definition: {
@@ -34,7 +34,7 @@ describe('print word data', () => {
     };
 
     // Act
-    const message = printWordData(wordData);
+    const message = printPhraseSummary(wordData);
 
     // Assert
     expect(message).toContain('<strong>dati</strong>');
@@ -63,7 +63,7 @@ describe('print word data', () => {
   test('should print noun', () => {
     // Arrange
     const wordData: WordData = {
-      word: 'sto',
+      phrase: 'sto',
       partOfSpeech: 'noun',
       definition: {
         english: 'a piece of furniture',
@@ -99,7 +99,7 @@ describe('print word data', () => {
     };
 
     // Act
-    const message = printWordData(wordData);
+    const message = printPhraseSummary(wordData);
 
     // Assert
 

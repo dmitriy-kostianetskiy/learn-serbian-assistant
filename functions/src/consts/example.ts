@@ -2,7 +2,7 @@ import { WordData } from '../model/wordData';
 
 export const EXAMPLE: WordData[] = [
   {
-    word: 'dati',
+    phrase: 'dati',
     partOfSpeech: 'verb',
     infinitive: 'dati',
     translation: {
@@ -31,7 +31,7 @@ export const EXAMPLE: WordData[] = [
     },
   },
   {
-    word: 'dete',
+    phrase: 'dete',
     partOfSpeech: 'noun',
     grammaticalGender: 'srednji',
     grammaticalNumber: 'jednina',
@@ -69,7 +69,7 @@ export const EXAMPLE: WordData[] = [
     },
   },
   {
-    word: 'bre',
+    phrase: 'bre',
     partOfSpeech: 'other',
     translation: {
       english: 'hey',

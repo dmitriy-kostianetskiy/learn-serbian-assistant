@@ -1,19 +1,27 @@
 import OpenAI from 'openai';
-import { Dependencies } from '../dependencies';
+import { Dependencies } from '../../dependencies';
+import { OpenAiService } from './openAiService.model';
 
-export interface OpenAiClient {
-  promptAsJson<T extends object>(prompt: string): Promise<T>;
-}
-
-export const getOpenAiClient = (
+export const getOpenAiService = (
   { openai }: Pick<Dependencies, 'openai'>,
   seed = 42,
-  temperature = 0.2,
-): OpenAiClient => {
+  temperature = 1,
+): OpenAiService => {
   return {
-    promptAsJson: async <T extends object>(prompt: string) => {
+    promptAsJson: async <T>(prompt: string, systemPrompt?: string) => {
+      const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] =
+        systemPrompt
+          ? [
+              {
+                role: 'system',
+                content: systemPrompt,
+              },
+            ]
+          : [];
+
       const chatCompletion = await openai.chat.completions.create({
         messages: [
+          ...messages,
           {
             role: 'user',
             content: prompt,
@@ -25,6 +33,7 @@ export const getOpenAiClient = (
         },
         temperature,
         seed,
+        top_p: 1,
       });
 
       return processChatCompletionAsJson<T>(chatCompletion);
@@ -32,7 +41,7 @@ export const getOpenAiClient = (
   };
 };
 
-const processChatCompletionAsJson = <T extends object>(
+const processChatCompletionAsJson = <T>(
   chatCompletion: OpenAI.ChatCompletion,
 ): T => {
   if (!chatCompletion.choices.length) {
