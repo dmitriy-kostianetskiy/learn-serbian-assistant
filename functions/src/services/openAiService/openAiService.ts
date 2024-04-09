@@ -5,12 +5,23 @@ import { OpenAiService } from './openAiService.model';
 export const getOpenAiService = (
   { openai }: Pick<Dependencies, 'openai'>,
   seed = 42,
-  temperature = 0.2,
+  temperature = 1,
 ): OpenAiService => {
   return {
-    promptAsJson: async <T>(prompt: string) => {
+    promptAsJson: async <T>(prompt: string, systemPrompt?: string) => {
+      const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] =
+        systemPrompt
+          ? [
+              {
+                role: 'system',
+                content: systemPrompt,
+              },
+            ]
+          : [];
+
       const chatCompletion = await openai.chat.completions.create({
         messages: [
+          ...messages,
           {
             role: 'user',
             content: prompt,
@@ -22,6 +33,7 @@ export const getOpenAiService = (
         },
         temperature,
         seed,
+        top_p: 1,
       });
 
       return processChatCompletionAsJson<T>(chatCompletion);

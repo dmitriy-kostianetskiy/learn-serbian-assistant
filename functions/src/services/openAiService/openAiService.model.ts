@@ -1,3 +1,3 @@
 export interface OpenAiService {
-  promptAsJson<T>(prompt: string): Promise<T>;
+  promptAsJson<T>(prompt: string, systemPrompt?: string): Promise<T>;
 }

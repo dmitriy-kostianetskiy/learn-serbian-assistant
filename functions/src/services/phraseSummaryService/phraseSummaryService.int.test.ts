@@ -53,14 +53,14 @@ describe('PhraseSummaryService', () => {
     }
   });
 
-  test('should summarise word "deca"', async () => {
+  test('should summarise word "dete"', async () => {
     // Act
-    const summary = await service.generate('deca');
+    const summary = await service.generate('dete');
 
     console.log(summary);
 
     // Assert
-    expect(summary.phrase).toBe('deca');
+    expect(summary.phrase).toBe('dete');
     expect(summary.partOfSpeech).toBe('noun');
 
     // Assert translations
@@ -80,7 +80,7 @@ describe('PhraseSummaryService', () => {
 
     if (summary.partOfSpeech === 'noun') {
       expect(summary.grammaticalGender).toBe('srednji');
-      expect(summary.grammaticalNumber).toBe('množina');
+      expect(summary.grammaticalNumber).toBe('jednina');
 
       expect(summary.cases).toMatchObject<CasesOutput>({
         singular: {

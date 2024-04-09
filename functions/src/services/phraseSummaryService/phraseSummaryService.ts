@@ -11,13 +11,26 @@ export const getPhraseSummaryService = ({
 }: PhraseSummaryServiceDependencies): PhraseSummaryService => {
   return {
     async generate(phrase) {
-      const promptTemplate = await configService.get('phraseSummaryPrompt');
-      const prompt = substitutePlaceholders(promptTemplate, {
+      const userPromptTemplate = await configService.get(
+        'phraseSummaryUserPrompt',
+      );
+      const systemPromptTemplate = await configService.get(
+        'phraseSummarySystemPrompt',
+      );
+
+      const userPrompt = substitutePlaceholders(userPromptTemplate, {
+        phrase,
+      });
+
+      const systemPrompt = substitutePlaceholders(systemPromptTemplate, {
         phrase,
       });
 
       // TODO: rename word data and repo
-      return await openAiService.promptAsJson<WordData>(prompt);
+      return await openAiService.promptAsJson<WordData>(
+        userPrompt,
+        systemPrompt,
+      );
     },
   };
 };
