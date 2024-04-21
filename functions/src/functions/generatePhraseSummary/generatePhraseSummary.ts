@@ -9,6 +9,8 @@ import { Context } from './middlewares/context';
 import { phraseSummaryMiddleware } from './middlewares/phraseSummaryMiddleware';
 import { Topic } from '../../consts/topic';
 import { chargeMiddleware } from './middlewares/chargeMiddleware';
+import { replyToMessageWithHtml } from '../../utils/replyToMessageWithHtml';
+import { Message } from '../../consts/message';
 
 export const generatePhraseSummary =
   onMessagePublished<GeneratePhraseSummaryPayload>(
@@ -22,21 +24,32 @@ export const generatePhraseSummary =
         message: { json: payload },
       },
     }) => {
-      const context: Context = {
-        dependencies: getDependencies({
-          telegramBotToken: TELEGRAM_BOT_TOKEN.value(),
-          openAiKey: OPEN_AI_KEY.value(),
-        }),
-        payload,
-      };
+      const dependencies = getDependencies({
+        telegramBotToken: TELEGRAM_BOT_TOKEN.value(),
+        openAiKey: OPEN_AI_KEY.value(),
+      });
 
-      const composedMiddleware = compose(
-        paywallMiddleware,
-        suggestionsMiddleware,
-        phraseSummaryMiddleware,
-        chargeMiddleware,
-      );
+      try {
+        const context: Context = {
+          dependencies,
+          payload,
+        };
 
-      await composedMiddleware(context);
+        const composedMiddleware = compose(
+          paywallMiddleware,
+          suggestionsMiddleware,
+          phraseSummaryMiddleware,
+          chargeMiddleware,
+        );
+
+        await composedMiddleware(context);
+      } catch (error) {
+        console.error(error);
+
+        await replyToMessageWithHtml(dependencies.telegram)(
+          Message.ErrorMessage,
+          { chatId: payload.chatId, messageId: payload.messageId },
+        );
+      }
     },
   );

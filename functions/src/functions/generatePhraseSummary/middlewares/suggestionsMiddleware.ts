@@ -2,6 +2,7 @@ import { replyToMessageWithInlineKeyboard } from '../../../utils/replyToMessageW
 import { replyToMessageWithHtml } from '../../../utils/replyToMessageWithHtml';
 import { GenericMiddleware } from '../../../utils/genericMiddleware';
 import { Context } from './context';
+import { Message } from '../../../consts/message';
 
 export const suggestionsMiddleware: GenericMiddleware<Context> = async (
   {
@@ -22,8 +23,7 @@ export const suggestionsMiddleware: GenericMiddleware<Context> = async (
     return await replyToMessageWithInlineKeyboard(telegram)(
       suggestions.suggestions,
       {
-        message:
-          'Seems like it is not in Serbian, please consider the following translations:',
+        message: Message.PhraseIsNotInSerbian,
         chatId,
         messageId,
       },
@@ -32,7 +32,7 @@ export const suggestionsMiddleware: GenericMiddleware<Context> = async (
 
   // otherwise fail
   return await replyToMessageWithHtml(telegram)(
-    'Sorry, I can not understand this. Can you please rephrase?',
+    Message.PhraseCanNotBeInterpret,
     {
       chatId,
       messageId,

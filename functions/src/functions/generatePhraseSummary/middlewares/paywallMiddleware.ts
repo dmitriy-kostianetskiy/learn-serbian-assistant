@@ -2,6 +2,7 @@ import { replyToMessageWithHtml } from '../../../utils/replyToMessageWithHtml';
 import { GenericMiddleware } from '../../../utils/genericMiddleware';
 import { Dependencies } from '../../../dependencies';
 import { GeneratePhraseSummaryPayload } from '../../../model/generatePhraseSummaryPayload';
+import { Message } from '../../../consts/message';
 
 export const paywallMiddleware: GenericMiddleware<{
   dependencies: Pick<
@@ -29,13 +30,10 @@ export const paywallMiddleware: GenericMiddleware<{
       `User '${userId}' failed to pass paywall: daily quota exceeded.`,
     );
 
-    return await replyToMessageWithHtml(telegram)(
-      'You have exceeded daily usage limit. Please try again tomorrow.',
-      {
-        chatId,
-        messageId,
-      },
-    );
+    return await replyToMessageWithHtml(telegram)(Message.DailyLimitExceeded, {
+      chatId,
+      messageId,
+    });
   }
 
   console.log(`User '${userId}' passed paywall.`);

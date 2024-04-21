@@ -8,11 +8,8 @@ import { errorMiddleware } from './middlewares/errorMiddleware';
 export const configureBot = (dependencies: Dependencies) => () => {
   const { telegraf } = dependencies;
 
-  telegraf.start(handleStartCommandMiddleware(dependencies));
-
+  telegraf.start(handleStartCommandMiddleware);
   telegraf.action(/^option-\d+$/, handleSuggestionsMiddleware(dependencies));
-
   telegraf.on(message('text'), handleTextMiddleware(dependencies));
-
   telegraf.catch(errorMiddleware);
 };
