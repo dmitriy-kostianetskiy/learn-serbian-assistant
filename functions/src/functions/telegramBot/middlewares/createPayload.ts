@@ -1,11 +1,11 @@
-import { GeneratePhraseSummaryPayload } from '../model/generatePhraseSummaryPayload';
+import { GeneratePhraseSummaryPayload } from '../../../model/generatePhraseSummaryPayload';
 import {
   Chat,
   Message,
   Update,
   User,
 } from 'telegraf/typings/core/types/typegram';
-import { UserDetails } from '../services/userService/userService';
+import { UserDetails } from '../../../services/userService/userService';
 
 export const createPayload = (
   text: string,

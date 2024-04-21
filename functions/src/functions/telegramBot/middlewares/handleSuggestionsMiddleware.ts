@@ -1,5 +1,5 @@
 import { Context, NarrowedContext } from 'telegraf';
-import { Dependencies } from '../dependencies';
+import { Dependencies } from '../../../dependencies';
 
 import {
   CallbackQuery,

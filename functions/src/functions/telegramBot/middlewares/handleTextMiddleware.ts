@@ -1,5 +1,5 @@
 import { Context } from 'telegraf';
-import { Dependencies } from '../dependencies';
+import { Dependencies } from '../../../dependencies';
 import { createPayload } from './createPayload';
 
 export type HandleTextMiddlewareDependencies = Pick<
