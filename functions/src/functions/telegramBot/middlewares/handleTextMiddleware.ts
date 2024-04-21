@@ -9,13 +9,13 @@ export type HandleTextMiddlewareDependencies = Pick<
 
 export const handleTextMiddleware =
   ({ phraseSummaryQueueService }: HandleTextMiddlewareDependencies) =>
-  async (context: Context) => {
+  async ({ text, from, chat, message }: Context) => {
     try {
-      const payload = createPayload(
-        context.text!,
-        context.message!,
-        context.chat!,
-      );
+      if (!text || !from || !chat) {
+        return;
+      }
+
+      const payload = createPayload(text, from, chat.id, message?.message_id);
 
       await phraseSummaryQueueService.add(payload);
     } catch (e) {

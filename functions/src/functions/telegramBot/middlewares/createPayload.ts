@@ -1,26 +1,16 @@
 import { GeneratePhraseSummaryPayload } from '../../../model/generatePhraseSummaryPayload';
-import {
-  Chat,
-  Message,
-  Update,
-  User,
-} from 'telegraf/typings/core/types/typegram';
+import { User } from 'telegraf/typings/core/types/typegram';
 import { UserDetails } from '../../../services/userService/userService';
 
 export const createPayload = (
   text: string,
-  message: Update.New & Update.NonChannel & Message,
-  chat:
-    | Chat.ChannelChat
-    | Chat.PrivateChat
-    | Chat.GroupChat
-    | Chat.SupergroupChat,
+  user: User,
+  chatId: number,
+  messageId?: number,
 ): GeneratePhraseSummaryPayload => {
-  const messageId = message.message_id;
-  const chatId = chat.id;
-  const userId = message.from.id;
+  const userId = user.id;
 
-  const userDetails = createUserDetails(message!.from);
+  const userDetails = createUserDetails(user);
 
   return {
     chatId,

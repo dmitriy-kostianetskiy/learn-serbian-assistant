@@ -22,21 +22,27 @@ export const handleSuggestionsMiddleware =
       Update.CallbackQueryUpdate<CallbackQuery>
     >,
   ) => {
-    const selectedOption = findSelectedOption(
-      context.callbackQuery as CallbackQuery.DataQuery,
-    );
+    try {
+      const selectedOption = findSelectedOption(
+        context.callbackQuery as CallbackQuery.DataQuery,
+      );
 
-    if (!selectedOption) {
+      if (!selectedOption || !context.chat) {
+        return;
+      }
+
+      const text = selectedOption.text;
+
+      const payload = createPayload(
+        text,
+        context.callbackQuery.from,
+        context.chat.id,
+      );
+
+      await phraseSummaryQueueService.add(payload);
+    } finally {
       await context.answerCbQuery();
-
-      return;
     }
-
-    const text = selectedOption.text;
-
-    const payload = createPayload(text, context.message!, context.chat!);
-
-    await phraseSummaryQueueService.add(payload);
   };
 
 const findSelectedOption = (callbackQuery: CallbackQuery.DataQuery) => {
