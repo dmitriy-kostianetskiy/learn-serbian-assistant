@@ -3,14 +3,12 @@ export type WellKnownParameter =
   | 'suggestionsUserPrompt'
   | 'phraseSummarySystemPrompt'
   | 'phraseSummaryUserPrompt'
-  | 'welcomeMessage'
   | 'dailyQuota';
 
 export type GetResult<T extends WellKnownParameter = WellKnownParameter> =
   T extends
     | 'suggestionsSystemPrompt'
     | 'suggestionsUserPrompt'
-    | 'welcomeMessage'
     | 'phraseSummaryUserPrompt'
     | 'phraseSummarySystemPrompt'
     ? string

@@ -1,6 +1,6 @@
-import { WordData } from '../model/wordData';
+import { PhraseSummary } from '../model/phraseSummary';
 
-export const EXAMPLE: WordData[] = [
+export const EXAMPLE = [
   {
     phrase: 'dati',
     partOfSpeech: 'verb',
@@ -84,6 +84,6 @@ export const EXAMPLE: WordData[] = [
     synonyms: [],
     example: 'Da kakav vinjak bre!',
   },
-];
+] satisfies PhraseSummary[];
 
 export const STRINGIFIED_EXAMPLE_WORD_DATA = JSON.stringify(EXAMPLE);

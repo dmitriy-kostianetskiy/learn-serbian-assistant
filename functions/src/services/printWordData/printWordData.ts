@@ -1,63 +1,75 @@
 import {
   Cases,
-  NounData,
-  OtherData,
-  VerbData,
-  WordData,
-} from '../../model/wordData';
+  NounSummary,
+  OtherSummary,
+  VerbSummary,
+  PhraseSummary,
+  CasesOutput,
+  ConjugationsOutput,
+} from '../../model/phraseSummary';
 
-export const printPhraseSummary = (phraseSummary: WordData): string => {
+export const printPhraseSummary = (phraseSummary: PhraseSummary): string => {
   switch (phraseSummary.partOfSpeech) {
     case 'verb':
       return printVerb(phraseSummary);
     case 'noun':
-      return printNoun(phraseSummary);
+      return printNounSummary(phraseSummary);
     default:
-      return printOther(phraseSummary);
+      return printOtherSummary(phraseSummary);
   }
 };
 
-const printVerb = (verb: VerbData) => {
-  const { conjugations, phrase } = verb;
+const printVerb = (verbSummary: VerbSummary) => {
+  const { phrase } = verbSummary;
 
   return [
     `<strong>${phrase}</strong>`,
     '',
-    printBasicSummary(verb),
+    printBasicSummary(verbSummary),
+    printConjugationsOutput(verbSummary?.conjugations),
+  ].join('\n');
+};
+
+const printConjugationsOutput = (conjugations?: ConjugationsOutput): string => {
+  return [
     '',
     '🔄 <strong>Conjugations</strong>',
     '',
-    `  Ja <strong>${conjugations.singular.first}</strong>`,
-    `  Ti <strong>${conjugations.singular.second}</strong>`,
-    `  On\\Ona\\Ono <strong>${conjugations.singular.third}</strong>`,
+    `  Ja <strong>${printNullish(conjugations?.singular?.first)}</strong>`,
+    `  Ti <strong>${printNullish(conjugations?.singular?.second)}</strong>`,
+    `  On\\Ona\\Ono <strong>${printNullish(conjugations?.singular?.third)}</strong>`,
     '',
-    `  Mi <strong>${conjugations.plural.first}</strong>`,
-    `  Vi <strong>${conjugations.plural.second}</strong>`,
-    `  Oni\\One\\Ona <strong>${conjugations.plural.third}</strong>`,
+    `  Mi <strong>${printNullish(conjugations?.plural?.first)}</strong>`,
+    `  Vi <strong>${printNullish(conjugations?.plural?.second)}</strong>`,
+    `  Oni\\One\\Ona <strong>${printNullish(conjugations?.plural?.third)}</strong>`,
   ].join('\n');
 };
 
-const printNoun = (noun: NounData) => {
-  const { cases, phrase, grammaticalGender, grammaticalNumber } = noun;
+const printNounSummary = (nounSummary: NounSummary) => {
+  const { cases, phrase } = nounSummary;
 
   return [
-    `📝 <strong>${phrase}</strong> (${grammaticalNumber}, ${grammaticalGender})`,
+    `📝 <strong>${phrase}</strong> ${printNumberAndGender(nounSummary)}`,
     '',
-    printBasicSummary(noun),
-    '',
-    '🔄 <strong>Cases</strong>',
-    '',
-    '👤 Singular:',
-    '',
-    printCases(cases.singular),
-    '',
-    '👥 Plural:',
-    '',
-    printCases(cases.plural),
+    printBasicSummary(nounSummary),
+    printCasesOutput(cases),
   ].join('\n');
 };
 
-const printOther = (other: OtherData) => {
+const printNumberAndGender = ({
+  grammaticalGender,
+  grammaticalNumber,
+}: NounSummary): string => {
+  if (!grammaticalNumber && !grammaticalGender) {
+    return '';
+  }
+
+  const text = [grammaticalGender, grammaticalNumber].join(', ');
+
+  return `(${text})`;
+};
+
+const printOtherSummary = (other: OtherSummary) => {
   const { phrase } = other;
 
   return [`<strong>${phrase}</strong>`, '', printBasicSummary(other)].join(
@@ -70,36 +82,58 @@ const printBasicSummary = ({
   translation,
   synonyms,
   example,
-}: WordData) => {
+}: PhraseSummary) => {
   return [
-    `💡 Example: ${example}`,
+    `💡 Example: ${printNullish(example)}`,
     '',
     ...[
       '❗️ <strong>Definition</strong>',
       '',
-      `  🇷🇸 ${definition.serbian}`,
-      `  🇬🇧 ${definition.english}`,
-      `  🇷🇺 ${definition.russian}`,
+      `  🇷🇸 ${printNullish(definition?.serbian)}`,
+      `  🇬🇧 ${printNullish(definition?.english)}`,
+      `  🇷🇺 ${printNullish(definition?.russian)}`,
       '',
       '💬 <strong>Translation</strong>',
       '',
-      `  🇬🇧 ${translation.english}`,
-      `  🇷🇺 ${translation.russian}`,
+      `  🇬🇧 ${printNullish(translation?.english)}`,
+      `  🇷🇺 ${printNullish(translation?.russian)}`,
     ],
-    ...(synonyms.length > 0
+    ...(synonyms?.length
       ? ['', '📚 <strong>Synonyms</strong>', '', synonyms.join(', ')]
       : []),
   ].join('\n');
 };
 
-const printCases = (cases: Cases) => {
+const printCasesOutput = (casesOutput?: CasesOutput) => {
+  if (!casesOutput) {
+    return '';
+  }
+
+  const { singular, plural } = casesOutput;
+
   return [
-    `  Nominative: <strong>${cases.nominative}</strong>`,
-    `  Genitive: <strong>${cases.genitive}</strong>`,
-    `  Dative: <strong>${cases.dative}</strong>`,
-    `  Accusative: <strong>${cases.accusative}</strong>`,
-    `  Instrumental: <strong>${cases.instrumental}</strong>`,
-    `  Locative: <strong>${cases.locative}</strong>`,
-    `  Vocative: <strong>${cases.vocative}</strong>`,
+    '',
+    '🔄 <strong>Cases</strong>',
+    printCases('👤 Singular:', singular),
+    printCases('👥 Plural:', plural),
   ].join('\n');
+};
+
+const printCases = (title: string, cases?: Cases) => {
+  return [
+    '',
+    title,
+    '',
+    `  Nominative: <strong>${printNullish(cases?.nominative)}</strong>`,
+    `  Genitive: <strong>${printNullish(cases?.genitive)}</strong>`,
+    `  Dative: <strong>${printNullish(cases?.dative)}</strong>`,
+    `  Accusative: <strong>${printNullish(cases?.accusative)}</strong>`,
+    `  Instrumental: <strong>${printNullish(cases?.instrumental)}</strong>`,
+    `  Locative: <strong>${printNullish(cases?.locative)}</strong>`,
+    `  Vocative: <strong>${printNullish(cases?.vocative)}</strong>`,
+  ].join('\n');
+};
+
+const printNullish = (value: string | number | null | undefined): string => {
+  return value === null || typeof value === 'undefined' ? 'N/A' : `${value}`;
 };

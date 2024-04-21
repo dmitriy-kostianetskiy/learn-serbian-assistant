@@ -1,6 +1,6 @@
 import './apis/firebase';
 
-import { configureBot } from './bot/configureBot';
+import { configureBot } from './functions/telegramBot/configureBot';
 import { getTestDependencies } from './dependencies';
 
 (async () => {

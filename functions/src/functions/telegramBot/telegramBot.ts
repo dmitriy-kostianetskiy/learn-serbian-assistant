@@ -1,8 +1,8 @@
 import { onRequest } from 'firebase-functions/v2/https';
-import { OPEN_AI_KEY, SECRET_TOKEN, TELEGRAM_BOT_TOKEN } from '../params';
-import { configureBot } from '../bot/configureBot';
-import { getDependencies } from '../dependencies';
-import { verifySecretToken } from '../bot/verifySecretToken';
+import { OPEN_AI_KEY, SECRET_TOKEN, TELEGRAM_BOT_TOKEN } from '../../params';
+import { getDependencies } from '../../dependencies';
+import { verifySecretToken } from '../../bot/verifySecretToken';
+import { configureBot } from './configureBot';
 
 export const telegramBot = onRequest(
   {

@@ -1,14 +1,19 @@
-import { WordData } from '../../model/wordData';
+import { PhraseSummary } from '../../model/phraseSummary';
 import { substitutePlaceholders } from '../../utils/substitutePlaceholders';
-import {
-  PhraseSummaryServiceDependencies,
-  PhraseSummaryService,
-} from './phraseSummaryService.model';
+import { ConfigService } from '../configService';
+import { OpenAiService } from '../openAiService';
+
+export interface PhraseSummaryService {
+  generate(phrase: string): Promise<PhraseSummary>;
+}
 
 export const getPhraseSummaryService = ({
   openAiService,
   configService,
-}: PhraseSummaryServiceDependencies): PhraseSummaryService => {
+}: {
+  openAiService: OpenAiService;
+  configService: ConfigService;
+}): PhraseSummaryService => {
   return {
     async generate(phrase) {
       const userPromptTemplate = await configService.get(
@@ -26,8 +31,7 @@ export const getPhraseSummaryService = ({
         phrase,
       });
 
-      // TODO: rename word data and repo
-      return await openAiService.promptAsJson<WordData>(
+      return await openAiService.promptAsJson<PhraseSummary>(
         userPrompt,
         systemPrompt,
       );

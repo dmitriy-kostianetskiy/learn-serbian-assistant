@@ -1,6 +1,5 @@
 import { Context, NarrowedContext } from 'telegraf';
-import { Dependencies } from '../dependencies';
-import { replyToMessage } from '../utils/replyToMessage';
+import { Dependencies } from '../../../dependencies';
 
 import {
   CallbackQuery,
@@ -8,41 +7,42 @@ import {
   Message,
   Update,
 } from 'telegraf/typings/core/types/typegram';
-import { printPhraseSummary } from '../services/printWordData/printWordData';
+import { createPayload } from './createPayload';
 
 type HandleSuggestionsMiddlewareDependencies = Pick<
   Dependencies,
-  'phraseSummaryService'
+  'phraseSummaryQueueService'
 >;
 
 export const handleSuggestionsMiddleware =
-  ({ phraseSummaryService }: HandleSuggestionsMiddlewareDependencies) =>
+  ({ phraseSummaryQueueService }: HandleSuggestionsMiddlewareDependencies) =>
   async (
     context: NarrowedContext<
       Context<Update>,
       Update.CallbackQueryUpdate<CallbackQuery>
     >,
   ) => {
-    const selectedOption = findSelectedOption(
-      context.callbackQuery as CallbackQuery.DataQuery,
-    );
+    try {
+      const selectedOption = findSelectedOption(
+        context.callbackQuery as CallbackQuery.DataQuery,
+      );
 
-    if (!selectedOption) {
+      if (!selectedOption || !context.chat) {
+        return;
+      }
+
+      const text = selectedOption.text;
+
+      const payload = createPayload(
+        text,
+        context.callbackQuery.from,
+        context.chat.id,
+      );
+
+      await phraseSummaryQueueService.add(payload);
+    } finally {
       await context.answerCbQuery();
-
-      return;
     }
-
-    const phrase = selectedOption.text;
-
-    const phraseSummary = await phraseSummaryService.generate(phrase);
-
-    const phraseSummaryString = printPhraseSummary(phraseSummary);
-
-    await replyToMessage(context)(
-      phraseSummaryString,
-      context.callbackQuery.message?.message_id,
-    );
   };
 
 const findSelectedOption = (callbackQuery: CallbackQuery.DataQuery) => {
