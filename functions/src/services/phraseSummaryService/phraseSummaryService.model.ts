@@ -1,5 +1,5 @@
 import { Dependencies } from '../../dependencies';
-import { WordData } from '../../model/wordData';
+import { PhraseSummary } from '../../model/phraseSummary';
 
 export type PhraseSummaryServiceDependencies = Pick<
   Dependencies,
@@ -7,5 +7,5 @@ export type PhraseSummaryServiceDependencies = Pick<
 >;
 
 export interface PhraseSummaryService {
-  generate(phrase: string): Promise<WordData>;
+  generate(phrase: string): Promise<PhraseSummary>;
 }

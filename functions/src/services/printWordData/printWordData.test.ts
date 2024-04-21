@@ -1,10 +1,10 @@
-import { WordData } from '../../model/wordData';
+import { PhraseSummary } from '../../model/phraseSummary';
 import { printPhraseSummary } from './printWordData';
 
 describe('print word data', () => {
   test('should print verb', () => {
     // Arrange
-    const wordData: WordData = {
+    const wordData: PhraseSummary = {
       phrase: 'dati',
       infinitive: 'dati',
       partOfSpeech: 'verb',
@@ -62,7 +62,7 @@ describe('print word data', () => {
 
   test('should print noun', () => {
     // Arrange
-    const wordData: WordData = {
+    const wordData: PhraseSummary = {
       phrase: 'sto',
       partOfSpeech: 'noun',
       definition: {
