@@ -1,14 +1,13 @@
 import OpenAI from 'openai';
-import { Dependencies } from '../../dependencies';
 import { OpenAiService } from './openAiService.model';
 
 export const getOpenAiService = (
-  { openai }: Pick<Dependencies, 'openai'>,
+  { openai }: { openai: OpenAI },
   seed = 42,
   temperature = 1,
 ): OpenAiService => {
   return {
-    promptAsJson: async <T>(prompt: string, systemPrompt?: string) => {
+    async promptAsJson<T>(prompt: string, systemPrompt?: string) {
       const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] =
         systemPrompt
           ? [

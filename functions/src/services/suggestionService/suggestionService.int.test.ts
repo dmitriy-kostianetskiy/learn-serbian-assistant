@@ -1,6 +1,6 @@
 import { getTestDependencies } from '../../dependencies';
 import { getSuggestionService } from './suggestionService';
-import { SuggestionService } from './suggestionService.model';
+import { SuggestionService } from './suggestionService';
 
 describe('SuggestionService', () => {
   let service: SuggestionService;

@@ -1,17 +1,13 @@
 import OpenAI from 'openai';
 import { getFirestore } from './apis/firestore';
-import { Telegraf } from 'telegraf';
+import { Telegraf, Telegram } from 'telegraf';
 import { OpenAiService, getOpenAiService } from './services/openAiService';
 import {
-  WordDataRepository,
-  getWordDataRepository,
-} from './services/wordDataRepository';
-
-import { UserRepository, getUserRepository } from './services/userRepository';
-import { RemoteConfig, getRemoteConfig } from 'firebase-admin/remote-config';
+  UserService,
+  getUserService,
+} from './services/userService/userService';
+import { getRemoteConfig } from 'firebase-admin/remote-config';
 import { ConfigService, getConfigService } from './services/configService';
-import { Firestore } from 'firebase-admin/firestore';
-import { PaywallService, getPaywallService } from './services/paywallService';
 import {
   PhraseSummaryService,
   getPhraseSummaryService,
@@ -20,6 +16,11 @@ import {
   SuggestionService,
   getSuggestionService,
 } from './services/suggestionService';
+import { PubSub } from '@google-cloud/pubsub';
+import {
+  PhraseSummaryQueueService,
+  getPhraseSummaryQueueService,
+} from './services/phraseSummaryQueueService';
 
 export type GetDependenciesOptions = {
   telegramBotToken: string;
@@ -27,17 +28,14 @@ export type GetDependenciesOptions = {
 };
 
 export interface Dependencies {
-  firestore: Firestore;
-  remoteConfig: RemoteConfig;
-  openai: OpenAI;
   telegraf: Telegraf;
-  wordDataRepository: WordDataRepository;
-  userRepository: UserRepository;
-  paywallService: PaywallService;
+  telegram: Telegram;
+  userService: UserService;
   configService: ConfigService;
   openAiService: OpenAiService;
   phraseSummaryService: PhraseSummaryService;
   suggestionService: SuggestionService;
+  phraseSummaryQueueService: PhraseSummaryQueueService;
 }
 
 let dependencies: Dependencies | undefined;
@@ -58,10 +56,8 @@ export const getDependencies = ({
   const openai = new OpenAI({ apiKey: openAiKey });
   const telegraf = new Telegraf(telegramBotToken);
 
-  const wordDataRepository = getWordDataRepository(firestore);
-  const userRepository = getUserRepository(firestore);
+  const userService = getUserService({ firestore });
 
-  const paywallService = getPaywallService({ userRepository, configService });
   const openAiService = getOpenAiService({ openai });
 
   const suggestionService = getSuggestionService({
@@ -74,18 +70,21 @@ export const getDependencies = ({
     configService,
   });
 
+  const pubSub = new PubSub({
+    projectId: 'learn-serbian-assistant',
+  });
+
+  const phraseSummaryQueueService = getPhraseSummaryQueueService({ pubSub });
+
   dependencies = {
-    firestore,
-    remoteConfig,
-    openai,
     telegraf,
-    wordDataRepository,
-    userRepository,
-    paywallService,
+    telegram: telegraf.telegram,
+    userService,
     configService,
     openAiService,
     phraseSummaryService,
     suggestionService,
+    phraseSummaryQueueService,
   };
 
   return dependencies;

@@ -1,8 +1,11 @@
+import { Suggestions } from '../../model/suggestions';
 import { substitutePlaceholders } from '../../utils/substitutePlaceholders';
-import {
-  SuggestionService,
-  SuggestionServiceDependencies,
-} from './suggestionService.model';
+import { ConfigService } from '../configService';
+import { OpenAiService } from '../openAiService';
+
+export interface SuggestionService {
+  generate(phrase: string): Promise<Suggestions>;
+}
 
 type SuggestionPromptResponse = {
   language?: string;
@@ -12,7 +15,10 @@ type SuggestionPromptResponse = {
 export const getSuggestionService = ({
   configService,
   openAiService,
-}: SuggestionServiceDependencies): SuggestionService => {
+}: {
+  configService: ConfigService;
+  openAiService: OpenAiService;
+}): SuggestionService => {
   return {
     async generate(phrase) {
       // get prompt

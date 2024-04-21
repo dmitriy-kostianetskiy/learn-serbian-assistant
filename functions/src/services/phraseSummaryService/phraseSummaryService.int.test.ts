@@ -1,7 +1,9 @@
 import { getTestDependencies } from '../../dependencies';
 import { CasesOutput, ConjugationsOutput } from '../../model/wordData';
-import { getPhraseSummaryService } from './phraseSummaryService';
-import { PhraseSummaryService } from './phraseSummaryService.model';
+import {
+  PhraseSummaryService,
+  getPhraseSummaryService,
+} from './phraseSummaryService';
 
 describe('PhraseSummaryService', () => {
   let service: PhraseSummaryService;
