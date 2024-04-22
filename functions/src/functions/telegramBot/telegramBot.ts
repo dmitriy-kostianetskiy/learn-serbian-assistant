@@ -1,23 +1,23 @@
 import { onRequest } from 'firebase-functions/v2/https';
-import { OPEN_AI_KEY, SECRET_TOKEN, TELEGRAM_BOT_TOKEN } from '../../params';
 import { getDependencies } from '../../dependencies';
 import { verifySecretToken } from '../../bot/verifySecretToken';
 import { configureBot } from './configureBot';
+import { Secret } from '../../consts/secret';
 
 export const telegramBot = onRequest(
   {
     region: 'europe-west1',
-    secrets: [TELEGRAM_BOT_TOKEN, OPEN_AI_KEY, SECRET_TOKEN],
+    secrets: [Secret.TelegramBotToken, Secret.OpenAiKey, Secret.SecretToken],
   },
   async (req, res) => {
     try {
-      if (!verifySecretToken(req, res, SECRET_TOKEN.value())) {
+      if (!verifySecretToken(req, res, Secret.SecretToken.value())) {
         return;
       }
 
       const dependencies = getDependencies({
-        telegramBotToken: TELEGRAM_BOT_TOKEN.value(),
-        openAiKey: OPEN_AI_KEY.value(),
+        telegramBotToken: Secret.TelegramBotToken.value(),
+        openAiKey: Secret.OpenAiKey.value(),
       });
 
       configureBot(dependencies)();
