@@ -6,7 +6,7 @@ import { paywallMiddleware } from './middlewares/paywallMiddleware';
 import { suggestionsMiddleware } from './middlewares/suggestionsMiddleware';
 import { Context } from './middlewares/context';
 import { phraseSummaryMiddleware } from './middlewares/phraseSummaryMiddleware';
-import { Topic } from '../../consts/topic';
+import { PubSubTopic } from '../../consts/pubSubTopic';
 import { chargeMiddleware } from './middlewares/chargeMiddleware';
 import { replyToMessageWithHtml } from '../../utils/replyToMessageWithHtml';
 import { Message } from '../../consts/message';
@@ -15,7 +15,7 @@ import { Secret } from '../../consts/secret';
 export const generatePhraseSummary =
   onMessagePublished<GeneratePhraseSummaryPayload>(
     {
-      topic: Topic.PhraseSummary,
+      topic: PubSubTopic.PhraseSummary,
       region: 'europe-west1',
       secrets: [Secret.TelegramBotToken, Secret.OpenAiKey],
     },
