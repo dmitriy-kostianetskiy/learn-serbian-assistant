@@ -2,8 +2,7 @@ import { Telegram } from 'telegraf';
 import { ConfigService } from '../../../services/configService';
 import { User, UserService } from '../../../services/userService/userService';
 import { paywallMiddleware } from './paywallMiddleware';
-
-type Context = Parameters<typeof paywallMiddleware>[0];
+import { Context } from './context';
 
 describe('paywallMiddleware', () => {
   const createUserService = (user: User): UserService => ({
@@ -36,7 +35,7 @@ describe('paywallMiddleware', () => {
         messageId: 0,
         userDetails: {},
       },
-    };
+    } as Context;
   };
 
   test('should pass if daily quota is not exceeded', async () => {

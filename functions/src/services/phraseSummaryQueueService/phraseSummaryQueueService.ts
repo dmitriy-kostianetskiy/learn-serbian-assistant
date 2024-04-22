@@ -1,5 +1,5 @@
 import { PubSub } from '@google-cloud/pubsub';
-import { Topic } from '../../consts/topic';
+import { PubSubTopic } from '../../consts/pubSubTopic';
 import { GeneratePhraseSummaryPayload } from '../../model/generatePhraseSummaryPayload';
 
 export interface PhraseSummaryQueueService {
@@ -13,7 +13,7 @@ export const getPhraseSummaryQueueService = ({
 }): PhraseSummaryQueueService => {
   return {
     async add(payload) {
-      const topic = Topic.PhraseSummary;
+      const topic = PubSubTopic.PhraseSummary;
 
       console.log(`Attempting to add request to the topic ${topic}`, payload);
 

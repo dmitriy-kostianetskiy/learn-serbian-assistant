@@ -20,6 +20,12 @@ export interface UserService {
   resetAllDailyQuotaUsed(): Promise<void>;
 }
 
+const EMPTY_USER: User = {
+  dailyQuotaUsed: 0,
+  hasPremium: false,
+  userDetails: {},
+} as const;
+
 export const getUserService = (
   { firestore }: { firestore: FirebaseFirestore.Firestore },
   collectionName = 'user',
@@ -46,9 +52,8 @@ export const getUserService = (
         console.log(`User '${id}': user details updated.`);
       } else {
         await documentRef.set({
+          ...EMPTY_USER,
           userDetails,
-          hasPremium: false,
-          dailyQuotaUsed: 0,
         });
 
         console.log(`User '${id}': user details created.`);
@@ -62,6 +67,12 @@ export const getUserService = (
       console.log(`User '${id}': attempt to increment daily quota usage.`);
 
       const documentRef = collection.doc(id);
+      const documentSnapshot = await documentRef.get();
+
+      console.log(documentSnapshot.exists);
+      if (!documentSnapshot.exists) {
+        await documentRef.set(EMPTY_USER);
+      }
 
       await documentRef.update({
         dailyQuotaUsed: FieldValue.increment(1),
@@ -70,12 +81,14 @@ export const getUserService = (
       console.log(`User '${id}': daily quota usage incremented.`);
     },
     async resetAllDailyQuotaUsed() {
-      // TODO: optimize
-      const documents = await collection.get();
+      const batch = firestore.batch();
+      const documents = await collection.select().get();
 
-      for (const { id } of documents.docs) {
-        await collection.doc(id).update({ dailyQuotaUsed: 0 });
-      }
+      documents.docs.forEach(({ id }) => {
+        batch.update(collection.doc(id), { dailyQuotaUsed: 0 });
+      });
+
+      await batch.commit();
 
       console.warn('All users are updated');
     },

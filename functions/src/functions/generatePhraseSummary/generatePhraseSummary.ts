@@ -1,5 +1,4 @@
 import { onMessagePublished } from 'firebase-functions/v2/pubsub';
-import { OPEN_AI_KEY, TELEGRAM_BOT_TOKEN } from '../../params';
 import { GeneratePhraseSummaryPayload } from '../../model/generatePhraseSummaryPayload';
 import { getDependencies } from '../../dependencies';
 import { compose } from '../../utils/genericMiddleware';
@@ -7,17 +6,18 @@ import { paywallMiddleware } from './middlewares/paywallMiddleware';
 import { suggestionsMiddleware } from './middlewares/suggestionsMiddleware';
 import { Context } from './middlewares/context';
 import { phraseSummaryMiddleware } from './middlewares/phraseSummaryMiddleware';
-import { Topic } from '../../consts/topic';
+import { PubSubTopic } from '../../consts/pubSubTopic';
 import { chargeMiddleware } from './middlewares/chargeMiddleware';
 import { replyToMessageWithHtml } from '../../utils/replyToMessageWithHtml';
 import { Message } from '../../consts/message';
+import { Secret } from '../../consts/secret';
 
 export const generatePhraseSummary =
   onMessagePublished<GeneratePhraseSummaryPayload>(
     {
-      topic: Topic.PhraseSummary,
+      topic: PubSubTopic.PhraseSummary,
       region: 'europe-west1',
-      secrets: [TELEGRAM_BOT_TOKEN, OPEN_AI_KEY],
+      secrets: [Secret.TelegramBotToken, Secret.OpenAiKey],
     },
     async ({
       data: {
@@ -25,8 +25,8 @@ export const generatePhraseSummary =
       },
     }) => {
       const dependencies = getDependencies({
-        telegramBotToken: TELEGRAM_BOT_TOKEN.value(),
-        openAiKey: OPEN_AI_KEY.value(),
+        telegramBotToken: Secret.TelegramBotToken.value(),
+        openAiKey: Secret.OpenAiKey.value(),
       });
 
       try {
