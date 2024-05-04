@@ -37,11 +37,11 @@ const printConjugationsOutput = (conjugations?: ConjugationsOutput): string => {
     '',
     `  Ja <strong>${printNullish(conjugations?.singular?.first)}</strong>`,
     `  Ti <strong>${printNullish(conjugations?.singular?.second)}</strong>`,
-    `  On\\Ona\\Ono <strong>${printNullish(conjugations?.singular?.third)}</strong>`,
+    `  On/Ona/Ono <strong>${printNullish(conjugations?.singular?.third)}</strong>`,
     '',
     `  Mi <strong>${printNullish(conjugations?.plural?.first)}</strong>`,
     `  Vi <strong>${printNullish(conjugations?.plural?.second)}</strong>`,
-    `  Oni\\One\\Ona <strong>${printNullish(conjugations?.plural?.third)}</strong>`,
+    `  Oni/One/Ona <strong>${printNullish(conjugations?.plural?.third)}</strong>`,
   ].join('\n');
 };
 
@@ -90,12 +90,12 @@ const printBasicSummary = ({
       '❗️ <strong>Definition</strong>',
       '',
       `  🇷🇸 ${printNullish(definition?.serbian)}`,
-      `  🇬🇧 ${printNullish(definition?.english)}`,
+      `  🇺🇸 ${printNullish(definition?.english)}`,
       `  🇷🇺 ${printNullish(definition?.russian)}`,
       '',
       '💬 <strong>Translation</strong>',
       '',
-      `  🇬🇧 ${printNullish(translation?.english)}`,
+      `  🇺🇸 ${printNullish(translation?.english)}`,
       `  🇷🇺 ${printNullish(translation?.russian)}`,
     ],
     ...(synonyms?.length

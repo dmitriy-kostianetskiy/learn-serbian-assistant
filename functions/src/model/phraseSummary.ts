@@ -1,14 +1,14 @@
-type PhraseSummaryBase = {
+export type PhraseSummaryBase = Partial<{
   phrase: string;
   partOfSpeech: PartOfSpeech;
-  grammaticalGender?: string;
-  grammaticalNumber?: string;
-  translation?: Translation;
-  definition?: Definition;
-  example?: string;
-  synonyms?: string[];
-  promptHash?: string;
-};
+  grammaticalGender: string;
+  grammaticalNumber: string;
+  translation: Translation;
+  definition: Definition;
+  example: string;
+  synonyms: string[];
+  promptHash: string;
+}>;
 
 export type Translation = Partial<{
   english: string;
@@ -62,7 +62,7 @@ export type CasesOutput = Partial<{
 }>;
 
 export type OtherSummary = PhraseSummaryBase & {
-  partOfSpeech: 'other';
+  partOfSpeech: 'other' | undefined;
 };
 
 export type PhraseSummary = VerbSummary | NounSummary | OtherSummary;

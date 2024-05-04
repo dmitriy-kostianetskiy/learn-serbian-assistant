@@ -59,8 +59,6 @@ describe('PhraseSummaryService', () => {
     // Act
     const summary = await service.generate('dete');
 
-    console.log(summary);
-
     // Assert
     expect(summary.phrase).toBe('dete');
     expect(summary.partOfSpeech).toBe('noun');
