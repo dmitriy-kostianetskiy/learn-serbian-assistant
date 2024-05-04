@@ -43,12 +43,12 @@ describe('print word data', () => {
     expect(message).toContain('Molim dajte kafu!');
 
     // Assert translations
-    expect(message).toContain('🇬🇧 to give');
+    expect(message).toContain('🇺🇸 to give');
     expect(message).toContain('🇷🇺 давать');
 
     // Assert definitions
     expect(message).toContain('🇷🇸 pružiti nešto');
-    expect(message).toContain('🇬🇧 to move, shift, provide something');
+    expect(message).toContain('🇺🇸 to move, shift, provide something');
     expect(message).toContain('🇷🇺 перемещать что-либо');
 
     // Assert cases
@@ -109,12 +109,12 @@ describe('print word data', () => {
     expect(message).toContain('Ostavite to na stolu.');
 
     // Assert translations
-    expect(message).toContain('🇬🇧 table');
+    expect(message).toContain('🇺🇸 table');
     expect(message).toContain('🇷🇺 стол');
 
     // Assert definitions
     expect(message).toContain('🇷🇸 komad nameštaja');
-    expect(message).toContain('🇬🇧 a piece of furniture');
+    expect(message).toContain('🇺🇸 a piece of furniture');
     expect(message).toContain('🇷🇺 предмет мебели');
 
     // Assert synonyms
