@@ -2,6 +2,7 @@ import { PhraseSummary } from '../../model/phraseSummary';
 import { substitutePlaceholders } from '../../utils/substitutePlaceholders';
 import { ConfigService } from '../configService';
 import { OpenAiService } from '../openAiService';
+import { validatePhraseSummary } from './validatePhraseSummary';
 
 export interface PhraseSummaryService {
   generate(phrase: string): Promise<PhraseSummary>;
@@ -31,10 +32,21 @@ export const getPhraseSummaryService = ({
         phrase,
       });
 
-      return await openAiService.promptAsJson<PhraseSummary>(
+      const summary = await openAiService.promptAsJson<PhraseSummary>(
         userPrompt,
         systemPrompt,
       );
+
+      const summaryValidation = validatePhraseSummary(summary);
+
+      if (!summaryValidation.passed) {
+        console.error(
+          'Generation summary validation failed.',
+          summaryValidation.errors,
+        );
+      }
+
+      return summary;
     },
   };
 };

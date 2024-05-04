@@ -1,40 +1,11 @@
-import { PhraseSummary } from '../../model/phraseSummary';
+import { GIVE_EXAMPLE } from '../../test/examples/give';
+import { TABLE_EXAMPLE } from '../../test/examples/table';
 import { printPhraseSummary } from './printWordData';
 
 describe('print word data', () => {
   test('should print verb', () => {
-    // Arrange
-    const wordData: PhraseSummary = {
-      phrase: 'dati',
-      infinitive: 'dati',
-      partOfSpeech: 'verb',
-      definition: {
-        serbian: 'pružiti nešto',
-        english: 'to move, shift, provide something',
-        russian: 'перемещать что-либо',
-      },
-      translation: {
-        english: 'to give',
-        russian: 'давать',
-      },
-      synonyms: ['prineti', 'pružiti', 'darovati', 'pokloniti'],
-      example: 'Molim dajte kafu!',
-      conjugations: {
-        singular: {
-          first: 'dajem',
-          second: 'daješ',
-          third: 'daje',
-        },
-        plural: {
-          first: 'dajemo',
-          second: 'dajete',
-          third: 'daju',
-        },
-      },
-    };
-
     // Act
-    const message = printPhraseSummary(wordData);
+    const message = printPhraseSummary(GIVE_EXAMPLE);
 
     // Assert
     expect(message).toContain('<strong>dati</strong>');
@@ -54,52 +25,15 @@ describe('print word data', () => {
     // Assert cases
     expect(message).toContain('Ja <strong>dajem</strong>');
     expect(message).toContain('Ti <strong>daješ</strong>');
-    expect(message).toContain('On\\Ona\\Ono <strong>daje</strong>');
+    expect(message).toContain('On/Ona/Ono <strong>daje</strong>');
     expect(message).toContain('Mi <strong>dajemo</strong>');
     expect(message).toContain('Vi <strong>dajete</strong>');
-    expect(message).toContain('Oni\\One\\Ona <strong>daju</strong>');
+    expect(message).toContain('Oni/One/Ona <strong>daju</strong>');
   });
 
   test('should print noun', () => {
-    // Arrange
-    const wordData: PhraseSummary = {
-      phrase: 'sto',
-      partOfSpeech: 'noun',
-      definition: {
-        english: 'a piece of furniture',
-        russian: 'предмет мебели',
-        serbian: 'komad nameštaja',
-      },
-      translation: {
-        english: 'table',
-        russian: 'стол',
-      },
-      synonyms: ['astal', 'trpeza'],
-      example: 'Ostavite to na stolu.',
-      cases: {
-        singular: {
-          nominative: 'sto',
-          genitive: 'stola',
-          dative: 'stolu',
-          accusative: 'sto',
-          instrumental: 'stolom',
-          locative: 'stolu',
-          vocative: 'sto',
-        },
-        plural: {
-          nominative: 'stolovi',
-          genitive: 'stolova',
-          dative: 'stolovima',
-          accusative: 'stolove',
-          instrumental: 'stolovima',
-          locative: 'stolovima',
-          vocative: 'stolovi',
-        },
-      },
-    };
-
     // Act
-    const message = printPhraseSummary(wordData);
+    const message = printPhraseSummary(TABLE_EXAMPLE);
 
     // Assert
 
