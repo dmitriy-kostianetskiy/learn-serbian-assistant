@@ -1,20 +1,12 @@
 import { PhraseSummary } from '../../model/phraseSummary';
 import { substitutePlaceholders } from '../../utils/substitutePlaceholders';
-import { ConfigService } from '../configService';
-import { OpenAiService } from '../openAiService';
+import { PhraseSummaryService, PhraseSummaryServiceDependencies } from './phraseSummaryService.model';
 import { validatePhraseSummary } from './validatePhraseSummary';
-
-export interface PhraseSummaryService {
-  generate(phrase: string): Promise<PhraseSummary>;
-}
 
 export const getPhraseSummaryService = ({
   openAiService,
   configService,
-}: {
-  openAiService: OpenAiService;
-  configService: ConfigService;
-}): PhraseSummaryService => {
+}: PhraseSummaryServiceDependencies): PhraseSummaryService => {
   return {
     async generate(phrase) {
       const userPromptTemplate = await configService.get(

@@ -21,6 +21,8 @@ import {
   PhraseSummaryQueueService,
   getPhraseSummaryQueueService,
 } from './services/phraseSummaryQueueService';
+import { PhraseSummary } from './model/phraseSummary';
+import { CacheService, getCacheService } from './services/cacheService';
 
 export type GetDependenciesOptions = {
   telegramBotToken: string;
@@ -34,6 +36,7 @@ export interface Dependencies {
   configService: ConfigService;
   openAiService: OpenAiService;
   phraseSummaryService: PhraseSummaryService;
+  phraseSummaryCache: CacheService<PhraseSummary>;
   suggestionService: SuggestionService;
   phraseSummaryQueueService: PhraseSummaryQueueService;
 }
@@ -70,6 +73,8 @@ export const getDependencies = ({
     configService,
   });
 
+  const phraseSummaryCache = getCacheService<PhraseSummary>('summaries', { firestore });
+
   const pubSub = new PubSub({
     projectId: 'learn-serbian-assistant',
   });
@@ -83,6 +88,7 @@ export const getDependencies = ({
     configService,
     openAiService,
     phraseSummaryService,
+    phraseSummaryCache,
     suggestionService,
     phraseSummaryQueueService,
   };
