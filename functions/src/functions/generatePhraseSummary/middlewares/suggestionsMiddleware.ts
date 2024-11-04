@@ -3,10 +3,11 @@ import { replyToMessageWithHtml } from '../../../utils/replyToMessageWithHtml';
 import { GenericMiddleware } from '../../../utils/genericMiddleware';
 import { Context } from './context';
 import { Message } from '../../../consts/message';
+import { v4 as uuid } from 'uuid';
 
 export const suggestionsMiddleware: GenericMiddleware<Context> = async (
   {
-    dependencies: { suggestionService, telegram },
+    dependencies: { suggestionService, telegram, failuresStorage },
     payload: { text, messageId, chatId },
   },
   next,
@@ -31,6 +32,12 @@ export const suggestionsMiddleware: GenericMiddleware<Context> = async (
   }
 
   // otherwise fail
+  const failureKey = uuid();
+
+  await failuresStorage.set(failureKey, {
+    input: text,
+  });
+
   return await replyToMessageWithHtml(telegram)(
     Message.PhraseCanNotBeInterpret,
     {

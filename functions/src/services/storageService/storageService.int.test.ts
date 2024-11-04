@@ -5,32 +5,32 @@ import {
   getFromCollection,
   insertIntoCollection,
 } from '../../utils/firebaseUtils';
-import { CacheService } from './cacheService.model';
-import { getCacheService } from './cacheService';
+import { StorageService } from './storageService.model';
+import { getStorageService } from './storageService';
 
-type CacheItem = {
+type StorageItem = {
   foo: string;
 }
 
-describe('CacheService', () => {
-  let service: CacheService<CacheItem>;
+describe('StorageService', () => {
+  let service: StorageService<StorageItem>;
   let firestore: FirebaseFirestore.Firestore;
   let collectionName: string;
 
   beforeAll(() => {
     firestore = getFirestore();
-    collectionName = `cache-${uuid()}`;
+    collectionName = `storage-${uuid()}`;
 
-    service = getCacheService(collectionName, { firestore });
+    service = getStorageService(collectionName, { firestore });
   });
 
   afterEach(async () => {
     await deleteCollection(firestore, collectionName);
   });
 
-  test('should return item if it is presented in cache', async () => {
+  test('should return item if it is presented in the storage', async () => {
     // Arrange
-    await insertIntoCollection<CacheItem>(
+    await insertIntoCollection<StorageItem>(
       firestore,
       collectionName,
       {
@@ -50,7 +50,7 @@ describe('CacheService', () => {
     expect(item?.foo).toBe('bar');
   });
 
-  test('should return null if item is not presented in cache', async () => {
+  test('should return null if item is not presented in the storage', async () => {
     // Act
     const item = await service.get('42');
 
@@ -59,16 +59,16 @@ describe('CacheService', () => {
   });
 
 
-  test('should save item to cache', async () => {
+  test('should save item to cathe storageche', async () => {
     // Act
     await service.set('42', { foo: 'bar bar' });
 
     // Assert
-    const itemsFromCache = await getFromCollection<CacheItem>(firestore, collectionName);
+    const items = await getFromCollection<StorageItem>(firestore, collectionName);
 
-    expect(itemsFromCache).toHaveLength(1);
+    expect(items).toHaveLength(1);
 
-    expect(itemsFromCache[0]).toBeDefined();
-    expect(itemsFromCache[0]?.foo).toBe('bar bar');
+    expect(items[0]).toBeDefined();
+    expect(items[0]?.foo).toBe('bar bar');
   });
 });

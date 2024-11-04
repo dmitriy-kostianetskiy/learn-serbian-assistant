@@ -1,14 +1,14 @@
-import { CacheService } from './cacheService.model';
+import { StorageService } from './storageService.model';
 
-export const getCacheService = <T extends object>(
-  cacheName: string,
+export const getStorageService = <T extends object>(
+  storageName: string,
   {
     firestore,
   }: {
     firestore: FirebaseFirestore.Firestore;
   },
-): CacheService<T> => {
-  const collection = firestore.collection(cacheName);
+): StorageService<T> => {
+  const collection = firestore.collection(storageName);
 
   return {
     async get<T>(key: string): Promise<T | null> {
