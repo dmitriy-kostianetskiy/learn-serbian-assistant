@@ -69,7 +69,6 @@ export const getUserService = (
       const documentRef = collection.doc(id);
       const documentSnapshot = await documentRef.get();
 
-      console.log(documentSnapshot.exists);
       if (!documentSnapshot.exists) {
         await documentRef.set(EMPTY_USER);
       }

@@ -12,9 +12,13 @@ export const suggestionsMiddleware: GenericMiddleware<Context> = async (
   },
   next,
 ) => {
+  console.log(`User '${userId}': suggestions for '${text}' for requested.`);
+
   const suggestions = await suggestionService.generate(text);
 
-  // if it is not serbian phrase proceed
+  console.log(`'${text}': suggestions for user '${userId}' generated.`, suggestions);
+
+  // if it is serbian phrase proceed
   if (suggestions.language === 'serbian') {
     return await next();
   }
