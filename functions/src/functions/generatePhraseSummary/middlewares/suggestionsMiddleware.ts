@@ -8,7 +8,7 @@ import { v4 as uuid } from 'uuid';
 export const suggestionsMiddleware: GenericMiddleware<Context> = async (
   {
     dependencies: { suggestionService, telegram, failuresStorage },
-    payload: { text, messageId, chatId },
+    payload: { text, messageId, chatId, userId },
   },
   next,
 ) => {
@@ -36,6 +36,9 @@ export const suggestionsMiddleware: GenericMiddleware<Context> = async (
 
   await failuresStorage.set(failureKey, {
     input: text,
+    messageId,
+    chatId,
+    userId,
   });
 
   return await replyToMessageWithHtml(telegram)(
