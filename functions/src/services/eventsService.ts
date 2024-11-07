@@ -7,9 +7,8 @@ export interface EventService {
 
 export const getEventsService = (
   { firestore }: { firestore: FirebaseFirestore.Firestore },
-  collectionName = 'user',
 ): EventService => {
-  const collection = firestore.collection(collectionName);
+  const collection = firestore.collection('events');
 
   return {
     async add(event) {
