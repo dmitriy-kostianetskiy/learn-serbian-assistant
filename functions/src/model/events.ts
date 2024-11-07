@@ -27,6 +27,7 @@ export type PhraseSummaryGenerateEvent = {
   type: 'phrase-summary-generated';
   payload: GeneratePhraseSummaryPayload;
   phraseSummary: PhraseSummary;
+  takenFromCache: boolean;
 };
 
 export type ChargedEvent = {

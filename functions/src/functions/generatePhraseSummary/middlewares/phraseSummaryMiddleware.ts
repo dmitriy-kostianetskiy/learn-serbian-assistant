@@ -18,7 +18,7 @@ export const phraseSummaryMiddleware: GenericMiddleware<Context> = async (
 ) => {
   const { messageId, chatId, text } = payload;
 
-  const phraseSummary = await getFromStorageOrCreate(
+  const { data: phraseSummary, takenFromCache } = await getFromStorageOrCreate(
     text,
     phraseSummaryStorage,
     async (key) => {
@@ -32,6 +32,7 @@ export const phraseSummaryMiddleware: GenericMiddleware<Context> = async (
     type: 'phrase-summary-generated',
     payload,
     phraseSummary,
+    takenFromCache,
   });
 
   await replyToMessageWithHtml(telegram)(phraseSummaryString, {
@@ -46,16 +47,22 @@ const getFromStorageOrCreate = async <T extends object>(
   key: string,
   storage: StorageService<T>,
   factory: (key: string) => Promise<T>,
-): Promise<T> => {
+): Promise<{ data: T; takenFromCache: boolean }> => {
   const storageData = await storage.get(key);
 
   if (storageData) {
-    return storageData;
+    return {
+      data: storageData,
+      takenFromCache: true,
+    };
   }
 
   const data = await factory(key);
 
   await storage.set(key, data);
 
-  return data;
+  return {
+    data,
+    takenFromCache: false,
+  };
 };
