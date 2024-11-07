@@ -66,10 +66,3 @@ export type OtherSummary = PhraseSummaryBase & {
 };
 
 export type PhraseSummary = VerbSummary | NounSummary | OtherSummary;
-
-export type FailedItem = {
-  input: string;
-  messageId: number | undefined;
-  chatId: number | undefined;
-  userId: number | undefined;
-};

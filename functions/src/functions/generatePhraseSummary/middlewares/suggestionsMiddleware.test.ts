@@ -4,8 +4,7 @@ import { Message } from '../../../consts/message';
 import { Context } from './context';
 import { SuggestionService } from '../../../services/suggestionService';
 import { Suggestions } from '../../../model/suggestions';
-import { StorageService } from '../../../services/storageService';
-import { FailedItem } from '../../../model/phraseSummary';
+import { EventService } from '../../../services/eventsService';
 
 describe('suggestionsMiddleware', () => {
   const createContext = (suggestions: Suggestions): Context => {
@@ -19,15 +18,15 @@ describe('suggestionsMiddleware', () => {
       sendMessage: jest.fn(),
     } as unknown as Telegram;
 
-    const failuresStorage = {
-      set: jest.fn(),
-    } as unknown as StorageService<FailedItem>;
+    const eventsService = {
+      add: jest.fn(),
+    } as unknown as EventService;
 
     return {
       dependencies: {
         suggestionService,
         telegram,
-        failuresStorage
+        eventsService
       },
       payload: {
         userId: 0,

@@ -1,6 +1,6 @@
 import { GeneratePhraseSummaryPayload } from '../../../model/generatePhraseSummaryPayload';
 import { User } from 'telegraf/typings/core/types/typegram';
-import { UserDetails } from '../../../services/userService/userService';
+import { UserDetails } from '../../../model/user';
 
 export const createPayload = (
   text: string,

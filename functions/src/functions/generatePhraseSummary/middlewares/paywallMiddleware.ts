@@ -7,36 +7,40 @@ import { Message } from '../../../consts/message';
 export const paywallMiddleware: GenericMiddleware<{
   dependencies: Pick<
     Dependencies,
-    'configService' | 'userService' | 'telegram'
+    'configService' | 'userService' | 'telegram' | 'eventsService'
   >;
-  payload: Pick<
-    GeneratePhraseSummaryPayload,
-    'messageId' | 'chatId' | 'userId' | 'userDetails'
-  >;
+  payload: GeneratePhraseSummaryPayload
 }> = async (
   {
-    dependencies: { configService, userService, telegram },
-    payload: { messageId, chatId, userId, userDetails },
+    dependencies: { configService, userService, telegram, eventsService },
+    payload,
   },
   next,
 ) => {
-  const [user, dailyQuota] = await Promise.all([
-    userService.getOrCreate(userId, userDetails),
-    configService.get('dailyQuota'),
-  ]);
+    const { messageId, chatId, userId, userDetails } = payload;
 
-  if (user.dailyQuotaUsed >= dailyQuota && !user.hasPremium) {
-    console.log(
-      `User '${userId}' failed to pass paywall: daily quota exceeded.`,
-    );
+    const [user, dailyQuota] = await Promise.all([
+      userService.getOrCreate(userId, userDetails),
+      configService.get('dailyQuota'),
+    ]);
 
-    return await replyToMessageWithHtml(telegram)(Message.DailyLimitExceeded, {
-      chatId,
-      messageId,
-    });
-  }
+    if (user.dailyQuotaUsed >= dailyQuota && !user.hasPremium) {
+      console.log(
+        `User '${userId}' failed to pass paywall: daily quota exceeded.`,
+      );
 
-  console.log(`User '${userId}' passed paywall.`);
+      await eventsService.add({
+        type: 'daily-quota-exceeded',
+        payload
+      });
 
-  await next();
-};
+      return await replyToMessageWithHtml(telegram)(Message.DailyLimitExceeded, {
+        chatId,
+        messageId,
+      });
+    }
+
+    console.log(`User '${userId}' passed paywall.`);
+
+    await next();
+  };

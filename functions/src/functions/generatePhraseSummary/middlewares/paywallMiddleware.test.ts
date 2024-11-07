@@ -1,8 +1,10 @@
 import { Telegram } from 'telegraf';
 import { ConfigService } from '../../../services/configService';
-import { User, UserService } from '../../../services/userService/userService';
+import { UserService } from '../../../services/userService/userService';
 import { paywallMiddleware } from './paywallMiddleware';
 import { Context } from './context';
+import { User } from '../../../model/user';
+import { EventService } from '../../../services/eventsService';
 
 describe('paywallMiddleware', () => {
   const createUserService = (user: User): UserService => ({
@@ -23,8 +25,14 @@ describe('paywallMiddleware', () => {
       sendMessage: jest.fn(),
     } as unknown as Telegram;
 
+    const eventsService = {
+      add: jest.fn(),
+    } as unknown as EventService;
+
+
     return {
       dependencies: {
+        eventsService,
         configService,
         userService,
         telegram,
@@ -42,6 +50,7 @@ describe('paywallMiddleware', () => {
     // Arrange
     const quota = 10;
     const user: User = {
+      userId: '42',
       dailyQuotaUsed: 0,
       hasPremium: false,
       userDetails: {},
@@ -61,6 +70,7 @@ describe('paywallMiddleware', () => {
     // Arrange
     const quota = 10;
     const user: User = {
+      userId: '42',
       dailyQuotaUsed: 10,
       hasPremium: false,
       userDetails: {},
@@ -80,6 +90,7 @@ describe('paywallMiddleware', () => {
     // Arrange
     const quota = 10;
     const user: User = {
+      userId: '42',
       dailyQuotaUsed: 10,
       hasPremium: true,
       userDetails: {},

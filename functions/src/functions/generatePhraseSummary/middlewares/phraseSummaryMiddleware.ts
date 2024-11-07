@@ -6,11 +6,13 @@ import { Context } from './context';
 
 export const phraseSummaryMiddleware: GenericMiddleware<Context> = async (
   {
-    dependencies: { telegram, phraseSummaryService, phraseSummaryStorage },
-    payload: { messageId, chatId, text },
+    dependencies: { telegram, phraseSummaryService, phraseSummaryStorage, eventsService },
+    payload
   },
   next,
 ) => {
+  const { messageId, chatId, text } = payload;
+
   const phraseSummary = await getFromStorageOrCreate(
     text,
     phraseSummaryStorage,
@@ -20,6 +22,12 @@ export const phraseSummaryMiddleware: GenericMiddleware<Context> = async (
   );
 
   const phraseSummaryString = printPhraseSummary(phraseSummary);
+
+  await eventsService.add({
+    type: 'phrase-summary-generated',
+    payload,
+    phraseSummary
+  });
 
   await replyToMessageWithHtml(telegram)(phraseSummaryString, {
     messageId,

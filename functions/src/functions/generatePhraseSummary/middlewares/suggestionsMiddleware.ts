@@ -3,15 +3,16 @@ import { replyToMessageWithHtml } from '../../../utils/replyToMessageWithHtml';
 import { GenericMiddleware } from '../../../utils/genericMiddleware';
 import { Context } from './context';
 import { Message } from '../../../consts/message';
-import { v4 as uuid } from 'uuid';
 
 export const suggestionsMiddleware: GenericMiddleware<Context> = async (
   {
-    dependencies: { suggestionService, telegram, failuresStorage },
-    payload: { text, messageId, chatId, userId },
+    dependencies: { suggestionService, telegram, eventsService },
+    payload,
   },
   next,
 ) => {
+  const { text, messageId, chatId, userId } = payload;
+
   console.log(`User '${userId}': suggestions for '${text}' for requested.`);
 
   const suggestions = await suggestionService.generate(text);
@@ -25,6 +26,12 @@ export const suggestionsMiddleware: GenericMiddleware<Context> = async (
 
   // if it is not serbian phrase and suggestion presented show inline keyboard
   if (suggestions.language !== 'serbian' && suggestions.suggestions?.length) {
+    await eventsService.add({
+      type: 'phrase-is-not-serbian',
+      payload,
+      suggestions
+    });
+
     return await replyToMessageWithInlineKeyboard(telegram)(
       suggestions.suggestions,
       {
@@ -35,16 +42,12 @@ export const suggestionsMiddleware: GenericMiddleware<Context> = async (
     );
   }
 
-  // otherwise fail
-  const failureKey = uuid();
-
-  await failuresStorage.set(failureKey, {
-    input: text,
-    messageId,
-    chatId,
-    userId,
+  await eventsService.add({
+    type: 'phrase-is-unknown',
+    payload
   });
 
+  // otherwise fail
   return await replyToMessageWithHtml(telegram)(
     Message.PhraseCanNotBeInterpret,
     {

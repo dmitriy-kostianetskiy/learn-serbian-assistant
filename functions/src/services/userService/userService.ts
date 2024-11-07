@@ -1,16 +1,5 @@
 import { FieldValue } from 'firebase-admin/firestore';
-
-export type UserDetails = Readonly<{
-  username?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-}>;
-
-export type User = Readonly<{
-  hasPremium: boolean;
-  dailyQuotaUsed: number;
-  userDetails: UserDetails;
-}>;
+import { User, UserDetails } from '../../model/user';
 
 export type UpdateUserInput = Partial<User>;
 
@@ -20,12 +9,6 @@ export interface UserService {
   resetAllDailyQuotaUsed(): Promise<void>;
 }
 
-const EMPTY_USER: User = {
-  dailyQuotaUsed: 0,
-  hasPremium: false,
-  userDetails: {},
-} as const;
-
 export const getUserService = (
   { firestore }: { firestore: FirebaseFirestore.Firestore },
   collectionName = 'user',
@@ -34,6 +17,13 @@ export const getUserService = (
 
   const getId = (userId: string | number): string =>
     typeof userId === 'number' ? userId.toFixed(0) : userId;
+
+  const createNewUser = (userId: string): User => ({
+    userId,
+    dailyQuotaUsed: 0,
+    hasPremium: false,
+    userDetails: {},
+  });
 
   return {
     async getOrCreate(userId, userDetails) {
@@ -51,8 +41,10 @@ export const getUserService = (
 
         console.log(`User '${id}': user details updated.`);
       } else {
+        const newUser = createNewUser(id);
+
         await documentRef.set({
-          ...EMPTY_USER,
+          ...newUser,
           userDetails,
         });
 
@@ -70,7 +62,9 @@ export const getUserService = (
       const documentSnapshot = await documentRef.get();
 
       if (!documentSnapshot.exists) {
-        await documentRef.set(EMPTY_USER);
+        const newUser = createNewUser(id);
+
+        await documentRef.set(newUser);
       }
 
       await documentRef.update({

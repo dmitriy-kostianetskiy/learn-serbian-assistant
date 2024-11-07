@@ -1,11 +1,12 @@
 import { getFirestore } from 'firebase-admin/firestore';
-import { User, UserService, getUserService } from './userService';
+import { UserService, getUserService } from './userService';
 import { v4 as uuid } from 'uuid';
 import {
   deleteCollection,
   getFromCollection,
   insertIntoCollection,
 } from '../../utils/firebaseUtils';
+import { User } from '../../model/user';
 
 describe('UserService', () => {
   let service: UserService;
@@ -31,6 +32,7 @@ describe('UserService', () => {
       {
         id: '42',
         data: {
+          userId: '42',
           dailyQuotaUsed: 100,
           hasPremium: false,
           userDetails: {},
@@ -39,6 +41,7 @@ describe('UserService', () => {
       {
         id: '43',
         data: {
+          userId: '43',
           dailyQuotaUsed: 101,
           hasPremium: true,
           userDetails: {},
@@ -68,6 +71,7 @@ describe('UserService', () => {
 
     // Assert
     expect(user).toMatchObject<User>({
+      userId: '42',
       dailyQuotaUsed: 0,
       hasPremium: false,
       userDetails: {
@@ -83,6 +87,7 @@ describe('UserService', () => {
     await insertIntoCollection<User>(firestore, collectionName, {
       id: '42',
       data: {
+        userId: '42',
         dailyQuotaUsed: 100,
         hasPremium: true,
         userDetails: {},
@@ -98,6 +103,7 @@ describe('UserService', () => {
 
     // Assert
     expect(user).toMatchObject<User>({
+      userId: '42',
       dailyQuotaUsed: 100,
       hasPremium: true,
       userDetails: {
@@ -113,6 +119,7 @@ describe('UserService', () => {
     await insertIntoCollection<User>(firestore, collectionName, {
       id: '42',
       data: {
+        userId: '42',
         dailyQuotaUsed: 100,
         hasPremium: true,
         userDetails: {},

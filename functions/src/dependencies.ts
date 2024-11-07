@@ -21,8 +21,9 @@ import {
   PhraseSummaryQueueService,
   getPhraseSummaryQueueService,
 } from './services/phraseSummaryQueueService';
-import { PhraseSummary, FailedItem } from './model/phraseSummary';
+import { PhraseSummary } from './model/phraseSummary';
 import { StorageService, getStorageService } from './services/storageService';
+import { EventService, getEventsService } from './services/eventsService';
 
 export type GetDependenciesOptions = {
   telegramBotToken: string;
@@ -37,7 +38,7 @@ export interface Dependencies {
   openAiService: OpenAiService;
   phraseSummaryService: PhraseSummaryService;
   phraseSummaryStorage: StorageService<PhraseSummary>;
-  failuresStorage: StorageService<FailedItem>;
+  eventsService: EventService;
   suggestionService: SuggestionService;
   phraseSummaryQueueService: PhraseSummaryQueueService;
 }
@@ -74,8 +75,11 @@ export const getDependencies = ({
     configService,
   });
 
-  const phraseSummaryStorage = getStorageService<PhraseSummary>('summaries', { firestore });
-  const failuresStorage = getStorageService<FailedItem>('failures', { firestore });
+  const phraseSummaryStorage = getStorageService<PhraseSummary>('summaries', {
+    firestore,
+  });
+
+  const eventsService = getEventsService({ firestore });
 
   const pubSub = new PubSub({
     projectId: 'learn-serbian-assistant',
@@ -91,7 +95,7 @@ export const getDependencies = ({
     openAiService,
     phraseSummaryService,
     phraseSummaryStorage,
-    failuresStorage,
+    eventsService,
     suggestionService,
     phraseSummaryQueueService,
   };

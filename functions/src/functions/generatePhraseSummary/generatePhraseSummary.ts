@@ -35,6 +35,11 @@ export const generatePhraseSummary =
           payload,
         };
 
+        dependencies.eventsService.add({
+          type: 'summary-request',
+          payload,
+        });
+
         const composedMiddleware = compose(
           paywallMiddleware,
           suggestionsMiddleware,

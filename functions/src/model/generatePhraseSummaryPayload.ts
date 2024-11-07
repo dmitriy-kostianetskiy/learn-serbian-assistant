@@ -1,4 +1,4 @@
-import { UserDetails } from '../services/userService/userService';
+import { UserDetails } from './user';
 
 export type GeneratePhraseSummaryPayload = Readonly<{
   userId: number;
