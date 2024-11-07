@@ -37,6 +37,7 @@ export const getUserService = (
       if (documentSnapshot.exists) {
         await documentRef.update({
           userDetails,
+          updatedAt: FieldValue.serverTimestamp(),
         });
 
         console.log(`User '${id}': user details updated.`);
@@ -46,6 +47,8 @@ export const getUserService = (
         await documentRef.set({
           ...newUser,
           userDetails,
+          createdAt: FieldValue.serverTimestamp(),
+          updatedAt: FieldValue.serverTimestamp(),
         });
 
         console.log(`User '${id}': user details created.`);
@@ -64,11 +67,16 @@ export const getUserService = (
       if (!documentSnapshot.exists) {
         const newUser = createNewUser(id);
 
-        await documentRef.set(newUser);
+        await documentRef.set({
+          ...newUser,
+          createdAt: FieldValue.serverTimestamp(),
+          updatedAt: FieldValue.serverTimestamp(),
+        });
       }
 
       await documentRef.update({
         dailyQuotaUsed: FieldValue.increment(1),
+        updatedAt: FieldValue.serverTimestamp(),
       });
 
       console.log(`User '${id}': daily quota usage incremented.`);
@@ -78,7 +86,11 @@ export const getUserService = (
       const documents = await collection.select().get();
 
       documents.docs.forEach(({ id }) => {
-        batch.update(collection.doc(id), { dailyQuotaUsed: 0 });
+        batch.update(collection.doc(id), {
+          dailyQuotaUsed: 0,
+          updatedAt: FieldValue.serverTimestamp(),
+          dailyQuotaResetAt: FieldValue.serverTimestamp(),
+        });
       });
 
       await batch.commit();

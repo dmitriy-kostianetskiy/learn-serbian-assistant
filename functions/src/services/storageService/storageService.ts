@@ -1,3 +1,4 @@
+import { FieldValue } from 'firebase-admin/firestore';
 import { StorageService } from './storageService.model';
 
 export const getStorageService = <T extends object>(
@@ -31,7 +32,11 @@ export const getStorageService = <T extends object>(
     async set<T extends object>(key: string, value: T): Promise<void> {
       const documentRef = collection.doc(key);
 
-      await documentRef.set(value);
+      await documentRef.set({
+        ...value,
+        updatedAt: FieldValue.serverTimestamp(),
+        createdAt: FieldValue.serverTimestamp(),
+      });
     },
   };
 };
