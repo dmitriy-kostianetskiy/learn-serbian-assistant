@@ -21,6 +21,6 @@ export const getEventsService = (
       await documentRef.set(event);
 
       console.log(`Event '${id}' added: ${event.type}`);
-    }
+    },
   };
 };

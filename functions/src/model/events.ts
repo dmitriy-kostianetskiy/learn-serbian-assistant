@@ -34,8 +34,8 @@ export type ChargedEvent = {
   payload: GeneratePhraseSummaryPayload;
 };
 
-
-export type AssistantEvent = SummaryRequestEvent
+export type AssistantEvent =
+  | SummaryRequestEvent
   | DailyQuotaExceededEvent
   | PhraseIsNotSerbianEvent
   | PhraseIsUnknownEvent

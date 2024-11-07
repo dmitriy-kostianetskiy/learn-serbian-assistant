@@ -5,10 +5,7 @@ import { Context } from './context';
 import { Message } from '../../../consts/message';
 
 export const suggestionsMiddleware: GenericMiddleware<Context> = async (
-  {
-    dependencies: { suggestionService, telegram, eventsService },
-    payload,
-  },
+  { dependencies: { suggestionService, telegram, eventsService }, payload },
   next,
 ) => {
   const { text, messageId, chatId, userId } = payload;
@@ -17,7 +14,10 @@ export const suggestionsMiddleware: GenericMiddleware<Context> = async (
 
   const suggestions = await suggestionService.generate(text);
 
-  console.log(`'${text}': suggestions for user '${userId}' generated.`, suggestions);
+  console.log(
+    `'${text}': suggestions for user '${userId}' generated.`,
+    suggestions,
+  );
 
   // if it is serbian phrase proceed
   if (suggestions.language === 'serbian') {
@@ -29,7 +29,7 @@ export const suggestionsMiddleware: GenericMiddleware<Context> = async (
     await eventsService.add({
       type: 'phrase-is-not-serbian',
       payload,
-      suggestions
+      suggestions,
     });
 
     return await replyToMessageWithInlineKeyboard(telegram)(
@@ -44,7 +44,7 @@ export const suggestionsMiddleware: GenericMiddleware<Context> = async (
 
   await eventsService.add({
     type: 'phrase-is-unknown',
-    payload
+    payload,
   });
 
   // otherwise fail

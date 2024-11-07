@@ -1,6 +1,9 @@
 import { PhraseSummary } from '../../model/phraseSummary';
 import { substitutePlaceholders } from '../../utils/substitutePlaceholders';
-import { PhraseSummaryService, PhraseSummaryServiceDependencies } from './phraseSummaryService.model';
+import {
+  PhraseSummaryService,
+  PhraseSummaryServiceDependencies,
+} from './phraseSummaryService.model';
 import { validatePhraseSummary } from './validatePhraseSummary';
 
 export const getPhraseSummaryService = ({

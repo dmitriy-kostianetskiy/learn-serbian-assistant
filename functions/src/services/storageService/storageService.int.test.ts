@@ -10,7 +10,7 @@ import { getStorageService } from './storageService';
 
 type StorageItem = {
   foo: string;
-}
+};
 
 describe('StorageService', () => {
   let service: StorageService<StorageItem>;
@@ -30,16 +30,12 @@ describe('StorageService', () => {
 
   test('should return item if it is presented in the storage', async () => {
     // Arrange
-    await insertIntoCollection<StorageItem>(
-      firestore,
-      collectionName,
-      {
-        id: '42',
-        data: {
-          foo: 'bar'
-        },
+    await insertIntoCollection<StorageItem>(firestore, collectionName, {
+      id: '42',
+      data: {
+        foo: 'bar',
       },
-    );
+    });
 
     // Act
     const item = await service.get('42');
@@ -58,13 +54,15 @@ describe('StorageService', () => {
     expect(item).toBeNull();
   });
 
-
   test('should save item to cathe storageche', async () => {
     // Act
     await service.set('42', { foo: 'bar bar' });
 
     // Assert
-    const items = await getFromCollection<StorageItem>(firestore, collectionName);
+    const items = await getFromCollection<StorageItem>(
+      firestore,
+      collectionName,
+    );
 
     expect(items).toHaveLength(1);
 

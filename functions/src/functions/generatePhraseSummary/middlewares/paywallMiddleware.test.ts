@@ -29,7 +29,6 @@ describe('paywallMiddleware', () => {
       add: jest.fn(),
     } as unknown as EventService;
 
-
     return {
       dependencies: {
         eventsService,

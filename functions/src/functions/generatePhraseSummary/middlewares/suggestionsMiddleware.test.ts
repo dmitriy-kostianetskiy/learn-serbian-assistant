@@ -26,7 +26,7 @@ describe('suggestionsMiddleware', () => {
       dependencies: {
         suggestionService,
         telegram,
-        eventsService
+        eventsService,
       },
       payload: {
         userId: 0,
