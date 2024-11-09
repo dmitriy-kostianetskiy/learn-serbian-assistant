@@ -6,7 +6,7 @@ export type UserDetails = Readonly<{
 
 export type User = Readonly<{
   userId: string;
-  hasPremium: boolean;
-  dailyQuotaUsed: number;
+  hasPremium?: boolean;
+  dailyQuotaUsed?: number;
   userDetails: UserDetails;
 }>;

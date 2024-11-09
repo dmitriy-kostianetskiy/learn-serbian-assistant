@@ -4,8 +4,12 @@ import { User, UserDetails } from '../../model/user';
 export type UpdateUserInput = Partial<User>;
 
 export interface UserService {
-  getOrCreate(userId: string | number, userDetails: UserDetails): Promise<User>;
+  updateUserDetails(
+    userId: string | number,
+    userDetails: UserDetails,
+  ): Promise<User>;
   incrementDailyQuotaUsed(userId: string | number): Promise<void>;
+  getDailyQuotaUsed(userId: string | number): Promise<[number, boolean]>;
   resetAllDailyQuotaUsed(): Promise<void>;
 }
 
@@ -18,66 +22,69 @@ export const getUserService = (
   const getId = (userId: string | number): string =>
     typeof userId === 'number' ? userId.toFixed(0) : userId;
 
-  const createNewUser = (userId: string): User => ({
-    userId,
-    dailyQuotaUsed: 0,
-    hasPremium: false,
-    userDetails: {},
-  });
-
   return {
-    async getOrCreate(userId, userDetails) {
+    async updateUserDetails(userId, userDetails) {
       const id = getId(userId);
 
       console.log(`User '${id}': attempt to upsert.`);
 
-      const documentRef = collection.doc(id);
-      const documentSnapshot = await documentRef.get();
+      const ref = collection.doc(id);
 
-      if (documentSnapshot.exists) {
-        await documentRef.update({
+      const snapshot = await ref.get();
+
+      if (snapshot.exists) {
+        await ref.update({
+          userId: id,
           userDetails,
           updatedAt: FieldValue.serverTimestamp(),
         });
-
-        console.log(`User '${id}': user details updated.`);
       } else {
-        const newUser = createNewUser(id);
-
-        await documentRef.set({
-          ...newUser,
+        await ref.set({
+          userId: id,
           userDetails,
+          hasPremium: false,
+          dailyQuotaUsed: 0,
           createdAt: FieldValue.serverTimestamp(),
           updatedAt: FieldValue.serverTimestamp(),
         });
-
-        console.log(`User '${id}': user details created.`);
       }
 
-      return (await documentRef.get()).data() as User;
+      console.log(`User '${id}': user details upserted.`);
+
+      // return current state if the user
+      return (await ref.get()).data() as User;
+    },
+    async getDailyQuotaUsed(userId) {
+      const id = getId(userId);
+
+      const ref = collection.doc(id);
+
+      const snapshot = await ref.get();
+
+      if (!snapshot.exists) {
+        return [0, false];
+      }
+
+      const user = snapshot.data() as User;
+
+      return [user.dailyQuotaUsed || 0, user.hasPremium || false];
     },
     async incrementDailyQuotaUsed(userId) {
       const id = getId(userId);
 
       console.log(`User '${id}': attempt to increment daily quota usage.`);
 
-      const documentRef = collection.doc(id);
-      const documentSnapshot = await documentRef.get();
+      const ref = collection.doc(id);
 
-      if (!documentSnapshot.exists) {
-        const newUser = createNewUser(id);
-
-        await documentRef.set({
-          ...newUser,
-          createdAt: FieldValue.serverTimestamp(),
-          updatedAt: FieldValue.serverTimestamp(),
-        });
-      }
-
-      await documentRef.update({
-        dailyQuotaUsed: FieldValue.increment(1),
-        updatedAt: FieldValue.serverTimestamp(),
-      });
+      await ref.set(
+        {
+          dailyQuotaUsed: FieldValue.increment(1),
+        },
+        // these fields will be updated if document already exists in firestore
+        {
+          mergeFields: ['dailyQuotaUsed'],
+        },
+      );
 
       console.log(`User '${id}': daily quota usage incremented.`);
     },

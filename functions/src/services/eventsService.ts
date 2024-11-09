@@ -19,8 +19,9 @@ export const getEventsService = ({
 
       console.log(`Event '${id}' adding: ${event.type}`);
 
-      const documentRef = collection.doc(id);
-      await documentRef.set({
+      const ref = collection.doc(id);
+
+      await ref.set({
         ...event,
         createdAt: FieldValue.serverTimestamp(),
       });

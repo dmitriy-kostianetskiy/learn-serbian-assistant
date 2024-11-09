@@ -63,7 +63,7 @@ describe('UserService', () => {
 
   test('should create new user when getOrCreate called', async () => {
     // Arrange & Act
-    const user = await service.getOrCreate(42, {
+    const user = await service.updateUserDetails(42, {
       username: 'joe.doe',
       firstName: 'Joe',
       lastName: 'Doe',
@@ -72,8 +72,6 @@ describe('UserService', () => {
     // Assert
     expect(user).toMatchObject<User>({
       userId: '42',
-      dailyQuotaUsed: 0,
-      hasPremium: false,
       userDetails: {
         username: 'joe.doe',
         firstName: 'Joe',
@@ -95,7 +93,7 @@ describe('UserService', () => {
     });
 
     // Act
-    const user = await service.getOrCreate(42, {
+    const user = await service.updateUserDetails(42, {
       username: 'joe.doe',
       firstName: 'Joe',
       lastName: 'Doe',

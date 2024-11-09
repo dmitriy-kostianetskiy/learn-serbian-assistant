@@ -17,14 +17,14 @@ export const paywallMiddleware: GenericMiddleware<{
   },
   next,
 ) => {
-  const { messageId, chatId, userId, userDetails } = payload;
+  const { messageId, chatId, userId } = payload;
 
-  const [user, dailyQuota] = await Promise.all([
-    userService.getOrCreate(userId, userDetails),
+  const [[dailyQuotaUsed, hasPremium], dailyQuota] = await Promise.all([
+    userService.getDailyQuotaUsed(userId),
     configService.get('dailyQuota'),
   ]);
 
-  if (user.dailyQuotaUsed >= dailyQuota && !user.hasPremium) {
+  if ((dailyQuotaUsed ?? 0) >= dailyQuota && !hasPremium) {
     console.log(
       `User '${userId}' failed to pass paywall: daily quota exceeded.`,
     );

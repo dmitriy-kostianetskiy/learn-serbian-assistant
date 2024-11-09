@@ -40,6 +40,11 @@ export const generatePhraseSummary =
           payload,
         });
 
+        await dependencies.userService.updateUserDetails(
+          payload.userId,
+          payload.userDetails,
+        );
+
         const composedMiddleware = compose(
           paywallMiddleware,
           suggestionsMiddleware,
