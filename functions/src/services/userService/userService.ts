@@ -9,7 +9,9 @@ export interface UserService {
     userDetails: UserDetails,
   ): Promise<User>;
   incrementDailyQuotaUsed(userId: string | number): Promise<void>;
-  getDailyQuotaUsed(userId: string | number): Promise<[number, boolean]>;
+  getDailyQuotaUsed(
+    userId: string | number,
+  ): Promise<readonly [number, boolean]>;
   resetAllDailyQuotaUsed(): Promise<void>;
 }
 
