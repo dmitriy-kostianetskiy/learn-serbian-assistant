@@ -15,7 +15,12 @@ export const handleTextMiddleware =
         return;
       }
 
-      const payload = createPayload(text, from, chat.id, message?.message_id);
+      const payload = createPayload(
+        text.toLowerCase(),
+        from,
+        chat.id,
+        message?.message_id,
+      );
 
       await phraseSummaryQueueService.add(payload);
     } catch (e) {
