@@ -1,5 +1,4 @@
 import { getFirestore } from 'firebase-admin/firestore';
-import { v4 as uuid } from 'uuid';
 import {
   deleteCollection,
   getFromCollection,
@@ -7,6 +6,7 @@ import {
 } from '../../utils/firebaseUtils';
 import { StorageService } from './storageService.model';
 import { getStorageService } from './storageService';
+import { randomUUID } from 'crypto';
 
 type StorageItem = {
   foo: string;
@@ -19,7 +19,7 @@ describe('StorageService', () => {
 
   beforeAll(() => {
     firestore = getFirestore();
-    collectionName = `storage-${uuid()}`;
+    collectionName = `storage-${randomUUID()}`;
 
     service = getStorageService(collectionName, { firestore });
   });

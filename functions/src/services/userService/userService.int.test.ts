@@ -1,6 +1,6 @@
 import { getFirestore } from 'firebase-admin/firestore';
 import { UserService, getUserService } from './userService';
-import { v4 as uuid } from 'uuid';
+import { randomUUID } from 'crypto';
 import {
   deleteCollection,
   getFromCollection,
@@ -15,7 +15,7 @@ describe('UserService', () => {
 
   beforeAll(() => {
     firestore = getFirestore();
-    collectionName = `user-test-${uuid()}`;
+    collectionName = `user-test-${randomUUID()}`;
 
     service = getUserService({ firestore }, collectionName);
   });

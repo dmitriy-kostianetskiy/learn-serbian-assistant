@@ -1,6 +1,6 @@
 import { FieldValue } from 'firebase-admin/firestore';
 import { AssistantEvent } from '../model/events';
-import { v4 as uuid } from 'uuid';
+import { randomUUID } from 'crypto';
 
 export interface EventService {
   add(event: AssistantEvent): Promise<void>;
@@ -15,7 +15,7 @@ export const getEventsService = ({
 
   return {
     async add(event) {
-      const id = uuid();
+      const id = randomUUID();
 
       console.log(`Event '${id}' adding: ${event.type}`);
 
