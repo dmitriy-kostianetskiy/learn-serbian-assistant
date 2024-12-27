@@ -104,4 +104,19 @@ describe('SummaryService', () => {
       });
     }
   });
+
+  test('should summarise word "talas"', async () => {
+    // Arrange
+    const { summaryService } = getTestDependencies();
+
+    // Act
+    const summary = await summaryService.generate('talas');
+
+    // Assert
+    expect(summary.input).toBe('talas');
+
+    // Assert translations
+    expect(summary.translation?.english).toBe('wave');
+    expect(summary.translation?.russian).toBe('волна');
+  });
 });

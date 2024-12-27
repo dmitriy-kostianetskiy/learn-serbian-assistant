@@ -21,7 +21,7 @@ describe('SuggestionService', () => {
     const suggestions = await suggestionService.generate('шаг');
 
     // Assert
-    expect(suggestions.language).toBe('russian');
+    expect(suggestions.language).toBe('serbian');
     expect(suggestions.suggestions).not.toHaveLength(0);
   });
 
