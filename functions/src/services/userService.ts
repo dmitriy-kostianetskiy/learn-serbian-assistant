@@ -9,9 +9,10 @@ export interface UserService {
     userDetails: UserDetails,
   ): Promise<User>;
   incrementDailyQuotaUsed(userId: string | number): Promise<void>;
-  getDailyQuotaUsed(
-    userId: string | number,
-  ): Promise<readonly [number, boolean]>;
+  getDailyQuotaUsed(userId: string | number): Promise<{
+    quotaUsed: number;
+    hasPremium: boolean;
+  }>;
   resetAllDailyQuotaUsed(): Promise<void>;
 }
 
@@ -64,12 +65,18 @@ export const getUserService = (
       const snapshot = await ref.get();
 
       if (!snapshot.exists) {
-        return [0, false];
+        return {
+          quotaUsed: 0,
+          hasPremium: false,
+        };
       }
 
       const user = snapshot.data() as User;
 
-      return [user.dailyQuotaUsed || 0, user.hasPremium || false];
+      return {
+        quotaUsed: user.dailyQuotaUsed || 0,
+        hasPremium: user.hasPremium || false,
+      };
     },
     async incrementDailyQuotaUsed(userId) {
       const id = getId(userId);

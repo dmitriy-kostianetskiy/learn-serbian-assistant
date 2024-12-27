@@ -8,9 +8,10 @@ import { EventService } from '../../../services/eventsService';
 
 describe('paywallMiddleware', () => {
   const createUserService = (user: User): UserService => ({
-    getDailyQuotaUsed: jest.fn(
-      async () => [user.dailyQuotaUsed ?? 0, user.hasPremium ?? false] as const,
-    ),
+    getDailyQuotaUsed: jest.fn(async () => ({
+      quotaUsed: user.dailyQuotaUsed ?? 0,
+      hasPremium: user.hasPremium ?? false,
+    })),
     updateUserDetails: jest.fn(),
     incrementDailyQuotaUsed: jest.fn(),
     resetAllDailyQuotaUsed: jest.fn(),
