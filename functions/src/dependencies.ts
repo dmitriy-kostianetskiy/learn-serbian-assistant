@@ -27,8 +27,10 @@ export type GetDependenciesOptions = {
   openAiKey: string;
   summaryUserPromptName?: string;
   summaryDeveloperPromptName?: string;
+  summaryAssistantPromptName?: string;
   suggestionsUserPromptName?: string;
   suggestionsDeveloperPromptName?: string;
+  suggestionsAssistantPromptName?: string;
 };
 
 export interface Dependencies {
@@ -51,8 +53,10 @@ export const getDependencies = ({
   telegramBotToken,
   summaryUserPromptName,
   summaryDeveloperPromptName,
+  summaryAssistantPromptName,
   suggestionsUserPromptName,
   suggestionsDeveloperPromptName,
+  suggestionsAssistantPromptName,
 }: GetDependenciesOptions): Dependencies => {
   if (dependencies) {
     return dependencies;
@@ -73,15 +77,17 @@ export const getDependencies = ({
   const suggestionService = getSuggestionService({
     openAiService,
     configService,
-    suggestionsUserPromptName,
-    suggestionsDeveloperPromptName,
+    userPromptName: suggestionsUserPromptName,
+    developerPromptName: suggestionsDeveloperPromptName,
+    assistantPromptName: suggestionsAssistantPromptName,
   });
 
   const summaryService = getSummaryService({
     openAiService,
     configService,
-    summaryUserPromptName,
-    summaryDeveloperPromptName,
+    userPromptName: summaryUserPromptName,
+    developerPromptName: summaryDeveloperPromptName,
+    assistantPromptName: summaryAssistantPromptName,
   });
 
   const summaryStorage = getStorageService<Summary>('summaries', {
@@ -118,7 +124,10 @@ export const getTestDependencies = () =>
     telegramBotToken: process.env.TELEGRAM_BOT_TOKEN!,
     summaryUserPromptName: process.env.SUMMARY_USER_PROMPT_NAME!,
     summaryDeveloperPromptName: process.env.SUMMARY_DEVELOPER_PROMPT_NAME!,
+    summaryAssistantPromptName: process.env.SUMMARY_ASSISTANT_PROMPT_NAME!,
     suggestionsUserPromptName: process.env.SUGGESTIONS_USER_PROMPT_NAME!,
     suggestionsDeveloperPromptName:
       process.env.SUGGESTIONS_DEVELOPER_PROMPT_NAME!,
+    suggestionsAssistantPromptName:
+      process.env.SUGGESTIONS_ASSISTANT_PROMPT_NAME!,
   });

@@ -6,8 +6,9 @@ export type SummaryServiceDependencies = Pick<
   Dependencies,
   'configService' | 'openAiService'
 > & {
-  summaryUserPromptName?: string;
-  summaryDeveloperPromptName?: string;
+  userPromptName?: string;
+  developerPromptName?: string;
+  assistantPromptName?: string;
 };
 
 export interface SummaryService {
@@ -17,15 +18,23 @@ export interface SummaryService {
 export const getSummaryService = ({
   openAiService,
   configService,
-  summaryUserPromptName,
-  summaryDeveloperPromptName,
+  userPromptName,
+  developerPromptName,
+  assistantPromptName,
 }: SummaryServiceDependencies): SummaryService => {
   return {
     async generate(phrase) {
-      const [userPromptTemplate, developerPromptTemplate] = await Promise.all([
-        configService.get<string>(summaryUserPromptName || 'summaryUserPrompt'),
+      const [
+        userPromptTemplate,
+        developerPromptTemplate,
+        assistantPromptTemplate,
+      ] = await Promise.all([
+        configService.get<string>(userPromptName || 'summaryUserPrompt'),
         configService.get<string>(
-          summaryDeveloperPromptName || 'summaryDeveloperPrompt',
+          developerPromptName || 'summaryDeveloperPrompt',
+        ),
+        configService.get<string>(
+          assistantPromptName || 'summaryAssistantPrompt',
         ),
       ]);
 
@@ -37,9 +46,14 @@ export const getSummaryService = ({
         phrase,
       });
 
+      const assistantPrompt = substitutePlaceholders(assistantPromptTemplate, {
+        phrase,
+      });
+
       const summary = await openAiService.promptAsJson({
         userPrompt,
         developerPrompt,
+        assistantPrompt,
         structuredOutput: {
           schema: SummarySchema,
           schemaName: 'summary',

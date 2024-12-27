@@ -5,6 +5,7 @@ import { z } from 'zod';
 export type PromptOptions<T> = {
   userPrompt: string;
   developerPrompt?: string;
+  assistantPrompt?: string;
   structuredOutput: {
     schema: z.Schema<T>;
     schemaName: string;
@@ -50,6 +51,7 @@ export const getOpenAiService = (
 const buildMessages = <T>({
   userPrompt,
   developerPrompt,
+  assistantPrompt,
 }: PromptOptions<T>): OpenAI.Chat.Completions.ChatCompletionMessageParam[] => {
   return [
     {
@@ -61,6 +63,14 @@ const buildMessages = <T>({
           {
             role: 'developer',
             content: developerPrompt,
+          } satisfies OpenAI.Chat.Completions.ChatCompletionMessageParam,
+        ]
+      : []),
+    ...(assistantPrompt
+      ? [
+          {
+            role: 'assistant',
+            content: assistantPrompt,
           } satisfies OpenAI.Chat.Completions.ChatCompletionMessageParam,
         ]
       : []),

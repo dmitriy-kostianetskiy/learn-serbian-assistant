@@ -10,39 +10,44 @@ export type SuggestionsServiceDependencies = Pick<
   Dependencies,
   'configService' | 'openAiService'
 > & {
-  suggestionsUserPromptName?: string;
-  suggestionsDeveloperPromptName?: string;
+  userPromptName?: string;
+  developerPromptName?: string;
+  assistantPromptName?: string;
 };
 
 export const getSuggestionService = ({
   configService,
   openAiService,
-  suggestionsUserPromptName,
-  suggestionsDeveloperPromptName,
+  userPromptName: userPromptName,
+  developerPromptName: developerPromptName,
+  assistantPromptName,
 }: SuggestionsServiceDependencies): SuggestionService => {
   return {
     async generate(phrase) {
       // get prompt
       const [
-        suggestionsDeveloperPromptTemplate,
-        suggestionsUserPromptTemplate,
+        developerPromptTemplate,
+        userPromptTemplate,
+        assistantPromptTemplate,
       ] = await Promise.all([
         configService.get<string>(
-          suggestionsDeveloperPromptName || 'suggestionsDeveloperPrompt',
+          developerPromptName || 'suggestionsDeveloperPrompt',
         ),
+        configService.get<string>(userPromptName || 'suggestionsUserPrompt'),
         configService.get<string>(
-          suggestionsUserPromptName || 'suggestionsUserPrompt',
+          assistantPromptName || 'suggestionsAssistantPrompt',
         ),
       ]);
 
-      const developerPrompt = substitutePlaceholders(
-        suggestionsDeveloperPromptTemplate,
-        {
-          phrase,
-        },
-      );
+      const developerPrompt = substitutePlaceholders(developerPromptTemplate, {
+        phrase,
+      });
 
-      const userPrompt = substitutePlaceholders(suggestionsUserPromptTemplate, {
+      const userPrompt = substitutePlaceholders(userPromptTemplate, {
+        phrase,
+      });
+
+      const assistantPrompt = substitutePlaceholders(assistantPromptTemplate, {
         phrase,
       });
 
@@ -50,6 +55,7 @@ export const getSuggestionService = ({
       const result = await openAiService.promptAsJson({
         userPrompt,
         developerPrompt,
+        assistantPrompt,
         structuredOutput: {
           schema: SuggestionsSchema,
           schemaName: 'suggestions',
