@@ -1,5 +1,5 @@
-import { getTestDependencies } from '../../dependencies';
-import { CasesByNumber, ConjugationsByNumber } from '../../model/summary';
+import { getTestDependencies } from '../dependencies';
+import { CasesByNumber, ConjugationsByNumber } from '../model/summary';
 
 describe('SummaryService', () => {
   test('should summarise word "ići"', async () => {

@@ -1,5 +1,5 @@
-import { GIVE_EXAMPLE } from '../../test/examples/give';
-import { TABLE_EXAMPLE } from '../../test/examples/table';
+import { GIVE_EXAMPLE } from '../test/examples/give';
+import { TABLE_EXAMPLE } from '../test/examples/table';
 import { printSummary } from './printSummary';
 
 describe('printSummary', () => {

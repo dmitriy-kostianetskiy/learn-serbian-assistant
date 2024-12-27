@@ -1,5 +1,5 @@
 import { FieldValue } from 'firebase-admin/firestore';
-import { User, UserDetails } from '../../model/user';
+import { User, UserDetails } from '../model/user';
 
 export type UpdateUserInput = Partial<User>;
 

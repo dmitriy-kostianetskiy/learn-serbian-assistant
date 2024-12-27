@@ -5,8 +5,8 @@ import {
   deleteCollection,
   getFromCollection,
   insertIntoCollection,
-} from '../../utils/firebaseUtils';
-import { User } from '../../model/user';
+} from '../utils/firebaseUtils';
+import { User } from '../model/user';
 
 describe('UserService', () => {
   let service: UserService;

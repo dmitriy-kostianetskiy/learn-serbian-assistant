@@ -1,6 +1,6 @@
 import { Telegram } from 'telegraf';
 import { ConfigService } from '../../../services/configService';
-import { UserService } from '../../../services/userService/userService';
+import { UserService } from '../../../services/userService';
 import { paywallMiddleware } from './paywallMiddleware';
 import { Context } from './context';
 import { User } from '../../../model/user';

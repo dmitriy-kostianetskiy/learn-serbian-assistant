@@ -5,7 +5,7 @@ import {
   CasesByNumber,
   GrammaticalGender,
   GrammaticalNumber,
-} from '../../model/summary';
+} from '../model/summary';
 
 export const printSummary = (summary: Summary): string => {
   return [

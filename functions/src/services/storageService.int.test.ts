@@ -3,7 +3,7 @@ import {
   deleteCollection,
   getFromCollection,
   insertIntoCollection,
-} from '../../utils/firebaseUtils';
+} from '../utils/firebaseUtils';
 import { getStorageService, StorageService } from './storageService';
 import { randomUUID } from 'crypto';
 

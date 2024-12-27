@@ -1,11 +1,10 @@
 import OpenAI from 'openai';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { z } from 'zod';
+import { Prompts } from '../model/prompts';
 
 export type PromptOptions<T> = {
-  userPrompt: string;
-  developerPrompt?: string;
-  assistantPrompt?: string;
+  prompts: Prompts;
   structuredOutput: {
     schema: z.Schema<T>;
     schemaName: string;
@@ -22,16 +21,16 @@ export const getOpenAiService = (
   temperature = 1,
 ): OpenAiService => {
   const service: OpenAiService = {
-    async promptAsJson<T>(options: PromptOptions<T>) {
-      const messages = buildMessages(options);
+    async promptAsJson<T>({ prompts, structuredOutput }: PromptOptions<T>) {
+      const messages = buildMessages(prompts);
 
       const chatCompletion = await openai.chat.completions.create({
         messages,
         model: 'gpt-4o-mini',
-        response_format: options.structuredOutput
+        response_format: structuredOutput
           ? zodResponseFormat(
-              options.structuredOutput.schema,
-              options.structuredOutput.schemaName,
+              structuredOutput.schema,
+              structuredOutput.schemaName,
             )
           : {
               type: 'json_object',
@@ -48,11 +47,11 @@ export const getOpenAiService = (
   return service;
 };
 
-const buildMessages = <T>({
-  userPrompt,
-  developerPrompt,
+const buildMessages = ({
   assistantPrompt,
-}: PromptOptions<T>): OpenAI.Chat.Completions.ChatCompletionMessageParam[] => {
+  developerPrompt,
+  userPrompt,
+}: Prompts): OpenAI.Chat.Completions.ChatCompletionMessageParam[] => {
   return [
     {
       role: 'user',

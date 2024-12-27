@@ -3,8 +3,8 @@ import {
   SummaryQueueService,
   getSummaryQueueService,
 } from './summaryQueueService';
-import { GenerateSummaryPayload } from '../../model/generateSummaryPayload';
-import { PubSubTopic } from '../../consts/pubSubTopic';
+import { GenerateSummaryPayload } from '../model/generateSummaryPayload';
+import { PubSubTopic } from '../consts/pubSubTopic';
 
 describe('SummaryQueueService', () => {
   let pubSub: PubSub;

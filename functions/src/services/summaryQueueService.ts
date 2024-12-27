@@ -1,6 +1,6 @@
 import { PubSub } from '@google-cloud/pubsub';
-import { PubSubTopic } from '../../consts/pubSubTopic';
-import { GenerateSummaryPayload } from '../../model/generateSummaryPayload';
+import { PubSubTopic } from '../consts/pubSubTopic';
+import { GenerateSummaryPayload } from '../model/generateSummaryPayload';
 
 export interface SummaryQueueService {
   add(payload: GenerateSummaryPayload): Promise<void>;

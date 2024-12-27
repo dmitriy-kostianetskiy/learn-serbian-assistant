@@ -1,4 +1,4 @@
-import { getTestDependencies } from '../../dependencies';
+import { getTestDependencies } from '../dependencies';
 
 describe('SuggestionService', () => {
   test('should provide suggestion for word "step"', async () => {

@@ -2,10 +2,7 @@ import OpenAI from 'openai';
 import { getFirestore } from './apis/firestore';
 import { Telegraf, Telegram } from 'telegraf';
 import { OpenAiService, getOpenAiService } from './services/openAiService';
-import {
-  UserService,
-  getUserService,
-} from './services/userService/userService';
+import { UserService, getUserService } from './services/userService';
 import { getRemoteConfig } from 'firebase-admin/remote-config';
 import { ConfigService, getConfigService } from './services/configService';
 import { SummaryService, getSummaryService } from './services/summaryService';
@@ -21,6 +18,10 @@ import {
 import { Summary } from './model/summary';
 import { StorageService, getStorageService } from './services/storageService';
 import { EventService, getEventsService } from './services/eventsService';
+import {
+  getPromptBuilderService,
+  PromptBuilderService,
+} from './services/prompt-builder';
 
 export type GetDependenciesOptions = {
   telegramBotToken: string;
@@ -44,6 +45,7 @@ export interface Dependencies {
   eventsService: EventService;
   suggestionService: SuggestionService;
   summaryQueueService: SummaryQueueService;
+  promptBuilderService: PromptBuilderService;
 }
 
 let dependencies: Dependencies | undefined;
@@ -74,20 +76,26 @@ export const getDependencies = ({
 
   const openAiService = getOpenAiService({ openai });
 
+  const promptBuilderService = getPromptBuilderService({
+    configService,
+  });
+
   const suggestionService = getSuggestionService({
     openAiService,
-    configService,
-    userPromptName: suggestionsUserPromptName,
-    developerPromptName: suggestionsDeveloperPromptName,
-    assistantPromptName: suggestionsAssistantPromptName,
+    promptBuilderService,
+    userPromptName: suggestionsUserPromptName ?? 'suggestionsUserPrompt',
+    developerPromptName:
+      suggestionsDeveloperPromptName ?? 'suggestionsDeveloperPrompt',
+    assistantPromptName:
+      suggestionsAssistantPromptName ?? 'suggestionsAssistantPrompt',
   });
 
   const summaryService = getSummaryService({
     openAiService,
-    configService,
-    userPromptName: summaryUserPromptName,
-    developerPromptName: summaryDeveloperPromptName,
-    assistantPromptName: summaryAssistantPromptName,
+    promptBuilderService,
+    userPromptName: summaryUserPromptName ?? 'summaryUserPrompt',
+    developerPromptName: summaryDeveloperPromptName ?? 'summaryDeveloperPrompt',
+    assistantPromptName: summaryAssistantPromptName ?? 'summaryAssistantPrompt',
   });
 
   const summaryStorage = getStorageService<Summary>('summaries', {
@@ -113,6 +121,7 @@ export const getDependencies = ({
     eventsService,
     suggestionService,
     summaryQueueService,
+    promptBuilderService,
   };
 
   return dependencies;
