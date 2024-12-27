@@ -7,7 +7,7 @@ export type SummaryServiceDependencies = Pick<
   'configService' | 'openAiService'
 > & {
   summaryUserPromptName?: string;
-  summarySystemPromptName?: string;
+  summaryDeveloperPromptName?: string;
 };
 
 export interface SummaryService {
@@ -18,14 +18,14 @@ export const getSummaryService = ({
   openAiService,
   configService,
   summaryUserPromptName,
-  summarySystemPromptName,
+  summaryDeveloperPromptName,
 }: SummaryServiceDependencies): SummaryService => {
   return {
     async generate(phrase) {
-      const [userPromptTemplate, systemPromptTemplate] = await Promise.all([
+      const [userPromptTemplate, developerPromptTemplate] = await Promise.all([
         configService.get<string>(summaryUserPromptName || 'summaryUserPrompt'),
         configService.get<string>(
-          summarySystemPromptName || 'summarySystemPrompt',
+          summaryDeveloperPromptName || 'summaryDeveloperPrompt',
         ),
       ]);
 
@@ -33,7 +33,7 @@ export const getSummaryService = ({
         phrase,
       });
 
-      const developerPrompt = substitutePlaceholders(systemPromptTemplate, {
+      const developerPrompt = substitutePlaceholders(developerPromptTemplate, {
         phrase,
       });
 

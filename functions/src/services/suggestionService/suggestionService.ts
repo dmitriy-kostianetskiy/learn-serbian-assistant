@@ -1,19 +1,25 @@
+import { Dependencies } from '../../dependencies';
 import { Suggestions, SuggestionsSchema } from '../../model/suggestions';
 import { substitutePlaceholders } from '../../utils/substitutePlaceholders';
-import { ConfigService } from '../configService';
-import { OpenAiService } from '../openAiService';
 
 export interface SuggestionService {
   generate(phrase: string): Promise<Suggestions>;
 }
 
+export type SuggestionsServiceDependencies = Pick<
+  Dependencies,
+  'configService' | 'openAiService'
+> & {
+  suggestionsUserPromptName?: string;
+  suggestionsDeveloperPromptName?: string;
+};
+
 export const getSuggestionService = ({
   configService,
   openAiService,
-}: {
-  configService: ConfigService;
-  openAiService: OpenAiService;
-}): SuggestionService => {
+  suggestionsUserPromptName,
+  suggestionsDeveloperPromptName,
+}: SuggestionsServiceDependencies): SuggestionService => {
   return {
     async generate(phrase) {
       // get prompt
@@ -21,8 +27,12 @@ export const getSuggestionService = ({
         suggestionsDeveloperPromptTemplate,
         suggestionsUserPromptTemplate,
       ] = await Promise.all([
-        configService.get<string>('suggestionsSystemPrompt'),
-        configService.get<string>('suggestionsUserPrompt'),
+        configService.get<string>(
+          suggestionsDeveloperPromptName || 'suggestionsDeveloperPrompt',
+        ),
+        configService.get<string>(
+          suggestionsUserPromptName || 'suggestionsUserPrompt',
+        ),
       ]);
 
       const developerPrompt = substitutePlaceholders(

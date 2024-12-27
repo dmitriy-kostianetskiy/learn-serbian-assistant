@@ -26,7 +26,9 @@ export type GetDependenciesOptions = {
   telegramBotToken: string;
   openAiKey: string;
   summaryUserPromptName?: string;
-  summarySystemPromptName?: string;
+  summaryDeveloperPromptName?: string;
+  suggestionsUserPromptName?: string;
+  suggestionsDeveloperPromptName?: string;
 };
 
 export interface Dependencies {
@@ -48,7 +50,9 @@ export const getDependencies = ({
   openAiKey,
   telegramBotToken,
   summaryUserPromptName,
-  summarySystemPromptName,
+  summaryDeveloperPromptName,
+  suggestionsUserPromptName,
+  suggestionsDeveloperPromptName,
 }: GetDependenciesOptions): Dependencies => {
   if (dependencies) {
     return dependencies;
@@ -69,13 +73,15 @@ export const getDependencies = ({
   const suggestionService = getSuggestionService({
     openAiService,
     configService,
+    suggestionsUserPromptName,
+    suggestionsDeveloperPromptName,
   });
 
   const summaryService = getSummaryService({
     openAiService,
     configService,
     summaryUserPromptName,
-    summarySystemPromptName,
+    summaryDeveloperPromptName,
   });
 
   const summaryStorage = getStorageService<Summary>('summaries', {
@@ -111,5 +117,8 @@ export const getTestDependencies = () =>
     openAiKey: process.env.OPEN_AI_KEY!,
     telegramBotToken: process.env.TELEGRAM_BOT_TOKEN!,
     summaryUserPromptName: process.env.SUMMARY_USER_PROMPT_NAME!,
-    summarySystemPromptName: process.env.SUMMARY_SYSTEM_PROMPT_NAME!,
+    summaryDeveloperPromptName: process.env.SUMMARY_DEVELOPER_PROMPT_NAME!,
+    suggestionsUserPromptName: process.env.SUGGESTIONS_USER_PROMPT_NAME!,
+    suggestionsDeveloperPromptName:
+      process.env.SUGGESTIONS_DEVELOPER_PROMPT_NAME!,
   });

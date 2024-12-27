@@ -1,18 +1,12 @@
 import { getTestDependencies } from '../../dependencies';
-import { getSuggestionService } from './suggestionService';
-import { SuggestionService } from './suggestionService';
 
 describe('SuggestionService', () => {
-  let service: SuggestionService;
-
-  beforeAll(() => {
-    const dependencies = getTestDependencies();
-    service = getSuggestionService(dependencies);
-  });
-
   test('should provide suggestion for word "step"', async () => {
+    // Arrange
+    const { suggestionService } = getTestDependencies();
+
     // Act
-    const suggestions = await service.generate('step');
+    const suggestions = await suggestionService.generate('step');
 
     // Assert
     expect(suggestions.language).toBe('english');
@@ -20,8 +14,11 @@ describe('SuggestionService', () => {
   });
 
   test('should provide suggestion for word "шаг"', async () => {
+    // Arrange
+    const { suggestionService } = getTestDependencies();
+
     // Act
-    const suggestions = await service.generate('шаг');
+    const suggestions = await suggestionService.generate('шаг');
 
     // Assert
     expect(suggestions.language).toBe('russian');
@@ -29,8 +26,11 @@ describe('SuggestionService', () => {
   });
 
   test('should provide no suggestion for word "deca"', async () => {
+    // Arrange
+    const { suggestionService } = getTestDependencies();
+
     // Act
-    const suggestions = await service.generate('deca');
+    const suggestions = await suggestionService.generate('deca');
 
     // Assert
     expect(suggestions.language).toBe('serbian');
@@ -38,8 +38,11 @@ describe('SuggestionService', () => {
   });
 
   test('should provide no suggestion for word "jj78 asd 12"', async () => {
+    // Arrange
+    const { suggestionService } = getTestDependencies();
+
     // Act
-    const suggestions = await service.generate('jj78 asd 12');
+    const suggestions = await suggestionService.generate('jj78 asd 12');
 
     // Assert
     expect(suggestions.language).toBe('unknown');
