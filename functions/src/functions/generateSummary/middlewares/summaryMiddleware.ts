@@ -1,41 +1,36 @@
 import { StorageService } from '../../../services/storageService';
-import { printPhraseSummary } from '../../../services/printWordData/printWordData';
+import { printSummary } from '../../../services/printSummary/printSummary';
 import { GenericMiddleware } from '../../../utils/genericMiddleware';
 import { replyToMessageWithHtml } from '../../../utils/replyToMessageWithHtml';
 import { Context } from './context';
 
-export const phraseSummaryMiddleware: GenericMiddleware<Context> = async (
+export const summaryMiddleware: GenericMiddleware<Context> = async (
   {
-    dependencies: {
-      telegram,
-      phraseSummaryService,
-      phraseSummaryStorage,
-      eventsService,
-    },
+    dependencies: { telegram, summaryService, summaryStorage, eventsService },
     payload,
   },
   next,
 ) => {
   const { messageId, chatId, text } = payload;
 
-  const { data: phraseSummary, takenFromCache } = await getFromStorageOrCreate(
+  const { data: summary, takenFromCache } = await getFromStorageOrCreate(
     text,
-    phraseSummaryStorage,
+    summaryStorage,
     async (key) => {
-      return await phraseSummaryService.generate(key);
+      return await summaryService.generate(key);
     },
   );
 
-  const phraseSummaryString = printPhraseSummary(phraseSummary);
+  const summaryString = printSummary(summary);
 
   await eventsService.add({
-    type: 'phrase-summary-generated',
+    type: 'summary-generated',
     payload,
-    phraseSummary,
+    summary,
     takenFromCache,
   });
 
-  await replyToMessageWithHtml(telegram)(phraseSummaryString, {
+  await replyToMessageWithHtml(telegram)(summaryString, {
     messageId,
     chatId,
   });

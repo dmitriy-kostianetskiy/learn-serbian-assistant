@@ -1,6 +1,6 @@
 import { UserDetails } from './user';
 
-export type GeneratePhraseSummaryPayload = Readonly<{
+export type GenerateSummaryPayload = Readonly<{
   userId: number;
   chatId: number;
   messageId?: number;

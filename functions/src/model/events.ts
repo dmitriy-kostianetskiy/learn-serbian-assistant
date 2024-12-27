@@ -1,38 +1,38 @@
-import { GeneratePhraseSummaryPayload } from './generatePhraseSummaryPayload';
-import { PhraseSummary } from './phraseSummary';
+import { GenerateSummaryPayload } from './generateSummaryPayload';
+import { Summary } from './summary';
 import { Suggestions } from './suggestions';
 
 export type SummaryRequestEvent = {
   type: 'summary-request';
-  payload: GeneratePhraseSummaryPayload;
+  payload: GenerateSummaryPayload;
 };
 
 export type DailyQuotaExceededEvent = {
   type: 'daily-quota-exceeded';
-  payload: GeneratePhraseSummaryPayload;
+  payload: GenerateSummaryPayload;
 };
 
 export type PhraseIsNotSerbianEvent = {
   type: 'phrase-is-not-serbian';
-  payload: GeneratePhraseSummaryPayload;
+  payload: GenerateSummaryPayload;
   suggestions: Suggestions;
 };
 
 export type PhraseIsUnknownEvent = {
   type: 'phrase-is-unknown';
-  payload: GeneratePhraseSummaryPayload;
+  payload: GenerateSummaryPayload;
 };
 
-export type PhraseSummaryGenerateEvent = {
-  type: 'phrase-summary-generated';
-  payload: GeneratePhraseSummaryPayload;
-  phraseSummary: PhraseSummary;
+export type GenerateSummaryEvent = {
+  type: 'summary-generated';
+  payload: GenerateSummaryPayload;
+  summary: Summary;
   takenFromCache: boolean;
 };
 
 export type ChargedEvent = {
   type: 'charged';
-  payload: GeneratePhraseSummaryPayload;
+  payload: GenerateSummaryPayload;
 };
 
 export type AssistantEvent =
@@ -40,5 +40,5 @@ export type AssistantEvent =
   | DailyQuotaExceededEvent
   | PhraseIsNotSerbianEvent
   | PhraseIsUnknownEvent
-  | PhraseSummaryGenerateEvent
+  | GenerateSummaryEvent
   | ChargedEvent;

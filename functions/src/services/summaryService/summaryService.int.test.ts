@@ -1,24 +1,16 @@
 import { getTestDependencies } from '../../dependencies';
-import { CasesOutput, ConjugationsOutput } from '../../model/phraseSummary';
-import { getPhraseSummaryService } from './phraseSummaryService';
-import { PhraseSummaryService } from './phraseSummaryService.model';
+import { CasesByNumber, ConjugationsByNumber } from '../../model/summary';
 
-describe('PhraseSummaryService', () => {
-  let service: PhraseSummaryService;
+describe('SummaryService', () => {
+  test('should summarise word "ići"', async () => {
+    // Arrange
+    const { summaryService } = getTestDependencies();
 
-  beforeAll(() => {
-    const dependencies = getTestDependencies();
-
-    service = getPhraseSummaryService(dependencies);
-  });
-
-  test('should summarise word "dati"', async () => {
     // Act
-    const summary = await service.generate('dati');
+    const summary = await summaryService.generate('ići');
 
     // Assert
-    expect(summary.phrase).toBe('dati');
-    expect(summary.partOfSpeech).toBe('verb');
+    expect(summary.input).toBe('ići');
 
     // Assert translations
     expect(summary.translation?.english).toBeTruthy();
@@ -35,31 +27,37 @@ describe('PhraseSummaryService', () => {
     // Assert example
     expect(summary.example).toBeTruthy();
 
-    if (summary.partOfSpeech === 'verb') {
-      expect(summary.infinitive).toBe('dati');
+    // Assert verb-specific data
+    const { additionalInfo } = summary;
 
-      expect(summary.conjugations).toMatchObject<ConjugationsOutput>({
+    expect(additionalInfo.partOfSpeech).toBe('verb');
+
+    if (additionalInfo.partOfSpeech === 'verb') {
+      expect(additionalInfo.infinitive).toBe('ići');
+      expect(additionalInfo.conjugations).toMatchObject<ConjugationsByNumber>({
         singular: {
-          first: 'dajem',
-          second: 'daješ',
-          third: 'daje',
+          first: 'idem',
+          second: 'ideš',
+          third: 'ide',
         },
         plural: {
-          first: 'dajemo',
-          second: 'dajete',
-          third: 'daju',
+          first: 'idemo',
+          second: 'idete',
+          third: 'idu',
         },
       });
     }
   });
 
   test('should summarise word "dete"', async () => {
+    // Arrange
+    const { summaryService } = getTestDependencies();
+
     // Act
-    const summary = await service.generate('dete');
+    const summary = await summaryService.generate('dete');
 
     // Assert
-    expect(summary.phrase).toBe('dete');
-    expect(summary.partOfSpeech).toBe('noun');
+    expect(summary.input).toBe('dete');
 
     // Assert translations
     expect(summary.translation?.english).toBeTruthy();
@@ -76,11 +74,15 @@ describe('PhraseSummaryService', () => {
     // Assert example
     expect(summary.example).toBeTruthy();
 
-    if (summary.partOfSpeech === 'noun') {
-      expect(summary.grammaticalGender).toBe('srednji');
-      expect(summary.grammaticalNumber).toBe('jednina');
+    // Assert noun-specific data
+    const { additionalInfo } = summary;
 
-      expect(summary.cases).toMatchObject<CasesOutput>({
+    expect(additionalInfo.partOfSpeech).toBe('noun');
+
+    if (additionalInfo.partOfSpeech === 'noun') {
+      expect(additionalInfo.grammaticalGender).toBe('n');
+      expect(additionalInfo.grammaticalNumber).toBe('s');
+      expect(additionalInfo.cases).toMatchObject<CasesByNumber>({
         singular: {
           nominative: 'dete',
           genitive: 'deteta',

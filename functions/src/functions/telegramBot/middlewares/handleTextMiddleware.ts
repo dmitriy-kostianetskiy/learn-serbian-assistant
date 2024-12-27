@@ -4,11 +4,11 @@ import { createPayload } from './createPayload';
 
 export type HandleTextMiddlewareDependencies = Pick<
   Dependencies,
-  'phraseSummaryQueueService'
+  'summaryQueueService'
 >;
 
 export const handleTextMiddleware =
-  ({ phraseSummaryQueueService }: HandleTextMiddlewareDependencies) =>
+  ({ summaryQueueService }: HandleTextMiddlewareDependencies) =>
   async ({ text, from, chat, message }: Context) => {
     try {
       if (!text || !from || !chat) {
@@ -22,7 +22,7 @@ export const handleTextMiddleware =
         message?.message_id,
       );
 
-      await phraseSummaryQueueService.add(payload);
+      await summaryQueueService.add(payload);
     } catch (e) {
       console.error(e);
     }

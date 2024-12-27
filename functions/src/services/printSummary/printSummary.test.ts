@@ -1,11 +1,11 @@
 import { GIVE_EXAMPLE } from '../../test/examples/give';
 import { TABLE_EXAMPLE } from '../../test/examples/table';
-import { printPhraseSummary } from './printWordData';
+import { printSummary } from './printSummary';
 
-describe('print word data', () => {
+describe('printSummary', () => {
   test('should print verb', () => {
     // Act
-    const message = printPhraseSummary(GIVE_EXAMPLE);
+    const message = printSummary(GIVE_EXAMPLE);
 
     // Assert
     expect(message).toContain('<strong>dati</strong>');
@@ -33,7 +33,7 @@ describe('print word data', () => {
 
   test('should print noun', () => {
     // Act
-    const message = printPhraseSummary(TABLE_EXAMPLE);
+    const message = printSummary(TABLE_EXAMPLE);
 
     // Assert
 
@@ -58,18 +58,18 @@ describe('print word data', () => {
     expect(message).toContain('Nominative: <strong>sto</strong>');
     expect(message).toContain('Genitive: <strong>stola</strong>');
     expect(message).toContain('Dative: <strong>stolu</strong>');
-    expect(message).toContain('Accusative: <strong>sto</strong>');
+    expect(message).toContain('Akuzative: <strong>sto</strong>');
     expect(message).toContain('Instrumental: <strong>stolom</strong>');
-    expect(message).toContain('Locative: <strong>stolu</strong>');
-    expect(message).toContain('Vocative: <strong>sto</strong>');
+    expect(message).toContain('Lokative: <strong>stolu</strong>');
+    expect(message).toContain('Vokative: <strong>sto</strong>');
 
     // Assert plural conjugations
     expect(message).toContain('Nominative: <strong>stolovi</strong>');
     expect(message).toContain('Genitive: <strong>stolova</strong>');
     expect(message).toContain('Dative: <strong>stolovima</strong>');
-    expect(message).toContain('Accusative: <strong>stolove</strong>');
+    expect(message).toContain('Akuzative: <strong>stolove</strong>');
     expect(message).toContain('Instrumental: <strong>stolovima</strong>');
-    expect(message).toContain('Locative: <strong>stolovima</strong>');
-    expect(message).toContain('Vocative: <strong>stolovi</strong>');
+    expect(message).toContain('Lokative: <strong>stolovima</strong>');
+    expect(message).toContain('Vokative: <strong>stolovi</strong>');
   });
 });

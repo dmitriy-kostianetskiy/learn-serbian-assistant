@@ -1,10 +1,7 @@
-import { NounSummary } from '../../model/phraseSummary';
+import { Summary } from '../../model/summary';
 
-export const TABLE_EXAMPLE: NounSummary = {
-  phrase: 'sto',
-  partOfSpeech: 'noun',
-  grammaticalGender: 'srednji',
-  grammaticalNumber: 'jednina',
+export const TABLE_EXAMPLE: Summary = {
+  input: 'sto',
   definition: {
     english: 'a piece of furniture',
     russian: 'предмет мебели',
@@ -16,24 +13,29 @@ export const TABLE_EXAMPLE: NounSummary = {
   },
   synonyms: ['astal', 'trpeza'],
   example: 'Ostavite to na stolu.',
-  cases: {
-    singular: {
-      nominative: 'sto',
-      genitive: 'stola',
-      dative: 'stolu',
-      accusative: 'sto',
-      instrumental: 'stolom',
-      locative: 'stolu',
-      vocative: 'sto',
-    },
-    plural: {
-      nominative: 'stolovi',
-      genitive: 'stolova',
-      dative: 'stolovima',
-      accusative: 'stolove',
-      instrumental: 'stolovima',
-      locative: 'stolovima',
-      vocative: 'stolovi',
+  additionalInfo: {
+    partOfSpeech: 'noun',
+    grammaticalGender: 'n',
+    grammaticalNumber: 's',
+    cases: {
+      singular: {
+        nominative: 'sto',
+        genitive: 'stola',
+        dative: 'stolu',
+        accusative: 'sto',
+        instrumental: 'stolom',
+        locative: 'stolu',
+        vocative: 'sto',
+      },
+      plural: {
+        nominative: 'stolovi',
+        genitive: 'stolova',
+        dative: 'stolovima',
+        accusative: 'stolove',
+        instrumental: 'stolovima',
+        locative: 'stolovima',
+        vocative: 'stolovi',
+      },
     },
   },
 };

@@ -1,3 +1,3 @@
 export const PubSubTopic = {
-  PhraseSummary: 'phrase-summary-requests',
+  Summary: 'phrase-summary-requests',
 } as const;

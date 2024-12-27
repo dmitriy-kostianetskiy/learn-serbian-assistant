@@ -1,9 +1,7 @@
-import { VerbSummary } from '../../model/phraseSummary';
+import { Summary } from '../../model/summary';
 
-export const GIVE_EXAMPLE: VerbSummary = {
-  phrase: 'dati',
-  infinitive: 'dati',
-  partOfSpeech: 'verb',
+export const GIVE_EXAMPLE: Summary = {
+  input: 'dati',
   definition: {
     serbian: 'pružiti nešto',
     english: 'to move, shift, provide something',
@@ -15,16 +13,20 @@ export const GIVE_EXAMPLE: VerbSummary = {
   },
   synonyms: ['prineti', 'pružiti', 'darovati', 'pokloniti'],
   example: 'Molim dajte kafu!',
-  conjugations: {
-    singular: {
-      first: 'dajem',
-      second: 'daješ',
-      third: 'daje',
-    },
-    plural: {
-      first: 'dajemo',
-      second: 'dajete',
-      third: 'daju',
+  additionalInfo: {
+    partOfSpeech: 'verb',
+    infinitive: 'dati',
+    conjugations: {
+      singular: {
+        first: 'dajem',
+        second: 'daješ',
+        third: 'daje',
+      },
+      plural: {
+        first: 'dajemo',
+        second: 'dajete',
+        third: 'daju',
+      },
     },
   },
 };

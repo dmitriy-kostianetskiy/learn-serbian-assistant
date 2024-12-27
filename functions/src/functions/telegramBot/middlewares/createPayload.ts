@@ -1,4 +1,4 @@
-import { GeneratePhraseSummaryPayload } from '../../../model/generatePhraseSummaryPayload';
+import { GenerateSummaryPayload } from '../../../model/generateSummaryPayload';
 import { User } from 'telegraf/typings/core/types/typegram';
 import { UserDetails } from '../../../model/user';
 
@@ -7,7 +7,7 @@ export const createPayload = (
   user: User,
   chatId: number,
   messageId?: number,
-): GeneratePhraseSummaryPayload => {
+): GenerateSummaryPayload => {
   const userId = user.id;
 
   const userDetails = createUserDetails(user);

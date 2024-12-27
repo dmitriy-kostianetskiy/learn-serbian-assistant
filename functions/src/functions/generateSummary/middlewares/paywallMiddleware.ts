@@ -1,7 +1,7 @@
 import { replyToMessageWithHtml } from '../../../utils/replyToMessageWithHtml';
 import { GenericMiddleware } from '../../../utils/genericMiddleware';
 import { Dependencies } from '../../../dependencies';
-import { GeneratePhraseSummaryPayload } from '../../../model/generatePhraseSummaryPayload';
+import { GenerateSummaryPayload } from '../../../model/generateSummaryPayload';
 import { Message } from '../../../consts/message';
 
 export const paywallMiddleware: GenericMiddleware<{
@@ -9,7 +9,7 @@ export const paywallMiddleware: GenericMiddleware<{
     Dependencies,
     'configService' | 'userService' | 'telegram' | 'eventsService'
   >;
-  payload: GeneratePhraseSummaryPayload;
+  payload: GenerateSummaryPayload;
 }> = async (
   {
     dependencies: { configService, userService, telegram, eventsService },
@@ -21,7 +21,7 @@ export const paywallMiddleware: GenericMiddleware<{
 
   const [[dailyQuotaUsed, hasPremium], dailyQuota] = await Promise.all([
     userService.getDailyQuotaUsed(userId),
-    configService.get('dailyQuota'),
+    configService.get<number>('dailyQuota'),
   ]);
 
   if ((dailyQuotaUsed ?? 0) >= dailyQuota && !hasPremium) {

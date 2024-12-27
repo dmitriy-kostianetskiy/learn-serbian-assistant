@@ -1,21 +1,18 @@
 import { RemoteConfig } from 'firebase-admin/remote-config';
 import {
-  ConfigService,
-  GetResult,
-  WellKnownParameter,
-} from './configService.model';
-import {
   RemoteConfigParameters,
   parseRemoteConfigTemplate,
 } from './parseRemoteConfigTemplate';
+
+export interface ConfigService {
+  get<T>(parameter: string): Promise<T>;
+}
 
 export const getConfigService = (remoteConfig: RemoteConfig): ConfigService => {
   let params: RemoteConfigParameters | undefined;
 
   return {
-    async get<T extends WellKnownParameter = WellKnownParameter>(
-      parameter: T,
-    ): Promise<GetResult<T>> {
+    async get<T>(parameter: string): Promise<T> {
       if (!params) {
         const template = await remoteConfig.getTemplate();
 
@@ -28,7 +25,7 @@ export const getConfigService = (remoteConfig: RemoteConfig): ConfigService => {
         throw new Error(`Unable to get value of ${parameter}`);
       }
 
-      return value as GetResult<T>;
+      return value as T;
     },
   };
 };

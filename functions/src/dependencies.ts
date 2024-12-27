@@ -8,26 +8,25 @@ import {
 } from './services/userService/userService';
 import { getRemoteConfig } from 'firebase-admin/remote-config';
 import { ConfigService, getConfigService } from './services/configService';
-import {
-  PhraseSummaryService,
-  getPhraseSummaryService,
-} from './services/phraseSummaryService';
+import { SummaryService, getSummaryService } from './services/summaryService';
 import {
   SuggestionService,
   getSuggestionService,
 } from './services/suggestionService';
 import { PubSub } from '@google-cloud/pubsub';
 import {
-  PhraseSummaryQueueService,
-  getPhraseSummaryQueueService,
-} from './services/phraseSummaryQueueService';
-import { PhraseSummary } from './model/phraseSummary';
+  SummaryQueueService,
+  getSummaryQueueService,
+} from './services/summaryQueueService';
+import { Summary } from './model/summary';
 import { StorageService, getStorageService } from './services/storageService';
 import { EventService, getEventsService } from './services/eventsService';
 
 export type GetDependenciesOptions = {
   telegramBotToken: string;
   openAiKey: string;
+  summaryUserPromptName?: string;
+  summarySystemPromptName?: string;
 };
 
 export interface Dependencies {
@@ -36,11 +35,11 @@ export interface Dependencies {
   userService: UserService;
   configService: ConfigService;
   openAiService: OpenAiService;
-  phraseSummaryService: PhraseSummaryService;
-  phraseSummaryStorage: StorageService<PhraseSummary>;
+  summaryService: SummaryService;
+  summaryStorage: StorageService<Summary>;
   eventsService: EventService;
   suggestionService: SuggestionService;
-  phraseSummaryQueueService: PhraseSummaryQueueService;
+  summaryQueueService: SummaryQueueService;
 }
 
 let dependencies: Dependencies | undefined;
@@ -48,6 +47,8 @@ let dependencies: Dependencies | undefined;
 export const getDependencies = ({
   openAiKey,
   telegramBotToken,
+  summaryUserPromptName,
+  summarySystemPromptName,
 }: GetDependenciesOptions): Dependencies => {
   if (dependencies) {
     return dependencies;
@@ -70,12 +71,14 @@ export const getDependencies = ({
     configService,
   });
 
-  const phraseSummaryService = getPhraseSummaryService({
+  const summaryService = getSummaryService({
     openAiService,
     configService,
+    summaryUserPromptName,
+    summarySystemPromptName,
   });
 
-  const phraseSummaryStorage = getStorageService<PhraseSummary>('summaries', {
+  const summaryStorage = getStorageService<Summary>('summaries', {
     firestore,
   });
 
@@ -85,7 +88,7 @@ export const getDependencies = ({
     projectId: 'learn-serbian-assistant',
   });
 
-  const phraseSummaryQueueService = getPhraseSummaryQueueService({ pubSub });
+  const summaryQueueService = getSummaryQueueService({ pubSub });
 
   dependencies = {
     telegraf,
@@ -93,11 +96,11 @@ export const getDependencies = ({
     userService,
     configService,
     openAiService,
-    phraseSummaryService,
-    phraseSummaryStorage,
+    summaryService,
+    summaryStorage,
     eventsService,
     suggestionService,
-    phraseSummaryQueueService,
+    summaryQueueService,
   };
 
   return dependencies;
@@ -107,4 +110,6 @@ export const getTestDependencies = () =>
   getDependencies({
     openAiKey: process.env.OPEN_AI_KEY!,
     telegramBotToken: process.env.TELEGRAM_BOT_TOKEN!,
+    summaryUserPromptName: process.env.SUMMARY_USER_PROMPT_NAME!,
+    summarySystemPromptName: process.env.SUMMARY_SYSTEM_PROMPT_NAME!,
   });

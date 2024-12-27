@@ -3,4 +3,4 @@ import './apis/firebase';
 
 export * from './functions/telegramBot/telegramBot';
 export * from './functions/resetQuotes';
-export * from './functions/generatePhraseSummary';
+export * from './functions/generateSummary';

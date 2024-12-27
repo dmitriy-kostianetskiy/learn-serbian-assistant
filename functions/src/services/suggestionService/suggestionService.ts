@@ -1,4 +1,4 @@
-import { Suggestions } from '../../model/suggestions';
+import { Suggestions, SuggestionsSchema } from '../../model/suggestions';
 import { substitutePlaceholders } from '../../utils/substitutePlaceholders';
 import { ConfigService } from '../configService';
 import { OpenAiService } from '../openAiService';
@@ -6,11 +6,6 @@ import { OpenAiService } from '../openAiService';
 export interface SuggestionService {
   generate(phrase: string): Promise<Suggestions>;
 }
-
-type SuggestionPromptResponse = {
-  language?: string;
-  suggestions?: string[];
-};
 
 export const getSuggestionService = ({
   configService,
@@ -22,35 +17,36 @@ export const getSuggestionService = ({
   return {
     async generate(phrase) {
       // get prompt
-      const [suggestionsSystemPromptTemplate, suggestionsUserPromptTemplate] =
-        await Promise.all([
-          configService.get('suggestionsSystemPrompt'),
-          configService.get('suggestionsUserPrompt'),
-        ]);
-
-      const suggestionsSystemPrompt = substitutePlaceholders(
-        suggestionsSystemPromptTemplate,
-        {
-          phrase,
-        },
-      );
-
-      const suggestionsUserPrompt = substitutePlaceholders(
+      const [
+        suggestionsDeveloperPromptTemplate,
         suggestionsUserPromptTemplate,
+      ] = await Promise.all([
+        configService.get<string>('suggestionsSystemPrompt'),
+        configService.get<string>('suggestionsUserPrompt'),
+      ]);
+
+      const developerPrompt = substitutePlaceholders(
+        suggestionsDeveloperPromptTemplate,
         {
           phrase,
         },
       );
+
+      const userPrompt = substitutePlaceholders(suggestionsUserPromptTemplate, {
+        phrase,
+      });
 
       // generate suggestions
-      const result = await openAiService.promptAsJson<
-        SuggestionPromptResponse | undefined
-      >(suggestionsUserPrompt, suggestionsSystemPrompt);
+      const result = await openAiService.promptAsJson({
+        userPrompt,
+        developerPrompt,
+        structuredOutput: {
+          schema: SuggestionsSchema,
+          schemaName: 'suggestions',
+        },
+      });
 
-      return {
-        language: result?.language || 'unknown',
-        suggestions: result?.suggestions || [],
-      };
+      return result;
     },
   };
 };

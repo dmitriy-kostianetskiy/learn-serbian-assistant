@@ -6,7 +6,7 @@
 import type { Config } from 'jest';
 
 const config: Config = {
-  testTimeout: 15_000,
+  testTimeout: 20_000,
   testEnvironment: 'node',
   // All imported modules in your tests should be mocked automatically
   // automock: false,

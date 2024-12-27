@@ -11,11 +11,11 @@ import { createPayload } from './createPayload';
 
 type HandleSuggestionsMiddlewareDependencies = Pick<
   Dependencies,
-  'phraseSummaryQueueService'
+  'summaryQueueService'
 >;
 
 export const handleSuggestionsMiddleware =
-  ({ phraseSummaryQueueService }: HandleSuggestionsMiddlewareDependencies) =>
+  ({ summaryQueueService }: HandleSuggestionsMiddlewareDependencies) =>
   async (
     context: NarrowedContext<
       Context<Update>,
@@ -39,7 +39,7 @@ export const handleSuggestionsMiddleware =
         context.chat.id,
       );
 
-      await phraseSummaryQueueService.add(payload);
+      await summaryQueueService.add(payload);
     } finally {
       await context.answerCbQuery();
     }
