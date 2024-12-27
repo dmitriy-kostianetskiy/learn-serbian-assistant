@@ -1,5 +1,9 @@
 import { FieldValue } from 'firebase-admin/firestore';
-import { StorageService } from './storageService.model';
+
+export interface StorageService<T extends object> {
+  get(key: string): Promise<T | null>;
+  set(key: string, value: T): Promise<void>;
+}
 
 export const getStorageService = <T extends object>(
   storageName: string,

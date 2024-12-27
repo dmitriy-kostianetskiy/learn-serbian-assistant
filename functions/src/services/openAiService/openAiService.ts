@@ -1,6 +1,19 @@
 import OpenAI from 'openai';
 import { zodResponseFormat } from 'openai/helpers/zod';
-import { OpenAiService, PromptOptions } from './openAiService.model';
+import { z } from 'zod';
+
+export type PromptOptions<T> = {
+  userPrompt: string;
+  developerPrompt?: string;
+  structuredOutput: {
+    schema: z.Schema<T>;
+    schemaName: string;
+  };
+};
+
+export interface OpenAiService {
+  promptAsJson<T>(options: PromptOptions<T>): Promise<T>;
+}
 
 export const getOpenAiService = (
   { openai }: { openai: OpenAI },

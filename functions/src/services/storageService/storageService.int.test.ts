@@ -4,8 +4,7 @@ import {
   getFromCollection,
   insertIntoCollection,
 } from '../../utils/firebaseUtils';
-import { StorageService } from './storageService.model';
-import { getStorageService } from './storageService';
+import { getStorageService, StorageService } from './storageService';
 import { randomUUID } from 'crypto';
 
 type StorageItem = {
