@@ -48,4 +48,16 @@ describe('SuggestionService', () => {
     expect(suggestions.language).toBe('unknown');
     expect(suggestions.suggestions).toHaveLength(0);
   });
+
+  test('should provide no suggestion for word "talas"', async () => {
+    // Arrange
+    const { suggestionService } = getTestDependencies();
+
+    // Act
+    const suggestions = await suggestionService.generate('talas');
+
+    // Assert
+    expect(suggestions.language).toBe('serbian');
+    expect(suggestions.suggestions).toHaveLength(0);
+  });
 });
