@@ -1,21 +1,19 @@
 import {
   Cases,
   Summary,
-  ConjugationsByNumber,
+  SimpleConjugations,
   CasesByNumber,
   GrammaticalGender,
   GrammaticalNumber,
+  VerbAdditionalInfo,
+  NounAdditionalInfo,
 } from '../model/summary';
 
-export const printSummary = (summary: Summary): string => {
-  return [
-    printTitle(summary),
-    printBasicInfo(summary),
-    printAdditionalInfo(summary),
-  ].join('\n');
+export const printSummary = (summary: Summary): string[] => {
+  return [printBasicInfo(summary), ...printAdditionalInfo(summary)];
 };
 
-const printTitle = (summary: Summary) => {
+const printTitle = (summary: Summary): string => {
   const subtitle = printSubtitle(summary);
 
   return [
@@ -25,16 +23,21 @@ const printTitle = (summary: Summary) => {
 };
 
 const printSubtitle = (summary: Summary): string | null => {
-  return printInfinitive(summary) || printNumberAndGender(summary) || '';
+  switch (summary.additionalInfo.partOfSpeech) {
+    case 'verb':
+      return printVerbSubtitle(summary.additionalInfo);
+    case 'noun':
+      return printNounSubtitle(summary.additionalInfo);
+    case 'other':
+    default:
+      return null;
+  }
 };
 
-const printNumberAndGender = ({ additionalInfo }: Summary) => {
-  if (additionalInfo.partOfSpeech !== 'noun') {
-    return '';
-  }
-
-  const { grammaticalNumber, grammaticalGender } = additionalInfo;
-
+const printNounSubtitle = ({
+  grammaticalGender,
+  grammaticalNumber,
+}: NounAdditionalInfo) => {
   if (!grammaticalNumber && !grammaticalGender) {
     return '';
   }
@@ -75,13 +78,7 @@ const printGrammaticalNumber = (
   }
 };
 
-const printInfinitive = ({ additionalInfo }: Summary) => {
-  if (additionalInfo.partOfSpeech !== 'verb') {
-    return '';
-  }
-
-  const { infinitive } = additionalInfo;
-
+const printVerbSubtitle = ({ infinitive }: VerbAdditionalInfo) => {
   if (!infinitive) {
     return '';
   }
@@ -89,13 +86,11 @@ const printInfinitive = ({ additionalInfo }: Summary) => {
   return `(<em>inf.</em> ${infinitive})`;
 };
 
-const printBasicInfo = ({
-  definition,
-  translation,
-  synonyms,
-  example,
-}: Summary) => {
+const printBasicInfo = (summary: Summary): string => {
+  const { example, definition, translation, synonyms } = summary;
+
   return [
+    printTitle(summary),
     `💡 Primer: ${printNullish(example)}`,
     '',
     ...[
@@ -116,34 +111,44 @@ const printBasicInfo = ({
   ].join('\n');
 };
 
-const printAdditionalInfo = (summary: Summary): string => {
-  return (
-    printVerbAdditionalInfo(summary) || printNounAdditionalInfo(summary) || ''
-  );
-};
-
-const printVerbAdditionalInfo = ({ additionalInfo }: Summary) => {
-  if (additionalInfo.partOfSpeech !== 'verb') {
-    return '';
+const printAdditionalInfo = (summary: Summary): string[] => {
+  switch (summary.additionalInfo.partOfSpeech) {
+    case 'verb':
+      return printVerbAdditionalInfo(summary.additionalInfo);
+    case 'noun':
+      return printNounAdditionalInfo(summary.additionalInfo);
+    case 'other':
+    default:
+      return [];
   }
-
-  return printConjugationsByNumber(additionalInfo.conjugations);
 };
 
-const printNounAdditionalInfo = ({ additionalInfo }: Summary) => {
-  if (additionalInfo.partOfSpeech !== 'noun') {
-    return '';
-  }
-
-  return printCasesByNumber(additionalInfo.cases);
+const printVerbAdditionalInfo = ({
+  conjugations: { present, future, perfect },
+}: VerbAdditionalInfo): string[] => {
+  return [
+    printConjugationsHeader(),
+    printSimpleConjugation(present, 'Prezent'),
+    printSimpleConjugation(perfect, 'Perfekt'),
+    printSimpleConjugation(future, 'Futur'),
+  ];
 };
 
-const printConjugationsByNumber = (
-  conjugations: ConjugationsByNumber,
-): string => {
+const printNounAdditionalInfo = ({ cases }: NounAdditionalInfo) => {
+  return [printCasesByNumber(cases)];
+};
+
+function printConjugationsHeader(): string {
+  return ['', '🔄 <strong>Conjugacija</strong>', ''].join('\n');
+}
+
+function printSimpleConjugation(
+  conjugations: SimpleConjugations,
+  title: string,
+): string {
   return [
     '',
-    '🔄 <strong>Conjugacija</strong>',
+    title,
     '',
     `  Ja <strong>${printNullish(conjugations?.singular?.first)}</strong>`,
     `  Ti <strong>${printNullish(conjugations?.singular?.second)}</strong>`,
@@ -153,7 +158,7 @@ const printConjugationsByNumber = (
     `  Vi <strong>${printNullish(conjugations?.plural?.second)}</strong>`,
     `  Oni/One/Ona <strong>${printNullish(conjugations?.plural?.third)}</strong>`,
   ].join('\n');
-};
+}
 
 const printCasesByNumber = (cases: CasesByNumber) => {
   const { singular, plural } = cases;

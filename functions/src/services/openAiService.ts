@@ -26,7 +26,7 @@ export const getOpenAiService = (
 
       const chatCompletion = await openai.chat.completions.create({
         messages,
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o',
         response_format: structuredOutput
           ? zodResponseFormat(
               structuredOutput.schema,

@@ -2,30 +2,56 @@ import { Summary } from '../../model/summary';
 
 export const GIVE_EXAMPLE: Summary = {
   input: 'dati',
-  definition: {
-    serbian: 'pružiti nešto',
-    english: 'to move, shift, provide something',
-    russian: 'перемещать что-либо',
-  },
   translation: {
     english: 'to give',
-    russian: 'давать',
+    russian: 'дать',
   },
-  synonyms: ['prineti', 'pružiti', 'darovati', 'pokloniti'],
-  example: 'Molim dajte kafu!',
+  definition: {
+    english: 'To transfer possession of something to someone else.',
+    russian: 'Перевести владение чем-либо к другому человеку.',
+    serbian: 'Preneti vlasništvo nečega drugome.',
+  },
+  example: 'Moramo dati poklon učitelju za njegov rođendan.',
+  synonyms: ['ponuditi', 'ustupiti', 'uručiti'],
   additionalInfo: {
     partOfSpeech: 'verb',
     infinitive: 'dati',
     conjugations: {
-      singular: {
-        first: 'dajem',
-        second: 'daješ',
-        third: 'daje',
+      present: {
+        singular: {
+          first: 'dajem',
+          second: 'daješ',
+          third: 'daje',
+        },
+        plural: {
+          first: 'dajemo',
+          second: 'dajete',
+          third: 'daju',
+        },
       },
-      plural: {
-        first: 'dajemo',
-        second: 'dajete',
-        third: 'daju',
+      perfect: {
+        singular: {
+          first: 'dao sam',
+          second: 'dao si',
+          third: 'dao je',
+        },
+        plural: {
+          first: 'dali smo',
+          second: 'dali ste',
+          third: 'dali su',
+        },
+      },
+      future: {
+        singular: {
+          first: 'daću',
+          second: 'daćeš',
+          third: 'daće',
+        },
+        plural: {
+          first: 'daćemo',
+          second: 'daćete',
+          third: 'daće',
+        },
       },
     },
   },

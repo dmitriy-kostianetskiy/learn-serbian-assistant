@@ -1,5 +1,5 @@
 import { getTestDependencies } from '../dependencies';
-import { CasesByNumber, ConjugationsByNumber } from '../model/summary';
+import { CasesByNumber, SimpleConjugations } from '../model/summary';
 
 describe('SummaryService', () => {
   test('should summarise word "ići"', async () => {
@@ -34,7 +34,9 @@ describe('SummaryService', () => {
 
     if (additionalInfo.partOfSpeech === 'verb') {
       expect(additionalInfo.infinitive).toBe('ići');
-      expect(additionalInfo.conjugations).toMatchObject<ConjugationsByNumber>({
+      expect(
+        additionalInfo.conjugations.present,
+      ).toMatchObject<SimpleConjugations>({
         singular: {
           first: 'idem',
           second: 'ideš',
@@ -44,6 +46,115 @@ describe('SummaryService', () => {
           first: 'idemo',
           second: 'idete',
           third: 'idu',
+        },
+      });
+
+      expect(
+        additionalInfo.conjugations.perfect,
+      ).toMatchObject<SimpleConjugations>({
+        singular: {
+          first: 'išao sam',
+          second: 'išao si',
+          third: 'išao je',
+        },
+        plural: {
+          first: 'išli smo',
+          second: 'išli ste',
+          third: 'išli su',
+        },
+      });
+
+      expect(
+        additionalInfo.conjugations.future,
+      ).toMatchObject<SimpleConjugations>({
+        singular: {
+          first: 'ići ću',
+          second: 'ići ćeš',
+          third: 'ići će',
+        },
+        plural: {
+          first: 'ići ćemo',
+          second: 'ići ćete',
+          third: 'ići će',
+        },
+      });
+    }
+  });
+
+  test('should summarise word "dati"', async () => {
+    // Arrange
+    const { summaryService } = getTestDependencies();
+
+    // Act
+    const summary = await summaryService.generate('dati');
+
+    // Assert
+    expect(summary.input).toBe('dati');
+
+    // Assert translations
+    expect(summary.translation?.english).toBeTruthy();
+    expect(summary.translation?.russian).toBeTruthy();
+
+    // Assert definition
+    expect(summary.definition?.english).toBeTruthy();
+    expect(summary.definition?.russian).toBeTruthy();
+    expect(summary.definition?.serbian).toBeTruthy();
+
+    // Assert synonyms
+    expect(summary.synonyms).not.toHaveLength(0);
+
+    // Assert example
+    expect(summary.example).toBeTruthy();
+
+    // Assert verb-specific data
+    const { additionalInfo } = summary;
+
+    expect(additionalInfo.partOfSpeech).toBe('verb');
+
+    if (additionalInfo.partOfSpeech === 'verb') {
+      expect(additionalInfo.infinitive).toBe('dati');
+      expect(
+        additionalInfo.conjugations.present,
+      ).toMatchObject<SimpleConjugations>({
+        singular: {
+          first: 'dajem',
+          second: 'daješ',
+          third: 'daje',
+        },
+        plural: {
+          first: 'dajemo',
+          second: 'dajete',
+          third: 'daju',
+        },
+      });
+
+      expect(
+        additionalInfo.conjugations.perfect,
+      ).toMatchObject<SimpleConjugations>({
+        singular: {
+          first: 'dao sam',
+          second: 'dao si',
+          third: 'dao je',
+        },
+        plural: {
+          first: 'dali smo',
+          second: 'dali ste',
+          third: 'dali su',
+        },
+      });
+
+      expect(
+        additionalInfo.conjugations.future,
+      ).toMatchObject<SimpleConjugations>({
+        singular: {
+          first: 'daću',
+          second: 'daćeš',
+          third: 'daće',
+        },
+        plural: {
+          first: 'daćemo',
+          second: 'daćete',
+          third: 'daće',
         },
       });
     }

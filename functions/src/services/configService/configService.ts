@@ -5,7 +5,9 @@ import {
 } from './parseRemoteConfigTemplate';
 
 export interface ConfigService {
-  get<T>(parameter: string): Promise<T>;
+  get<T extends string | number | boolean | object>(
+    parameter: string,
+  ): Promise<T>;
 }
 
 export const getConfigService = (remoteConfig: RemoteConfig): ConfigService => {

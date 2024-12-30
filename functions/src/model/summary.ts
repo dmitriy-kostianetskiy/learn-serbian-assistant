@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const ConjugationsSchema = z.object(
+const ConjugationsByPersonSchema = z.object(
   {
     first: z.string({ description: 'First person' }),
     second: z.string({ description: 'Second person' }),
@@ -9,14 +9,22 @@ const ConjugationsSchema = z.object(
   { description: 'Conjugations of the verb' },
 );
 
-export type Conjugations = z.infer<typeof ConjugationsSchema>;
+export type ConjugationsByPerson = z.infer<typeof ConjugationsByPersonSchema>;
 
-const ConjugationsByNumberSchema = z.object({
-  singular: ConjugationsSchema,
-  plural: ConjugationsSchema,
+const SimpleConjugations = z.object({
+  singular: ConjugationsByPersonSchema,
+  plural: ConjugationsByPersonSchema,
 });
 
-export type ConjugationsByNumber = z.infer<typeof ConjugationsByNumberSchema>;
+export type SimpleConjugations = z.infer<typeof SimpleConjugations>;
+
+const Conjugations = z.object({
+  present: SimpleConjugations,
+  perfect: SimpleConjugations,
+  future: SimpleConjugations,
+});
+
+export type Conjugations = z.infer<typeof Conjugations>;
 
 const CasesSchema = z.object({
   nominative: z.string(),
@@ -51,6 +59,31 @@ const GrammaticalNumberSchema = z.enum(['s', 'p'], {
 
 export type GrammaticalNumber = z.infer<typeof GrammaticalNumberSchema>;
 
+const VerbAdditionalInfoSchema = z.object({
+  partOfSpeech: z.literal('verb'),
+  infinitive: z.string({
+    description: 'Infinitive form of the verb',
+  }),
+  conjugations: Conjugations,
+});
+
+export type VerbAdditionalInfo = z.infer<typeof VerbAdditionalInfoSchema>;
+
+const NounAdditionalInfoSchema = z.object({
+  partOfSpeech: z.literal('noun'),
+  grammaticalGender: GrammaticalGenderSchema,
+  grammaticalNumber: GrammaticalNumberSchema,
+  cases: CasesByNumberSchema,
+});
+
+export type NounAdditionalInfo = z.infer<typeof NounAdditionalInfoSchema>;
+
+const OtherAdditionalInfoSchema = z.object({
+  partOfSpeech: z.literal('other'),
+});
+
+export type OtherAdditionalInfo = z.infer<typeof OtherAdditionalInfoSchema>;
+
 export const SummarySchema = z.object({
   input: z.string({
     description: 'Input text to process',
@@ -83,23 +116,9 @@ export const SummarySchema = z.object({
   additionalInfo: z.discriminatedUnion(
     'partOfSpeech',
     [
-      z.object({
-        partOfSpeech: z.literal('verb'),
-        infinitive: z.string({
-          description:
-            'Infinitive form of the verb or null if the word is not a verb',
-        }),
-        conjugations: ConjugationsByNumberSchema,
-      }),
-      z.object({
-        partOfSpeech: z.literal('noun'),
-        grammaticalGender: GrammaticalGenderSchema,
-        grammaticalNumber: GrammaticalNumberSchema,
-        cases: CasesByNumberSchema,
-      }),
-      z.object({
-        partOfSpeech: z.literal('other'),
-      }),
+      VerbAdditionalInfoSchema,
+      NounAdditionalInfoSchema,
+      OtherAdditionalInfoSchema,
     ],
     {
       description: 'Additional information about the input',

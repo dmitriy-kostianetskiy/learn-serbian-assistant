@@ -5,22 +5,28 @@ import { printSummary } from './printSummary';
 describe('printSummary', () => {
   test('should print verb', () => {
     // Act
-    const message = printSummary(GIVE_EXAMPLE);
+    const message = printSummary(GIVE_EXAMPLE).join('\n');
 
     // Assert
     expect(message).toContain('<strong>dati</strong>');
 
     // Assert Example
-    expect(message).toContain('Molim dajte kafu!');
+    expect(message).toContain(
+      'Moramo dati poklon učitelju za njegov rođendan.',
+    );
 
     // Assert translations
     expect(message).toContain('🇺🇸 to give');
-    expect(message).toContain('🇷🇺 давать');
+    expect(message).toContain('🇷🇺 дать');
 
     // Assert definitions
-    expect(message).toContain('🇷🇸 pružiti nešto');
-    expect(message).toContain('🇺🇸 to move, shift, provide something');
-    expect(message).toContain('🇷🇺 перемещать что-либо');
+    expect(message).toContain('🇷🇸 Preneti vlasništvo nečega drugome.');
+    expect(message).toContain(
+      '🇺🇸 To transfer possession of something to someone else.',
+    );
+    expect(message).toContain(
+      '🇷🇺 Перевести владение чем-либо к другому человеку.',
+    );
 
     // Assert cases
     expect(message).toContain('Ja <strong>dajem</strong>');
@@ -33,7 +39,7 @@ describe('printSummary', () => {
 
   test('should print noun', () => {
     // Act
-    const message = printSummary(TABLE_EXAMPLE);
+    const message = printSummary(TABLE_EXAMPLE).join('\n');
 
     // Assert
 

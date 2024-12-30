@@ -1,0 +1,60 @@
+{
+  "input": "ići",
+  "translation": {
+    "english": "to go",
+    "russian": "идти"
+  },
+  "definition": {
+    "english": "To move or travel from one place to another.",
+    "russian": "Передвигаться или путешествовать из одного места в другое.",
+    "serbian": "Kretati se ili putovati sa jednog mesta na drugo."
+  },
+  "example": "Svakog jutra idem u školu.",
+  "synonyms": [
+    "hodati",
+    "putovati",
+    "kretati se"
+  ],
+  "additionalInfo": {
+    "partOfSpeech": "verb",
+    "infinitive": "ići",
+    "conjugations": {
+      "present": {
+        "singular": {
+          "first": "idem",
+          "second": "ideš",
+          "third": "ide"
+        },
+        "plural": {
+          "first": "idemo",
+          "second": "idete",
+          "third": "idu"
+        }
+      },
+      "perfect": {
+        "singular": {
+          "first": "išao sam",
+          "second": "išao si",
+          "third": "išao je"
+        },
+        "plural": {
+          "first": "išli smo",
+          "second": "išli ste",
+          "third": "išli su"
+        }
+      },
+      "future": {
+        "singular": {
+          "first": "ići ću",
+          "second": "ići ćeš",
+          "third": "ići će"
+        },
+        "plural": {
+          "first": "ići ćemo",
+          "second": "ići ćete",
+          "third": "ići će"
+        }
+      }
+    }
+  }
+}

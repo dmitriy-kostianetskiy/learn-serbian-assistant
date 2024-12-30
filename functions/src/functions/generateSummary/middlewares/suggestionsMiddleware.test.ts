@@ -5,6 +5,7 @@ import { Context } from './context';
 import { SuggestionService } from '../../../services/suggestionService';
 import { Suggestions } from '../../../model/suggestions';
 import { EventService } from '../../../services/eventsService';
+import { ConfigService } from '../../../services/configService';
 
 describe('suggestionsMiddleware', () => {
   const createContext = (suggestions: Suggestions): Context => {
@@ -22,11 +23,16 @@ describe('suggestionsMiddleware', () => {
       add: jest.fn(),
     } as unknown as EventService;
 
+    const configService = {
+      get: jest.fn(async () => false),
+    } as unknown as ConfigService;
+
     return {
       dependencies: {
         suggestionService,
         telegram,
         eventsService,
+        configService,
       },
       payload: {
         userId: 0,

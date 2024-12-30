@@ -5,10 +5,21 @@ import { Context } from './context';
 import { Message } from '../../../consts/message';
 
 export const suggestionsMiddleware: GenericMiddleware<Context> = async (
-  { dependencies: { suggestionService, telegram, eventsService }, payload },
+  {
+    dependencies: { suggestionService, telegram, eventsService, configService },
+    payload,
+  },
   next,
 ) => {
   const { text, messageId, chatId, userId } = payload;
+
+  const skipSuggestions = await configService.get<boolean>('skipSuggestions');
+
+  if (skipSuggestions) {
+    console.log(`User '${userId}': suggestions for '${text}' skipped.`);
+
+    return await next();
+  }
 
   console.log(`User '${userId}': suggestions for '${text}' for requested.`);
 
