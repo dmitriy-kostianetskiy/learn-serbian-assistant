@@ -230,4 +230,18 @@ describe('SummaryService', () => {
     expect(summary.translation?.english).toBe('wave');
     expect(summary.translation?.russian).toBe('волна');
   });
+
+  test('should summarise word "lep"', async () => {
+    // Arrange
+    const { summaryService } = getTestDependencies();
+
+    // Act
+    const summary = await summaryService.generate('lep');
+
+    // Assert
+    expect(summary.input).toBe('lep');
+
+    // Assert translations
+    expect(summary.additionalInfo.partOfSpeech).toBe('adjective');
+  });
 });

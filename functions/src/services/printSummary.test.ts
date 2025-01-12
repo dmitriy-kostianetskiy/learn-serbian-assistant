@@ -1,3 +1,4 @@
+import { BEAUTIFUL_EXAMPLE } from '../test/examples/beautiful';
 import { BELOW_EXAMPLE } from '../test/examples/below';
 import { GIVE_EXAMPLE } from '../test/examples/give';
 import { TABLE_EXAMPLE } from '../test/examples/table';
@@ -12,7 +13,8 @@ describe('printSummary', () => {
     expect(message).toContain(`
 📝 <strong>dati</strong> (<em>inf.</em> dati)
 
-💡 Primer: Moramo dati poklon učitelju za njegov rođendan.
+💡 <strong>Primer</strong>
+  Moramo dati poklon učitelju za njegov rođendan.
 
 ❗️ <strong>Definicija</strong>
   🇷🇸 Preneti vlasništvo nečega drugome.
@@ -64,7 +66,8 @@ describe('printSummary', () => {
     expect(message).toBe(`
 📝 <strong>sto</strong> (srednji, jednina)
 
-💡 Primer: Ostavite to na stolu.
+💡 <strong>Primer</strong>
+  Ostavite to na stolu.
 
 ❗️ <strong>Definicija</strong>
   🇷🇸 komad nameštaja
@@ -100,6 +103,51 @@ describe('printSummary', () => {
 `);
   });
 
+  test('should print adjective', () => {
+    // Act
+    const message = printSummary(BEAUTIFUL_EXAMPLE);
+
+    // Assert
+    expect(message).toBe(`
+📝 <strong>lep</strong> (muški, jednina)
+
+💡 <strong>Primer</strong>
+  Dan je lep i sunčan.
+
+❗️ <strong>Definicija</strong>
+  🇷🇸 Imajući osobine koje obraduju čula; estetski prijatan.
+  🇺🇸 Having qualities that delight the senses; aesthetically pleasing.
+  🇷🇺 Имеющий качества, которые радуют чувства; эстетически приятный.
+
+💬 <strong>Prevod</strong>
+  🇺🇸 beautiful
+  🇷🇺 красивый
+
+📚 <strong>Sinonimi</strong>
+  divan, predivan, lepši
+
+🔄 <strong>Padeži</strong>
+
+👤 Jednina:
+  Nominative: <strong>lep</strong>
+  Genitive: <strong>lepog</strong>
+  Dative: <strong>lepom</strong>
+  Akuzative: <strong>lepog</strong>
+  Instrumental: <strong>lepim</strong>
+  Lokative: <strong>lepom</strong>
+  Vokative: <strong>lepi</strong>
+
+👥 Množina:
+  Nominative: <strong>lepi</strong>
+  Genitive: <strong>lepih</strong>
+  Dative: <strong>lepim</strong>
+  Akuzative: <strong>lepe</strong>
+  Instrumental: <strong>lepim</strong>
+  Lokative: <strong>lepim</strong>
+  Vokative: <strong>lepi</strong>
+`);
+  });
+
   test('should print other', () => {
     // Act
     const message = printSummary(BELOW_EXAMPLE);
@@ -108,7 +156,8 @@ describe('printSummary', () => {
     expect(message).toBe(`
 📝 <strong>ispod</strong>
 
-💡 Primer: Mačka se sakrila ispod stola.
+💡 <strong>Primer</strong>
+  Mačka se sakrila ispod stola.
 
 ❗️ <strong>Definicija</strong>
   🇷🇸 Pozicioniran ili postavljen na nižem nivou, ne direktno iznad.

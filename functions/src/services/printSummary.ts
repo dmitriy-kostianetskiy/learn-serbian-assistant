@@ -8,7 +8,8 @@ import {
 // Partials
 Handlebars.registerPartial(
   'basicInfo',
-  `💡 Primer: {{example}}
+  `💡 <strong>Primer</strong>
+  {{example}}
 
 {{#with definition}}
 ❗️ <strong>Definicija</strong>
@@ -143,6 +144,17 @@ const verbTemplate = Handlebars.compile(
 `,
 );
 
+const adjectiveTemplate = Handlebars.compile(
+  `
+📝 <strong>{{input}}</strong> {{nounSubtitle (grammaticalGender additionalInfo.grammaticalGender) (grammaticalNumber additionalInfo.grammaticalNumber)}}
+
+{{> basicInfo}}
+
+🔄 <strong>Padeži</strong>
+{{> casesInfo}}
+`,
+);
+
 const otherTemplate = Handlebars.compile(
   `
 📝 <strong>{{input}}</strong>
@@ -157,6 +169,8 @@ export function printSummary(summary: Summary): string {
       return verbTemplate(summary);
     case 'noun':
       return nounTemplate(summary);
+    case 'adjective':
+      return adjectiveTemplate(summary);
     default:
       return otherTemplate(summary);
   }

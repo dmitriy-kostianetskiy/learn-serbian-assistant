@@ -78,6 +78,17 @@ const NounAdditionalInfoSchema = z.object({
 
 export type NounAdditionalInfo = z.infer<typeof NounAdditionalInfoSchema>;
 
+const AdjectiveAdditionalInfoSchema = z.object({
+  partOfSpeech: z.literal('adjective'),
+  grammaticalGender: GrammaticalGenderSchema,
+  grammaticalNumber: GrammaticalNumberSchema,
+  cases: CasesByNumberSchema,
+});
+
+export type AdjectiveAdditionalInfoSchema = z.infer<
+  typeof AdjectiveAdditionalInfoSchema
+>;
+
 const OtherAdditionalInfoSchema = z.object({
   partOfSpeech: z.literal('other'),
 });
@@ -118,6 +129,7 @@ export const SummarySchema = z.object({
     [
       VerbAdditionalInfoSchema,
       NounAdditionalInfoSchema,
+      AdjectiveAdditionalInfoSchema,
       OtherAdditionalInfoSchema,
     ],
     {
