@@ -1,3 +1,4 @@
+import { BELOW_EXAMPLE } from '../test/examples/below';
 import { GIVE_EXAMPLE } from '../test/examples/give';
 import { TABLE_EXAMPLE } from '../test/examples/table';
 import { printSummary } from './printSummary';
@@ -5,77 +6,121 @@ import { printSummary } from './printSummary';
 describe('printSummary', () => {
   test('should print verb', () => {
     // Act
-    const message = printSummary(GIVE_EXAMPLE).join('\n');
+    const message = printSummary(GIVE_EXAMPLE);
 
     // Assert
-    expect(message).toContain('<strong>dati</strong>');
+    expect(message).toContain(`
+📝 <strong>dati</strong> (<em>inf.</em> dati)
 
-    // Assert Example
-    expect(message).toContain(
-      'Moramo dati poklon učitelju za njegov rođendan.',
-    );
+💡 Primer: Moramo dati poklon učitelju za njegov rođendan.
 
-    // Assert translations
-    expect(message).toContain('🇺🇸 to give');
-    expect(message).toContain('🇷🇺 дать');
+❗️ <strong>Definicija</strong>
+  🇷🇸 Preneti vlasništvo nečega drugome.
+  🇺🇸 To transfer possession of something to someone else.
+  🇷🇺 Перевести владение чем-либо к другому человеку.
 
-    // Assert definitions
-    expect(message).toContain('🇷🇸 Preneti vlasništvo nečega drugome.');
-    expect(message).toContain(
-      '🇺🇸 To transfer possession of something to someone else.',
-    );
-    expect(message).toContain(
-      '🇷🇺 Перевести владение чем-либо к другому человеку.',
-    );
+💬 <strong>Prevod</strong>
+  🇺🇸 to give
+  🇷🇺 дать
 
-    // Assert cases
-    expect(message).toContain('Ja <strong>dajem</strong>');
-    expect(message).toContain('Ti <strong>daješ</strong>');
-    expect(message).toContain('On/Ona/Ono <strong>daje</strong>');
-    expect(message).toContain('Mi <strong>dajemo</strong>');
-    expect(message).toContain('Vi <strong>dajete</strong>');
-    expect(message).toContain('Oni/One/Ona <strong>daju</strong>');
+📚 <strong>Sinonimi</strong>
+  ponuditi, ustupiti, uručiti
+
+🔄 <strong>Conjugacija</strong>
+
+  <strong>⏰ Prezent</strong>
+
+  Ja <strong>dajem</strong>
+  Ti <strong>daješ</strong>
+  On/Ona/Ono <strong>daje</strong>
+  Mi <strong>dajemo</strong>
+  Vi <strong>dajete</strong>
+  Oni/One/Ona <strong>daju</strong>
+
+  <strong>↩️ Perfekat</strong>
+
+  Ja <strong>dao sam</strong>
+  Ti <strong>dao si</strong>
+  On/Ona/Ono <strong>dao je</strong>
+  Mi <strong>dali smo</strong>
+  Vi <strong>dali ste</strong>
+  Oni/One/Ona <strong>dali su</strong>
+
+  <strong>🔮 Futur I</strong>
+
+  Ja <strong>daću</strong>
+  Ti <strong>daćeš</strong>
+  On/Ona/Ono <strong>daće</strong>
+  Mi <strong>daćemo</strong>
+  Vi <strong>daćete</strong>
+  Oni/One/Ona <strong>daće</strong>`);
   });
 
   test('should print noun', () => {
     // Act
-    const message = printSummary(TABLE_EXAMPLE).join('\n');
+    const message = printSummary(TABLE_EXAMPLE);
 
     // Assert
+    expect(message).toBe(`
+📝 <strong>sto</strong> (srednji, jednina)
 
-    expect(message).toContain('<strong>sto</strong>');
+💡 Primer: Ostavite to na stolu.
 
-    // Assert Example
-    expect(message).toContain('Ostavite to na stolu.');
+❗️ <strong>Definicija</strong>
+  🇷🇸 komad nameštaja
+  🇺🇸 a piece of furniture
+  🇷🇺 предмет мебели
 
-    // Assert translations
-    expect(message).toContain('🇺🇸 table');
-    expect(message).toContain('🇷🇺 стол');
+💬 <strong>Prevod</strong>
+  🇺🇸 table
+  🇷🇺 стол
 
-    // Assert definitions
-    expect(message).toContain('🇷🇸 komad nameštaja');
-    expect(message).toContain('🇺🇸 a piece of furniture');
-    expect(message).toContain('🇷🇺 предмет мебели');
+📚 <strong>Sinonimi</strong>
+  astal, trpeza
 
-    // Assert synonyms
-    expect(message).toContain('astal, trpeza');
+🔄 <strong>Padeži</strong>
 
-    // Assert singular conjugations
-    expect(message).toContain('Nominative: <strong>sto</strong>');
-    expect(message).toContain('Genitive: <strong>stola</strong>');
-    expect(message).toContain('Dative: <strong>stolu</strong>');
-    expect(message).toContain('Akuzative: <strong>sto</strong>');
-    expect(message).toContain('Instrumental: <strong>stolom</strong>');
-    expect(message).toContain('Lokative: <strong>stolu</strong>');
-    expect(message).toContain('Vokative: <strong>sto</strong>');
+👤 Jednina:
+  Nominative: <strong>sto</strong>
+  Genitive: <strong>stola</strong>
+  Dative: <strong>stolu</strong>
+  Akuzative: <strong>sto</strong>
+  Instrumental: <strong>stolom</strong>
+  Lokative: <strong>stolu</strong>
+  Vokative: <strong>sto</strong>
 
-    // Assert plural conjugations
-    expect(message).toContain('Nominative: <strong>stolovi</strong>');
-    expect(message).toContain('Genitive: <strong>stolova</strong>');
-    expect(message).toContain('Dative: <strong>stolovima</strong>');
-    expect(message).toContain('Akuzative: <strong>stolove</strong>');
-    expect(message).toContain('Instrumental: <strong>stolovima</strong>');
-    expect(message).toContain('Lokative: <strong>stolovima</strong>');
-    expect(message).toContain('Vokative: <strong>stolovi</strong>');
+👥 Množina:
+  Nominative: <strong>stolovi</strong>
+  Genitive: <strong>stolova</strong>
+  Dative: <strong>stolovima</strong>
+  Akuzative: <strong>stolove</strong>
+  Instrumental: <strong>stolovima</strong>
+  Lokative: <strong>stolovima</strong>
+  Vokative: <strong>stolovi</strong>
+`);
+  });
+
+  test('should print other', () => {
+    // Act
+    const message = printSummary(BELOW_EXAMPLE);
+
+    // Assert
+    expect(message).toBe(`
+📝 <strong>ispod</strong>
+
+💡 Primer: Mačka se sakrila ispod stola.
+
+❗️ <strong>Definicija</strong>
+  🇷🇸 Pozicioniran ili postavljen na nižem nivou, ne direktno iznad.
+  🇺🇸 Situated or placed at a lower level, not directly on top.
+  🇷🇺 Расположен или находится на более низком уровне, не прямо на вершине.
+
+💬 <strong>Prevod</strong>
+  🇺🇸 below
+  🇷🇺 ниже
+
+📚 <strong>Sinonimi</strong>
+  niž, dole, odozdo
+`);
   });
 });

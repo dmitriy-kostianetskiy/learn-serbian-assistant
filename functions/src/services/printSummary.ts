@@ -1,58 +1,77 @@
+import Handlebars from 'handlebars';
 import {
-  Cases,
   Summary,
-  SimpleConjugations,
-  CasesByNumber,
   GrammaticalGender,
   GrammaticalNumber,
-  VerbAdditionalInfo,
-  NounAdditionalInfo,
 } from '../model/summary';
 
-export const printSummary = (summary: Summary): string[] => {
-  return [printBasicInfo(summary), ...printAdditionalInfo(summary)];
-};
+// Partials
+Handlebars.registerPartial(
+  'basicInfo',
+  `💡 Primer: {{example}}
 
-const printTitle = (summary: Summary): string => {
-  const subtitle = printSubtitle(summary);
+{{#with definition}}
+❗️ <strong>Definicija</strong>
+  🇷🇸 {{serbian}}
+  🇺🇸 {{english}}
+  🇷🇺 {{russian}}
+{{/with}}
 
-  return [
-    `📝 <strong>${summary.input}</strong>${subtitle ? ` ${subtitle}` : ''}`,
-    '',
-  ].join('\n');
-};
+{{#with translation}}
+💬 <strong>Prevod</strong>
+  🇺🇸 {{english}}
+  🇷🇺 {{russian}}
+{{/with}}
 
-const printSubtitle = (summary: Summary): string | null => {
-  switch (summary.additionalInfo.partOfSpeech) {
-    case 'verb':
-      return printVerbSubtitle(summary.additionalInfo);
-    case 'noun':
-      return printNounSubtitle(summary.additionalInfo);
-    case 'other':
-    default:
-      return null;
-  }
-};
+{{#if synonyms}}
+📚 <strong>Sinonimi</strong>
+  {{#each synonyms}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+{{/if}}`,
+);
 
-const printNounSubtitle = ({
-  grammaticalGender,
-  grammaticalNumber,
-}: NounAdditionalInfo) => {
-  if (!grammaticalNumber && !grammaticalGender) {
-    return '';
-  }
+Handlebars.registerPartial(
+  'casesInfo',
+  `
+{{#with additionalInfo.cases.singular}}
+👤 Jednina:
+  Nominative: <strong>{{nominative}}</strong>
+  Genitive: <strong>{{genitive}}</strong>
+  Dative: <strong>{{dative}}</strong>
+  Akuzative: <strong>{{accusative}}</strong>
+  Instrumental: <strong>{{instrumental}}</strong>
+  Lokative: <strong>{{locative}}</strong>
+  Vokative: <strong>{{vocative}}</strong>
+{{/with}}
 
-  const text = [
-    printGrammaticalGender(grammaticalGender),
-    printGrammaticalNumber(grammaticalNumber),
-  ]
-    .filter((item) => item)
-    .join(', ');
+{{#with additionalInfo.cases.plural}}
+👥 Množina:
+  Nominative: <strong>{{nominative}}</strong>
+  Genitive: <strong>{{genitive}}</strong>
+  Dative: <strong>{{dative}}</strong>
+  Akuzative: <strong>{{accusative}}</strong>
+  Instrumental: <strong>{{instrumental}}</strong>
+  Lokative: <strong>{{locative}}</strong>
+  Vokative: <strong>{{vocative}}</strong>
+{{/with}}`,
+);
 
-  return `(${text})`;
-};
+Handlebars.registerPartial(
+  'conjugationsInfo',
+  `{{#each additionalInfo.conjugations}}
 
-const printGrammaticalGender = (gender: GrammaticalGender): string => {
+  <strong>{{conjugationTitle @key}}</strong>
+
+  Ja <strong>{{this.singular.first}}</strong>
+  Ti <strong>{{this.singular.second}}</strong>
+  On/Ona/Ono <strong>{{this.singular.third}}</strong>
+  Mi <strong>{{this.plural.first}}</strong>
+  Vi <strong>{{this.plural.second}}</strong>
+  Oni/One/Ona <strong>{{this.plural.third}}</strong>
+{{/each}}`,
+);
+
+// Helpers
+Handlebars.registerHelper('grammaticalGender', (gender: GrammaticalGender) => {
   switch (gender) {
     case 'm':
       return 'muški';
@@ -63,12 +82,10 @@ const printGrammaticalGender = (gender: GrammaticalGender): string => {
     default:
       return '';
   }
-};
+});
 
-const printGrammaticalNumber = (
-  grammaticalNumber: GrammaticalNumber,
-): string => {
-  switch (grammaticalNumber) {
+Handlebars.registerHelper('grammaticalNumber', (number: GrammaticalNumber) => {
+  switch (number) {
     case 'p':
       return 'množina';
     case 's':
@@ -76,116 +93,71 @@ const printGrammaticalNumber = (
     default:
       return '';
   }
-};
+});
 
-const printVerbSubtitle = ({ infinitive }: VerbAdditionalInfo) => {
-  if (!infinitive) {
+Handlebars.registerHelper('nounSubtitle', (gender: string, number: string) => {
+  const text = [gender, number].filter((item) => item).join(', ');
+
+  if (!text) {
     return '';
   }
 
-  return `(<em>inf.</em> ${infinitive})`;
-};
+  return `(${text})`;
+});
 
-const printBasicInfo = (summary: Summary): string => {
-  const { example, definition, translation, synonyms } = summary;
+Handlebars.registerHelper('conjugationTitle', (conjugationKey: string) => {
+  switch (conjugationKey) {
+    case 'present':
+      return '⏰ Prezent';
+    case 'perfect':
+      return '↩️ Perfekat';
+    case 'future':
+      return '🔮 Futur I';
+    default:
+      console.warn(`Unknown conjugation key: ${conjugationKey}`);
 
-  return [
-    printTitle(summary),
-    `💡 Primer: ${printNullish(example)}`,
-    '',
-    ...[
-      '❗️ <strong>Definicija</strong>',
-      '',
-      `  🇷🇸 ${printNullish(definition?.serbian)}`,
-      `  🇺🇸 ${printNullish(definition?.english)}`,
-      `  🇷🇺 ${printNullish(definition?.russian)}`,
-      '',
-      '💬 <strong>Prevod</strong>',
-      '',
-      `  🇺🇸 ${printNullish(translation?.english)}`,
-      `  🇷🇺 ${printNullish(translation?.russian)}`,
-    ],
-    ...(synonyms?.length
-      ? ['', '📚 <strong>Sinonimi</strong>', '', synonyms.join(', ')]
-      : []),
-  ].join('\n');
-};
+      return conjugationKey;
+  }
+});
 
-const printAdditionalInfo = (summary: Summary): string[] => {
+// Templates
+const nounTemplate = Handlebars.compile(
+  `
+📝 <strong>{{input}}</strong> {{nounSubtitle (grammaticalGender additionalInfo.grammaticalGender) (grammaticalNumber additionalInfo.grammaticalNumber)}}
+
+{{> basicInfo}}
+
+🔄 <strong>Padeži</strong>
+{{> casesInfo}}
+`,
+);
+
+const verbTemplate = Handlebars.compile(
+  `
+📝 <strong>{{input}}</strong> (<em>inf.</em> {{additionalInfo.infinitive}})
+
+{{> basicInfo}}
+
+🔄 <strong>Conjugacija</strong>
+{{> conjugationsInfo}}
+`,
+);
+
+const otherTemplate = Handlebars.compile(
+  `
+📝 <strong>{{input}}</strong>
+
+{{> basicInfo}}
+`,
+);
+
+export function printSummary(summary: Summary): string {
   switch (summary.additionalInfo.partOfSpeech) {
     case 'verb':
-      return printVerbAdditionalInfo(summary.additionalInfo);
+      return verbTemplate(summary);
     case 'noun':
-      return printNounAdditionalInfo(summary.additionalInfo);
-    case 'other':
+      return nounTemplate(summary);
     default:
-      return [];
+      return otherTemplate(summary);
   }
-};
-
-const printVerbAdditionalInfo = ({
-  conjugations: { present, future, perfect },
-}: VerbAdditionalInfo): string[] => {
-  return [
-    printConjugationsHeader(),
-    printSimpleConjugation(present, 'Prezent'),
-    printSimpleConjugation(perfect, 'Perfekt'),
-    printSimpleConjugation(future, 'Futur'),
-  ];
-};
-
-const printNounAdditionalInfo = ({ cases }: NounAdditionalInfo) => {
-  return [printCasesByNumber(cases)];
-};
-
-function printConjugationsHeader(): string {
-  return ['', '🔄 <strong>Conjugacija</strong>', ''].join('\n');
 }
-
-function printSimpleConjugation(
-  conjugations: SimpleConjugations,
-  title: string,
-): string {
-  return [
-    '',
-    title,
-    '',
-    `  Ja <strong>${printNullish(conjugations?.singular?.first)}</strong>`,
-    `  Ti <strong>${printNullish(conjugations?.singular?.second)}</strong>`,
-    `  On/Ona/Ono <strong>${printNullish(conjugations?.singular?.third)}</strong>`,
-    '',
-    `  Mi <strong>${printNullish(conjugations?.plural?.first)}</strong>`,
-    `  Vi <strong>${printNullish(conjugations?.plural?.second)}</strong>`,
-    `  Oni/One/Ona <strong>${printNullish(conjugations?.plural?.third)}</strong>`,
-  ].join('\n');
-}
-
-const printCasesByNumber = (cases: CasesByNumber) => {
-  const { singular, plural } = cases;
-
-  return [
-    '',
-    '🔄 <strong>Padeži</strong>',
-    printCases('👤 Jednina:', singular),
-    printCases('👥 Množina:', plural),
-  ].join('\n');
-};
-
-const printCases = (title: string, cases: Cases) => {
-  return [
-    '',
-    title,
-    '',
-    `  Nominative: <strong>${printNullish(cases?.nominative)}</strong>`,
-    `  Genitive: <strong>${printNullish(cases?.genitive)}</strong>`,
-    `  Dative: <strong>${printNullish(cases?.dative)}</strong>`,
-    `  Akuzative: <strong>${printNullish(cases?.accusative)}</strong>`,
-    `  Instrumental: <strong>${printNullish(cases?.instrumental)}</strong>`,
-    `  Lokative: <strong>${printNullish(cases?.locative)}</strong>`,
-    `  Vokative: <strong>${printNullish(cases?.vocative)}</strong>`,
-  ].join('\n');
-};
-
-const printNullish = (value: string | number | null | undefined): string => {
-  return value === null || typeof value === 'undefined' ? 'N/A' : `${value}`;
-};

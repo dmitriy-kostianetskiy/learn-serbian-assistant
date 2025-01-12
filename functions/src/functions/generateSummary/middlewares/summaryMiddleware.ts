@@ -6,6 +6,7 @@ import { Context } from './context';
 import { groupSections } from '../../../utils/string';
 
 const MAX_TELEGRAM_MESSAGE_SIZE = 4096;
+const DELIMITER = '\n\n';
 
 export const summaryMiddleware: GenericMiddleware<Context> = async (
   {
@@ -24,7 +25,7 @@ export const summaryMiddleware: GenericMiddleware<Context> = async (
     },
   );
 
-  const summarySections = printSummary(summary);
+  const summarySections = printSummary(summary).split(DELIMITER);
 
   await eventsService.add({
     type: 'summary-generated',
@@ -33,7 +34,11 @@ export const summaryMiddleware: GenericMiddleware<Context> = async (
     takenFromCache,
   });
 
-  const messages = groupSections(summarySections, MAX_TELEGRAM_MESSAGE_SIZE);
+  const messages = groupSections(
+    summarySections,
+    MAX_TELEGRAM_MESSAGE_SIZE,
+    DELIMITER,
+  );
 
   for (const message of messages) {
     await replyToMessageWithHtml(telegram)(message, {
