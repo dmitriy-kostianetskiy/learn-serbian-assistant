@@ -11,7 +11,8 @@ describe('printSummary', () => {
 
     // Assert
     expect(message).toContain(`
-📝 <strong>dati</strong> (<em>inf.</em> dati)
+📝 <strong>dati</strong> (glagol)
+<em>inf.</em> dati
 
 💡 <strong>Primer</strong>
   Moramo dati poklon učitelju za njegov rođendan.
@@ -64,7 +65,7 @@ describe('printSummary', () => {
 
     // Assert
     expect(message).toBe(`
-📝 <strong>sto</strong> (srednji, jednina)
+📝 <strong>sto</strong> (imenica, srednji, jednina)
 
 💡 <strong>Primer</strong>
   Ostavite to na stolu.
@@ -109,7 +110,7 @@ describe('printSummary', () => {
 
     // Assert
     expect(message).toBe(`
-📝 <strong>lep</strong> (muški, jednina)
+📝 <strong>lep</strong> (pridev, muški, jednina)
 
 💡 <strong>Primer</strong>
   Dan je lep i sunčan.

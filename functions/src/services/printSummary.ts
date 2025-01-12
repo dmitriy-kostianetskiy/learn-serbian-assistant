@@ -96,6 +96,19 @@ Handlebars.registerHelper('grammaticalNumber', (number: GrammaticalNumber) => {
   }
 });
 
+Handlebars.registerHelper('subtitle', (...params: unknown[]) => {
+  const text = params
+    .slice(0, -1)
+    .filter((item) => item)
+    .join(', ');
+
+  if (!text) {
+    return '';
+  }
+
+  return `(${text})`;
+});
+
 Handlebars.registerHelper('nounSubtitle', (gender: string, number: string) => {
   const text = [gender, number].filter((item) => item).join(', ');
 
@@ -121,10 +134,30 @@ Handlebars.registerHelper('conjugationTitle', (conjugationKey: string) => {
   }
 });
 
+Handlebars.registerHelper(
+  'partOfSpeech',
+  (partOfSpeech: Summary['additionalInfo']['partOfSpeech']) => {
+    switch (partOfSpeech) {
+      case 'verb':
+        return 'glagol';
+      case 'noun':
+        return 'imenica';
+      case 'adjective':
+        return 'pridev';
+      default:
+        return '';
+    }
+  },
+);
+
 // Templates
 const nounTemplate = Handlebars.compile(
   `
-📝 <strong>{{input}}</strong> {{nounSubtitle (grammaticalGender additionalInfo.grammaticalGender) (grammaticalNumber additionalInfo.grammaticalNumber)}}
+📝 <strong>{{input}}</strong> {{{subtitle
+  (partOfSpeech additionalInfo.partOfSpeech)
+  (grammaticalGender additionalInfo.grammaticalGender)
+  (grammaticalNumber additionalInfo.grammaticalNumber)
+}}}
 
 {{> basicInfo}}
 
@@ -135,7 +168,8 @@ const nounTemplate = Handlebars.compile(
 
 const verbTemplate = Handlebars.compile(
   `
-📝 <strong>{{input}}</strong> (<em>inf.</em> {{additionalInfo.infinitive}})
+📝 <strong>{{input}}</strong> {{{subtitle (partOfSpeech additionalInfo.partOfSpeech)}}}
+<em>inf.</em> {{additionalInfo.infinitive}}
 
 {{> basicInfo}}
 
@@ -146,7 +180,11 @@ const verbTemplate = Handlebars.compile(
 
 const adjectiveTemplate = Handlebars.compile(
   `
-📝 <strong>{{input}}</strong> {{nounSubtitle (grammaticalGender additionalInfo.grammaticalGender) (grammaticalNumber additionalInfo.grammaticalNumber)}}
+📝 <strong>{{input}}</strong> {{{subtitle
+  (partOfSpeech additionalInfo.partOfSpeech)
+  (grammaticalGender additionalInfo.grammaticalGender)
+  (grammaticalNumber additionalInfo.grammaticalNumber)
+}}}
 
 {{> basicInfo}}
 
