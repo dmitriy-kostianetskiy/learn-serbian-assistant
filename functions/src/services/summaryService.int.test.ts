@@ -244,4 +244,19 @@ describe('SummaryService', () => {
     // Assert translations
     expect(summary.additionalInfo.partOfSpeech).toBe('adjective');
   });
+
+  test('should summarise word "jederenjak"', async () => {
+    // Arrange
+    const { summaryService } = getTestDependencies();
+
+    // Act
+    const summary = await summaryService.generate('jedrenjak');
+
+    // Assert
+    expect(summary.input).toBe('jedrenjak');
+
+    // Assert translations
+    expect(summary.translation?.english).toBe('sailing ship');
+    expect(summary.translation?.russian).toBe('парусник');
+  });
 });
