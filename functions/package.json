@@ -25,6 +25,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@google-cloud/pubsub": "^4.4.0",
+    "csv-writer": "^1.6.0",
     "firebase-admin": "^13.0.2",
     "firebase-functions": "^6.2.0",
     "handlebars": "^4.7.8",
