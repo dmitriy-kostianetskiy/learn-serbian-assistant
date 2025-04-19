@@ -4,7 +4,7 @@ import { configureBot } from './functions/telegramBot/configureBot';
 import { getTestDependencies } from './dependencies';
 
 (async () => {
-  const dependencies = getTestDependencies();
+  const dependencies = await getTestDependencies();
 
   configureBot(dependencies)();
 
