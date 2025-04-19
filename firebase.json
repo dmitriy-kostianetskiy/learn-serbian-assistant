@@ -11,8 +11,14 @@
       "ignore": [
         "node_modules",
         ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log"
+        ".env",
+        ".env.example",
+        ".envrc",
+        ".eslintignore",
+        ".eslintrc.yml",
+        ".gitignore",
+        "*.log",
+        "coverage"
       ],
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint",
