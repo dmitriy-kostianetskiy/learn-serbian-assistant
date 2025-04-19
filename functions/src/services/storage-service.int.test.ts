@@ -3,8 +3,8 @@ import {
   deleteCollection,
   getFromCollection,
   insertIntoCollection,
-} from '../utils/firebaseUtils';
-import { getStorageService, StorageService } from './storageService';
+} from '../utils/firebase-utils';
+import { getStorageService, StorageService } from './storage-service';
 import { randomUUID } from 'crypto';
 
 type StorageItem = {

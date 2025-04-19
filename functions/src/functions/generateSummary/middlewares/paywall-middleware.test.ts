@@ -1,10 +1,9 @@
 import { Telegram } from 'telegraf';
-import { ConfigService } from '../../../services/configService';
-import { UserService } from '../../../services/userService';
-import { paywallMiddleware } from './paywallMiddleware';
+import { UserService } from '../../../services/user-service';
+import { paywallMiddleware } from './paywall-middleware';
 import { Context } from './context';
 import { User } from '../../../model/user';
-import { EventService } from '../../../services/eventsService';
+import { EventService } from '../../../services/events-service';
 
 describe('paywallMiddleware', () => {
   const createUserService = (user: User): UserService => ({
@@ -17,14 +16,8 @@ describe('paywallMiddleware', () => {
     resetAllDailyQuotaUsed: jest.fn(),
   });
 
-  const createConfigService = (quota: number): ConfigService =>
-    ({
-      get: jest.fn(async () => quota),
-    }) as ConfigService;
-
   const createContext = (user: User, quota = 10): Context => {
     const userService = createUserService(user);
-    const configService = createConfigService(quota);
     const telegram = {
       sendMessage: jest.fn(),
     } as unknown as Telegram;
@@ -36,9 +29,11 @@ describe('paywallMiddleware', () => {
     return {
       dependencies: {
         eventsService,
-        configService,
         userService,
         telegram,
+        serverConfig: {
+          dailyQuota: quota,
+        },
       },
       payload: {
         userId: 0,

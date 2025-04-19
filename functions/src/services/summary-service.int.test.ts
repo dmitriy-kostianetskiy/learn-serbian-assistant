@@ -4,7 +4,7 @@ import { CasesByNumber, SimpleConjugations } from '../model/summary';
 describe('SummaryService', () => {
   test('should summarise word "ići"', async () => {
     // Arrange
-    const { summaryService } = getTestDependencies();
+    const { summaryService } = await getTestDependencies();
 
     // Act
     const summary = await summaryService.generate('ići');
@@ -83,7 +83,7 @@ describe('SummaryService', () => {
 
   test('should summarise word "dati"', async () => {
     // Arrange
-    const { summaryService } = getTestDependencies();
+    const { summaryService } = await getTestDependencies();
 
     // Act
     const summary = await summaryService.generate('dati');
@@ -162,7 +162,7 @@ describe('SummaryService', () => {
 
   test('should summarise word "dete"', async () => {
     // Arrange
-    const { summaryService } = getTestDependencies();
+    const { summaryService } = await getTestDependencies();
 
     // Act
     const summary = await summaryService.generate('dete');
@@ -218,7 +218,7 @@ describe('SummaryService', () => {
 
   test('should summarise word "talas"', async () => {
     // Arrange
-    const { summaryService } = getTestDependencies();
+    const { summaryService } = await getTestDependencies();
 
     // Act
     const summary = await summaryService.generate('talas');
@@ -233,7 +233,7 @@ describe('SummaryService', () => {
 
   test('should summarise word "lep"', async () => {
     // Arrange
-    const { summaryService } = getTestDependencies();
+    const { summaryService } = await getTestDependencies();
 
     // Act
     const summary = await summaryService.generate('lep');
@@ -247,7 +247,7 @@ describe('SummaryService', () => {
 
   test('should summarise word "jederenjak"', async () => {
     // Arrange
-    const { summaryService } = getTestDependencies();
+    const { summaryService } = await getTestDependencies();
 
     // Act
     const summary = await summaryService.generate('jedrenjak');

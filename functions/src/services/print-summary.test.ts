@@ -2,7 +2,7 @@ import { BEAUTIFUL_EXAMPLE } from '../test/examples/beautiful';
 import { BELOW_EXAMPLE } from '../test/examples/below';
 import { GIVE_EXAMPLE } from '../test/examples/give';
 import { TABLE_EXAMPLE } from '../test/examples/table';
-import { printSummary } from './printSummary';
+import { printSummary } from './print-summary';
 
 describe('printSummary', () => {
   test('should print verb', () => {

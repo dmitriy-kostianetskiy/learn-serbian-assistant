@@ -1,5 +1,5 @@
-import { StorageService } from '../../../services/storageService';
-import { printSummary } from '../../../services/printSummary';
+import { StorageService } from '../../../services/storage-service';
+import { printSummary } from '../../../services/print-summary';
 import { GenericMiddleware } from '../../../utils/genericMiddleware';
 import { replyToMessageWithHtml } from '../../../utils/replyToMessageWithHtml';
 import { Context } from './context';

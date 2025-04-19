@@ -1,11 +1,11 @@
 import { getFirestore } from 'firebase-admin/firestore';
-import { UserService, getUserService } from './userService';
+import { UserService, getUserService } from './user-service';
 import { randomUUID } from 'crypto';
 import {
   deleteCollection,
   getFromCollection,
   insertIntoCollection,
-} from '../utils/firebaseUtils';
+} from '../utils/firebase-utils';
 import { User } from '../model/user';
 
 describe('UserService', () => {

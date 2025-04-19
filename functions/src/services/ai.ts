@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { Prompts } from '../model/prompts';
 import { generateObject } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai'; // Ensure OPENAI_API_KEY environment variable is set
 
 export type GenerateObjectOptions<T> = {
-  prompts: Prompts;
+  prompt: string;
+  system: string;
   schema: z.Schema<T>;
 };
 
@@ -27,11 +27,15 @@ export const createAi = ({
   }).responses('gpt-4o');
 
   const service: Ai = {
-    async generateObject<T>({ prompts, schema }: GenerateObjectOptions<T>) {
+    async generateObject<T>({
+      system,
+      prompt,
+      schema,
+    }: GenerateObjectOptions<T>) {
       const { object } = await generateObject<T>({
         model,
-        system: prompts.systemPrompt,
-        prompt: prompts.userPrompt,
+        system,
+        prompt,
         schema,
         temperature,
         seed,

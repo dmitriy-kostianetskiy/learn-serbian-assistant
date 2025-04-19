@@ -7,24 +7,21 @@ import { Message } from '../../../consts/message';
 export const paywallMiddleware: GenericMiddleware<{
   dependencies: Pick<
     Dependencies,
-    'configService' | 'userService' | 'telegram' | 'eventsService'
+    'userService' | 'telegram' | 'eventsService' | 'serverConfig'
   >;
   payload: GenerateSummaryPayload;
 }> = async (
   {
-    dependencies: { configService, userService, telegram, eventsService },
+    dependencies: { userService, telegram, eventsService, serverConfig },
     payload,
   },
   next,
 ) => {
   const { messageId, chatId, userId } = payload;
 
-  const [{ quotaUsed, hasPremium }, dailyQuota] = await Promise.all([
-    userService.getDailyQuotaUsed(userId),
-    configService.get<number>('dailyQuota'),
-  ]);
+  const { quotaUsed, hasPremium } = await userService.getDailyQuotaUsed(userId);
 
-  if (quotaUsed >= dailyQuota && !hasPremium) {
+  if (quotaUsed >= serverConfig.dailyQuota && !hasPremium) {
     console.log(
       `User '${userId}' failed to pass paywall: daily quota exceeded.`,
     );

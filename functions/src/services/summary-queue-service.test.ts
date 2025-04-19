@@ -2,7 +2,7 @@ import { PubSub, Topic } from '@google-cloud/pubsub';
 import {
   SummaryQueueService,
   getSummaryQueueService,
-} from './summaryQueueService';
+} from './summary-queue-service';
 import { GenerateSummaryPayload } from '../model/generateSummaryPayload';
 import { PubSubTopic } from '../consts/pubSubTopic';
 

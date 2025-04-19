@@ -1,1 +1,1 @@
-export * from './generateSummary';
+export * from './generate-summary';

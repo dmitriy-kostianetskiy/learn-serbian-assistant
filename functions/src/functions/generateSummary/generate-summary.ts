@@ -2,11 +2,11 @@ import { onMessagePublished } from 'firebase-functions/v2/pubsub';
 import { GenerateSummaryPayload } from '../../model/generateSummaryPayload';
 import { getDependencies } from '../../dependencies';
 import { compose } from '../../utils/genericMiddleware';
-import { paywallMiddleware } from './middlewares/paywallMiddleware';
+import { paywallMiddleware } from './middlewares/paywall-middleware';
 import { Context } from './middlewares/context';
-import { summaryMiddleware } from './middlewares/summaryMiddleware';
+import { summaryMiddleware } from './middlewares/summary-middleware';
 import { PubSubTopic } from '../../consts/pubSubTopic';
-import { chargeMiddleware } from './middlewares/chargeMiddleware';
+import { chargeMiddleware } from './middlewares/charge-middleware';
 import { replyToMessageWithHtml } from '../../utils/replyToMessageWithHtml';
 import { Message } from '../../consts/message';
 import { Secret } from '../../consts/secret';
@@ -22,7 +22,7 @@ export const generateSummary = onMessagePublished<GenerateSummaryPayload>(
       message: { json: payload },
     },
   }) => {
-    const dependencies = getDependencies({
+    const dependencies = await getDependencies({
       telegramBotToken: Secret.TelegramBotToken.value(),
       openAiKey: Secret.OpenAiKey.value(),
     });
