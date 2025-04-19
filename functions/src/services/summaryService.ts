@@ -1,36 +1,33 @@
 import { Dependencies } from '../dependencies';
-import { PromptNames } from '../model/prompts';
 import { Summary, SummarySchema } from '../model/summary';
 
 export type SummaryServiceDependencies = Pick<
   Dependencies,
-  'openAiService' | 'promptBuilderService'
-> &
-  PromptNames;
+  'ai' | 'promptBuilderService'
+> & {
+  promptName: string;
+};
 
 export interface SummaryService {
   generate(phrase: string): Promise<Summary>;
 }
 
 export const getSummaryService = ({
-  openAiService,
+  ai,
   promptBuilderService,
-  ...promptNames
+  promptName,
 }: SummaryServiceDependencies): SummaryService => {
   return {
     async generate(phrase) {
       // get prompts
-      const prompts = await promptBuilderService.buildPrompt(promptNames, {
+      const prompts = await promptBuilderService.buildPrompt(promptName, {
         phrase,
       });
 
       // generate summary
-      const summary = await openAiService.promptAsJson({
+      const summary = await ai.generateObject({
         prompts,
-        structuredOutput: {
-          schema: SummarySchema,
-          schemaName: 'summary',
-        },
+        schema: SummarySchema,
       });
 
       return summary;

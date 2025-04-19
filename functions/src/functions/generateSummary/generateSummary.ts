@@ -3,7 +3,6 @@ import { GenerateSummaryPayload } from '../../model/generateSummaryPayload';
 import { getDependencies } from '../../dependencies';
 import { compose } from '../../utils/genericMiddleware';
 import { paywallMiddleware } from './middlewares/paywallMiddleware';
-import { suggestionsMiddleware } from './middlewares/suggestionsMiddleware';
 import { Context } from './middlewares/context';
 import { summaryMiddleware } from './middlewares/summaryMiddleware';
 import { PubSubTopic } from '../../consts/pubSubTopic';
@@ -46,7 +45,6 @@ export const generateSummary = onMessagePublished<GenerateSummaryPayload>(
 
       const composedMiddleware = compose(
         paywallMiddleware,
-        suggestionsMiddleware,
         summaryMiddleware,
         chargeMiddleware,
       );
